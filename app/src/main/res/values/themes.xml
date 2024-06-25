@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.Trackizer" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Trackizer.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/gray80</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/avd_app_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Trackizer</item>
+    </style>
 </resources>
