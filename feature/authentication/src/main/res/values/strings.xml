@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="if_you_don_t_have_an_account_yet">If you don\'t have an account yet?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forgot_password">Forgot password</string>
+
+    <string name="sign_up_with">Sign up with %s</string>
+    <string name="or">Or</string>
+    <string name="sign_up_with_email">Sign up with E-mail</string>
+    <string name="by_registering_you_agree">By registering, you agree to our Terms of Use. Learn\nhow we collect, use and share your data.</string>
+
+    <string name="e_mail_address">E-mail address</string>
+    <string name="use_8_or_more_characters"><![CDATA[Use 8 or more characters with a mix of letters, numbers & symbols.]]></string>
+    <string name="get_started_it_s_free">Get started, it\'s free!</string>
+    <string name="do_you_have_already_an_account">Do you have already an account?</string>
+</resources>

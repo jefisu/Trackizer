@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jefisu.trackizer.navigation.NavGraph
+import com.jefisu.trackizer.util.AppStartup
 import com.jefisu.ui.theme.AppTheme
 import com.jefisu.welcome.WelcomeScreenRoute
 
@@ -16,6 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         enableEdgeToEdge()
+        AppStartup(applicationContext).init()
         setContent {
             AppTheme(
                 modifier = Modifier.fillMaxSize()

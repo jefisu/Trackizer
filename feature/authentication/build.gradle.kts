@@ -2,10 +2,11 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.jefisu.ui_theme"
+    namespace = "com.jefisu.authentication"
     compileSdk = libs.versions.target.sdk.get().toInt()
 
     defaultConfig {
@@ -42,7 +43,14 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    debugImplementation(libs.androidx.ui.tooling)
 
-    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation(libs.koin.androidx.compose)
+
+    implementation(projects.core.ui)
 }
