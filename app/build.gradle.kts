@@ -31,6 +31,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.navigation.compose)
 
     implementation(projects.core.ui)
+    implementation(projects.feature.welcome)
 }
