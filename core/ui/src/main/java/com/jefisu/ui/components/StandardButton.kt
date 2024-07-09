@@ -1,7 +1,10 @@
 package com.jefisu.ui.components
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Surface
@@ -17,13 +21,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.jefisu.ui.theme.AccentPrimary100
 import com.jefisu.ui.theme.Theme
-import com.jefisu.ui.util.modifier.dropShadow
+import com.jefisu.ui.modifier.dropShadow
 
 private val buttonHeight = 48.dp
 
@@ -33,6 +39,8 @@ fun StandardButton(
     buttonType: ButtonType,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    dynamicContent: (@Composable BoxScope.() -> Unit)? = null,
+    isEnabled: Boolean = true,
     @DrawableRes leadingIconRes: Int? = null,
 ) {
     val containerColor =
@@ -53,6 +61,7 @@ fun StandardButton(
         color = containerColor,
         contentColor = contentColor,
         shape = CircleShape,
+        enabled = isEnabled,
         modifier =
             modifier
                 .fillMaxWidth()
@@ -99,6 +108,17 @@ fun StandardButton(
                     shape = CircleShape,
                 ),
     ) {
+        if (dynamicContent != null) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(containerColor)
+                    .zIndex(1f)
+            ) {
+                dynamicContent()
+            }
+        }
         Row(
             modifier = Modifier.wrapContentSize(),
         ) {
@@ -107,9 +127,9 @@ fun StandardButton(
                     painter = painterResource(id = resId),
                     contentDescription = null,
                     modifier =
-                        Modifier
-                            .size(Theme.size.icon.extraSmall)
-                            .align(Alignment.CenterVertically),
+                    Modifier
+                        .size(Theme.size.icon.extraSmall)
+                        .align(Alignment.CenterVertically),
                 )
                 Spacer(modifier = Modifier.width(Theme.spacing.small))
             }
@@ -130,4 +150,19 @@ sealed interface ButtonType {
         val containerColor: Color,
         val contentColor: Color,
     ) : ButtonType
+}
+
+fun loadingInButton(
+    isLoading: Boolean,
+    color: Color = Color.White,
+    modifier: Modifier = Modifier
+): (@Composable BoxScope.() -> Unit)? = run {
+    if (isLoading) {
+        {
+            CircularProgressIndicator(
+                color = color,
+                modifier = modifier.scale(0.7f)
+            )
+        }
+    } else null
 }

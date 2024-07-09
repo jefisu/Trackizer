@@ -27,3 +27,8 @@ val AccentSecondary100 = Color(0xFF00FAD9)
 val AccentSecondary50 = Color(0xFF7DFFEE)
 
 val facebookColor = Color(0xFF1771E6)
+
+val SuccessContainerColor = Color(0xFF2D6A4F)
+val ErrorContainerColor = Color(0xFFDB3056)
+val WarningContainerColor = Color(0xFFF88F01)
+val HelpContainerColor = Color(0xFF0070AC)

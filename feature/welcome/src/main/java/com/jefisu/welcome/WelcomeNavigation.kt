@@ -2,7 +2,7 @@ package com.jefisu.welcome
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.jefisu.ui.navigation.Screen
+import com.jefisu.common.navigation.Screen
 import kotlinx.serialization.Serializable
 
 @Serializable

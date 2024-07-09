@@ -25,7 +25,7 @@ fun StandardScreenLogo(content: @Composable BoxScope.() -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             modifier =
                 Modifier
-                    .padding(top = 60.dp)
+                    .padding(top = 70.dp)
                     .align(Alignment.TopCenter),
         ) {
             Image(
