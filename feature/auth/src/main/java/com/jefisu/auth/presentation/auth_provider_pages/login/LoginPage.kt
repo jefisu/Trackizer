@@ -5,12 +5,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.jefisu.auth.R
 import com.jefisu.auth.presentation.auth_provider_pages.login.components.ForgotPasswordBottomSheet
@@ -29,6 +34,8 @@ fun LoginPage(
     onNavigateToRegisterPage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val focusManager = LocalFocusManager.current
+
     ForgotPasswordBottomSheet(
         state = state,
         onAction = onAction
@@ -42,7 +49,11 @@ fun LoginPage(
             text = state.email,
             onTextChange = { onAction(LoginAction.EmailChanged(it)) },
             fieldName = stringResource(R.string.login),
-            isEnabled = !state.isLoading
+            isEnabled = !state.isLoading,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardActions = KeyboardActions {
+                focusManager.moveFocus(FocusDirection.Down)
+            }
         )
         Spacer(modifier = Modifier.height(Theme.spacing.medium))
         StandardTextField(
@@ -50,7 +61,11 @@ fun LoginPage(
             onTextChange = { onAction(LoginAction.PasswordChanged(it)) },
             fieldName = stringResource(R.string.password),
             isPasswordField = true,
-            isEnabled = !state.isLoading
+            isEnabled = !state.isLoading,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
+            }
         )
         Spacer(modifier = Modifier.height(Theme.spacing.extraSmall))
         Row(
