@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
 import com.jefisu.ui.components.StandardButton
 import com.jefisu.ui.components.StandardScreenLogo
@@ -69,14 +70,17 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height(40.dp))
             StandardButton(
                 text = stringResource(R.string.get_started),
-                buttonType = ButtonType.Primary,
                 onClick = onNavigateToRegisterScreen,
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(Theme.spacing.medium))
             StandardButton(
                 text = stringResource(R.string.i_have_an_account),
-                buttonType = ButtonType.Secondary,
+                properties = ButtonProperties(
+                    type = ButtonType.Secondary
+                ),
                 onClick = onNavigateToLoginScreen,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

@@ -3,6 +3,7 @@ package com.jefisu.auth.presentation.auth_provider_pages.login
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
@@ -20,10 +21,10 @@ import androidx.compose.ui.unit.dp
 import com.jefisu.auth.R
 import com.jefisu.auth.presentation.auth_provider_pages.login.components.ForgotPasswordBottomSheet
 import com.jefisu.auth.presentation.auth_provider_pages.login.components.RoundCheckbox
+import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
 import com.jefisu.ui.components.StandardButton
 import com.jefisu.ui.components.StandardTextField
-import com.jefisu.ui.components.loadingInButton
 import com.jefisu.ui.theme.Gray50
 import com.jefisu.ui.theme.Theme
 
@@ -97,10 +98,12 @@ fun LoginPage(
         Spacer(modifier = Modifier.height(Theme.spacing.extraSmall))
         StandardButton(
             text = stringResource(R.string.sign_in),
-            buttonType = ButtonType.Primary,
-            isEnabled = !state.isLoading,
+            properties = ButtonProperties(
+                enabled = !state.isLoading,
+                isLoading = state.isLoading && !state.showForgotPasswordSheet
+            ),
             onClick = { onAction(LoginAction.Login) },
-            dynamicContent = loadingInButton(state.isLoading && !state.showForgotPasswordSheet)
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(152.dp))
         Text(
@@ -111,8 +114,11 @@ fun LoginPage(
         Spacer(modifier = Modifier.height(20.dp))
         StandardButton(
             text = stringResource(R.string.sign_up),
-            buttonType = ButtonType.Secondary,
-            onClick = onNavigateToRegisterPage
+            properties = ButtonProperties(
+                type = ButtonType.Secondary
+            ),
+            onClick = onNavigateToRegisterPage,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

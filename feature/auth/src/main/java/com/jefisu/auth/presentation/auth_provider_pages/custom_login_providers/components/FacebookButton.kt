@@ -25,9 +25,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.jefisu.auth.R
 import com.jefisu.auth.data.AuthMessage
+import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
 import com.jefisu.ui.components.StandardButton
-import com.jefisu.ui.components.loadingInButton
 import com.jefisu.ui.theme.facebookColor
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -47,7 +47,7 @@ object FacebookAuthUi {
 fun FacebookButton(
     onSuccessfulLogin: () -> Unit,
     onFailureLogin: (AuthMessage.Error) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val view = LocalView.current
     val scope = rememberCoroutineScope()
@@ -104,14 +104,16 @@ fun FacebookButton(
     StandardButton(
         modifier = modifier,
         text = stringResource(id = R.string.sign_up_with, "Facebook"),
-        leadingIconRes = R.drawable.ic_facebook,
-        buttonType = ButtonType.DynamicColor(
-            containerColor = facebookColor,
-            contentColor = contentColor
+        properties = ButtonProperties(
+            leadingIconRes = R.drawable.ic_facebook,
+            type = ButtonType.DynamicColor(
+                containerColor = facebookColor,
+                contentColor = contentColor
+            ),
+            isLoading = isLoading
         ),
         onClick = {
             facebookActivityLauncher?.launch(listOf("email", "public_profile"))
-        },
-        dynamicContent = loadingInButton(isLoading, contentColor)
+        }
     )
 }

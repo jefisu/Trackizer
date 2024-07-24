@@ -2,6 +2,7 @@ package com.jefisu.auth.presentation.auth_provider_pages.custom_login_providers
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import com.jefisu.auth.R
 import com.jefisu.auth.data.AuthMessage
 import com.jefisu.auth.presentation.auth_provider_pages.custom_login_providers.components.FacebookButton
 import com.jefisu.auth.presentation.auth_provider_pages.custom_login_providers.components.GoogleButton
+import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
 import com.jefisu.ui.components.StandardButton
 import com.jefisu.ui.theme.Gray50
@@ -31,12 +33,14 @@ fun CustomLoginProvidersPage(
     ) {
         GoogleButton(
             onSuccessfulLogin = onNavigateToHome,
-            onFailureLogin = onShowError
+            onFailureLogin = onShowError,
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(Theme.spacing.medium))
         FacebookButton(
             onSuccessfulLogin = onNavigateToHome,
-            onFailureLogin = onShowError
+            onFailureLogin = onShowError,
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(Theme.spacing.large))
         Text(
@@ -46,8 +50,11 @@ fun CustomLoginProvidersPage(
         Spacer(modifier = Modifier.height(Theme.spacing.large))
         StandardButton(
             text = stringResource(id = R.string.sign_up_with, "E-mail"),
-            buttonType = ButtonType.Secondary,
-            onClick = onNavigateToRegisterEmailPage
+            properties = ButtonProperties(
+                type = ButtonType.Secondary
+            ),
+            onClick = onNavigateToRegisterEmailPage,
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(Theme.spacing.extraMedium))
         Text(

@@ -22,9 +22,9 @@ import com.google.firebase.ktx.Firebase
 import com.jefisu.auth.BuildConfig
 import com.jefisu.auth.R
 import com.jefisu.auth.data.AuthMessage
+import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
 import com.jefisu.ui.components.StandardButton
-import com.jefisu.ui.components.loadingInButton
 import com.jefisu.ui.theme.Gray80
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -33,7 +33,7 @@ import kotlinx.coroutines.tasks.await
 fun GoogleButton(
     onSuccessfulLogin: () -> Unit,
     onFailureLogin: (AuthMessage.Error) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -79,14 +79,13 @@ fun GoogleButton(
     StandardButton(
         modifier = modifier,
         text = stringResource(id = R.string.sign_up_with, "Google"),
-        leadingIconRes = R.drawable.ic_google,
-        buttonType = ButtonType.DynamicColor(
-            containerColor = Color.White,
-            contentColor = contentColor
-        ),
-        dynamicContent = loadingInButton(
-            isLoading = isLoading,
-            color = contentColor
+        properties = ButtonProperties(
+            leadingIconRes = R.drawable.ic_google,
+            type = ButtonType.DynamicColor(
+                containerColor = Color.White,
+                contentColor = contentColor
+            ),
+            isLoading = isLoading
         ),
         onClick = onClickSignIn
     )

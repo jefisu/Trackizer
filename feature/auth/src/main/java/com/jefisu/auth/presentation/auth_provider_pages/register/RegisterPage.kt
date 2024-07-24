@@ -18,10 +18,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jefisu.auth.R
 import com.jefisu.auth.presentation.auth_provider_pages.register.components.PasswordStrengthMeter
+import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
 import com.jefisu.ui.components.StandardButton
 import com.jefisu.ui.components.StandardTextField
-import com.jefisu.ui.components.loadingInButton
 import com.jefisu.ui.theme.Gray50
 import com.jefisu.ui.theme.Theme
 
@@ -30,7 +30,7 @@ fun RegisterPage(
     state: RegisterState,
     onAction: (RegisterAction) -> Unit,
     onNavigateToLoginPage: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -74,11 +74,13 @@ fun RegisterPage(
         Spacer(modifier = Modifier.height(40.dp))
         StandardButton(
             text = stringResource(R.string.get_started_it_s_free),
-            buttonType = ButtonType.Primary,
             onClick = {
                 onAction(RegisterAction.Register)
             },
-            dynamicContent = loadingInButton(state.isLoading)
+            properties = ButtonProperties(
+                isLoading = state.isLoading
+            ),
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(130.dp))
         Text(
@@ -88,8 +90,11 @@ fun RegisterPage(
         Spacer(modifier = Modifier.height(Theme.spacing.extraMedium))
         StandardButton(
             text = stringResource(R.string.sign_in),
-            buttonType = ButtonType.Secondary,
-            onClick = onNavigateToLoginPage
+            properties = ButtonProperties(
+                type = ButtonType.Secondary
+            ),
+            onClick = onNavigateToLoginPage,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

@@ -24,10 +24,9 @@ import androidx.compose.ui.res.stringResource
 import com.jefisu.auth.R
 import com.jefisu.auth.presentation.auth_provider_pages.login.LoginAction
 import com.jefisu.auth.presentation.auth_provider_pages.login.LoginState
-import com.jefisu.ui.components.ButtonType
+import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.StandardButton
 import com.jefisu.ui.components.StandardTextField
-import com.jefisu.ui.components.loadingInButton
 import com.jefisu.ui.theme.Gray50
 import com.jefisu.ui.theme.Theme
 import kotlinx.coroutines.launch
@@ -97,9 +96,11 @@ fun ForgotPasswordBottomSheet(
                 Spacer(modifier = Modifier.height(Theme.spacing.extraMedium))
                 StandardButton(
                     text = stringResource(R.string.send),
-                    buttonType = ButtonType.Primary,
                     onClick = { onAction(LoginAction.SendResetPassword) },
-                    dynamicContent = loadingInButton(state.isLoading)
+                    properties = ButtonProperties(
+                        isLoading = state.isLoading
+                    ),
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
