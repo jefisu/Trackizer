@@ -25,4 +25,5 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.feature.welcome)
     implementation(projects.feature.auth)
+    implementation(projects.feature.home)
 }

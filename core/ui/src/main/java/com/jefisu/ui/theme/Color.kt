@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val Gray100 = Color(0xFF0E0E12)
 val Gray80 = Color(0xFF1C1C23)
-val Gray70 = Color(0xFF353542)
+val Gray70 = Color(0xFF282833)
 val Gray60 = Color(0xFF4E4E61)
 val Gray50 = Color(0xFF666680)
 val Gray40 = Color(0xFF83839C)
@@ -32,3 +32,10 @@ val SuccessContainerColor = Color(0xFF2D6A4F)
 val ErrorContainerColor = Color(0xFFDB3056)
 val WarningContainerColor = Color(0xFFF88F01)
 val HelpContainerColor = Color(0xFF0070AC)
+
+val Black18 = Color(0xFF282833)
+val Purple90 = Color(0xFFCFCFFC)
+
+val SpotifyContainerColor = Color(0xFF1ED760)
+val Microsoft365ContainerColor = Color(0xFFACDCF5)
+val FabIconColor = Color(0xFFFF7F37)
