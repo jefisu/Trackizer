@@ -1,4 +1,4 @@
-package com.jefisu.data.repository
+package com.jefisu.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 

@@ -4,9 +4,9 @@ import java.time.LocalDate
 
 data class Subscription(
     val id: String,
-    val name: String,
-    val icon: ServiceIcon,
+    val service: SubscriptionService,
+    val description: String,
     val price: Float,
-    val firstPaymentDate: LocalDate,
+    val paymentDate: LocalDate,
     val reminder: Boolean,
 )

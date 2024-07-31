@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -20,9 +19,9 @@ import com.jefisu.home.presentation.components.HorizontalTabs
 import com.jefisu.home.presentation.components.SubscriptionList
 import com.jefisu.home.presentation.components.SubscriptionTab
 import com.jefisu.home.presentation.util.SampleData
+import com.jefisu.home.presentation.util.filterUpcomingBills
 import com.jefisu.ui.theme.AppTheme
 import com.jefisu.ui.theme.Theme
-import java.time.LocalDate
 
 @Composable
 fun HomeScreen(
@@ -52,15 +51,8 @@ fun HomeScreen(
                     }
 
                     SubscriptionTab.UPCOMING_BILLS -> {
-                        val subscriptionActive by remember {
-                            derivedStateOf {
-                                val today = LocalDate.now()
-                                state.subscriptions.filter {
-                                    it.reminder &&
-                                        it.firstPaymentDate.isEqual(today) ||
-                                        it.firstPaymentDate.isAfter(today)
-                                }
-                            }
+                        val subscriptionActive = remember {
+                            state.subscriptions.filterUpcomingBills()
                         }
                         SubscriptionList(
                             subscriptions = subscriptionActive,

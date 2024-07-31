@@ -1,5 +1,8 @@
 package com.jefisu.home.presentation.components
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,9 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,7 +39,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +46,7 @@ import com.jefisu.home.R
 import com.jefisu.home.presentation.HomeState
 import com.jefisu.home.presentation.util.formatCurrency
 import com.jefisu.ui.R as CommonRes
+import com.jefisu.ui.components.AnimatedText
 import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonSize
 import com.jefisu.ui.components.ButtonType
@@ -77,42 +78,27 @@ internal fun Header(
     val subscriptions = state.subscriptions
     val monthlyBudget = state.monthlyBudget
 
-    val monthlyBillsValue by remember {
-        derivedStateOf {
-            val today = LocalDate.now()
-            val items =
-                subscriptions.filter { it.reminder || it.firstPaymentDate.month == today.month }
-            if (items.isNotEmpty()) {
-                0.0
-            } else {
-                items.sumOf { it.price.toDouble() }
-            }
-        }
-    }
-    val budgetCommittedPercentage: Float by remember {
-        derivedStateOf {
-            val result = monthlyBillsValue.toFloat() / monthlyBudget
-            if (result.isNaN()) 0f else result
-        }
-    }
+    val monthlyBillsValue = subscriptions
+        .filter { it.reminder || it.paymentDate.month == LocalDate.now().month }
+        .sumOf { it.price.toDouble() }
 
-    val activeSubs: Int by remember {
-        derivedStateOf {
-            subscriptions.count { it.reminder }
-        }
-    }
-    val highestSubs: String by remember {
-        derivedStateOf {
-            val highestValue = subscriptions.maxOfOrNull { it.price } ?: 0f
-            formatCurrency(highestValue.toDouble())
-        }
-    }
-    val lowestSubs: String by remember {
-        derivedStateOf {
-            val lowestValue = subscriptions.minOfOrNull { it.price } ?: 0f
-            formatCurrency(lowestValue.toDouble())
-        }
-    }
+    val budgetCommittedPercentage by animateFloatAsState(
+        targetValue = run {
+            val budget = (if (monthlyBudget > 0) monthlyBudget else monthlyBillsValue).toFloat()
+            val result = monthlyBillsValue.toFloat() / budget
+            if (result.isNaN()) 0f else result.coerceAtMost(budget)
+        },
+        label = "",
+        animationSpec = tween(
+            durationMillis = 1000,
+            easing = LinearEasing,
+        ),
+    )
+
+    val activeSubs = subscriptions.count { it.reminder }
+    val highestSubs = formatCurrency(subscriptions.maxOfOrNull { it.price.toDouble() } ?: 0.0)
+    val lowestSubs = formatCurrency(subscriptions.minOfOrNull { it.price.toDouble() } ?: 0.0)
+
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(0.dp, 0.dp, 24.dp, 24.dp))
@@ -155,10 +141,9 @@ internal fun Header(
                 )
             }
             Spacer(modifier = Modifier.height(Theme.spacing.extraMedium))
-            Text(
+            AnimatedText(
                 text = formatCurrency(monthlyBillsValue),
                 style = Theme.typography.headline7,
-                textAlign = TextAlign.Center,
                 modifier = Modifier.width(205.dp),
             )
             Spacer(modifier = Modifier.height(Theme.spacing.medium))
@@ -421,7 +406,7 @@ fun SubscriptionInfoItem(
             color = Gray40,
         )
         Spacer(modifier = Modifier.height(2.dp))
-        Text(
+        AnimatedText(
             text = value,
             style = Theme.typography.headline2,
         )

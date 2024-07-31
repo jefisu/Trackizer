@@ -22,6 +22,8 @@ material = "1.12.0"
 datastorePreferences = "1.1.1"
 secretGradle = "2.0.1"
 facebookLogin = "latest.release"
+firebaseFirestore = "25.0.0"
+desugar_jdk_libs = "2.0.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,6 +54,8 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebookLogin" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -8,7 +8,7 @@ import com.jefisu.auth.domain.validation.ValidateEmail
 import com.jefisu.auth.presentation.util.asMessageText
 import com.jefisu.common.util.onError
 import com.jefisu.common.util.onSuccess
-import com.jefisu.data.repository.UserRepository
+import com.jefisu.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
@@ -69,7 +69,7 @@ class LoginViewModel(
         _state.update {
             it.copy(
                 email = emailSaved.orEmpty(),
-                rememberMeCredentials = emailSaved != null
+                rememberMeCredentials = emailSaved != null,
             )
         }
     }
@@ -84,7 +84,9 @@ class LoginViewModel(
                     _state.update { it.copy(isLoggedIn = true) }
                     if (rememberMeCredentials) {
                         userRepository.saveEmail(email)
-                    } else userRepository.deleteSavedEmail()
+                    } else {
+                        userRepository.deleteSavedEmail()
+                    }
                 }
                 .onError { error ->
                     _state.update { it.copy(messageText = error.asMessageText()) }
@@ -101,7 +103,7 @@ class LoginViewModel(
                         it.copy(
                             messageText = message.asMessageText(),
                             showForgotPasswordSheet = false,
-                            emailResetPassword = ""
+                            emailResetPassword = "",
                         )
                     }
                 }
@@ -128,7 +130,7 @@ class LoginViewModel(
                     it.copy(
                         messageText = AuthMessage.Error
                             .INVALID_EMAIL_OR_PASSWORD
-                            .asMessageText()
+                            .asMessageText(),
                     )
                 }
                 return
@@ -138,7 +140,7 @@ class LoginViewModel(
         _state.update {
             it.copy(
                 isLoading = true,
-                messageText = null
+                messageText = null,
             )
         }
         viewModelScope.launch {

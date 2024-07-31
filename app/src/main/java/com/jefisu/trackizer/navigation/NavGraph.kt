@@ -18,7 +18,7 @@ import com.jefisu.auth.presentation.authScreen
 import com.jefisu.auth.presentation.navigateAuthSignIn
 import com.jefisu.auth.presentation.navigateAuthSignUp
 import com.jefisu.common.navigation.Screen
-import com.jefisu.data.repository.UserRepository
+import com.jefisu.domain.repository.UserRepository
 import com.jefisu.home.presentation.HomeScreen
 import com.jefisu.home.presentation.homeScreen
 import com.jefisu.home.presentation.navigateToHome

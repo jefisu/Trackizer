@@ -1,12 +1,23 @@
 package com.jefisu.home.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,7 +31,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,39 +61,53 @@ internal fun SubscriptionList(
     }
     val bottomPadding = 80.dp
 
-    if (subscriptions.isEmpty()) {
-        Text(
-            text = messageEmptyList,
-            color = Gray50,
-            style = Theme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
+    Box(modifier = Modifier.fillMaxSize()) {
+        AnimatedVisibility(
+            visible = subscriptions.isEmpty(),
+            enter = fadeIn() + scaleIn(),
+            exit = fadeOut() + scaleOut(),
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = bottomPadding)
-        )
-    } else {
-        Column {
-            AnimatedVisibility(visible = showDivider) {
-                HorizontalDivider(color = Gray50)
-            }
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(Theme.spacing.small),
-                contentPadding = PaddingValues(
-                    bottom = bottomPadding,
-                    start = Theme.spacing.extraMedium,
-                    end = Theme.spacing.extraMedium,
-                ),
-                state = lazyListState,
-                modifier = modifier.weight(1f),
-            ) {
-                items(
-                    items = subscriptions,
-                    key = { it.id },
-                ) { sub ->
-                    SubscriptionItem(
-                        subscription = sub,
-                        upcomingBill = upcomingBill,
-                    )
+                .align(Alignment.TopCenter)
+                .padding(top = bottomPadding),
+        ) {
+            Text(
+                text = messageEmptyList,
+                color = Gray50,
+                style = Theme.typography.bodyLarge,
+            )
+        }
+
+        AnimatedVisibility(
+            visible = subscriptions.isNotEmpty(),
+            enter = fadeIn() + slideInVertically(animationSpec = tween(700)),
+            exit = fadeOut() + slideOutVertically(animationSpec = tween(700)),
+        ) {
+            Column {
+                AnimatedVisibility(visible = showDivider) {
+                    HorizontalDivider(color = Gray50)
+                }
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(Theme.spacing.small),
+                    contentPadding = PaddingValues(
+                        bottom = bottomPadding,
+                        start = Theme.spacing.extraMedium,
+                        end = Theme.spacing.extraMedium,
+                    ),
+                    state = lazyListState,
+                    modifier = modifier.weight(1f),
+                ) {
+                    items(
+                        items = subscriptions,
+                        key = { it.id },
+                    ) { sub ->
+                        SubscriptionItem(
+                            subscription = sub,
+                            upcomingBill = upcomingBill,
+                        )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(Theme.spacing.medium))
+                    }
                 }
             }
         }
@@ -125,22 +149,25 @@ private fun SubscriptionItem(
             ),
     ) {
         if (upcomingBill) {
-            DateIcon(subscription.firstPaymentDate)
+            DateIcon(subscription.paymentDate)
         } else {
             SubscriptionIcon(
-                icon = subscription.icon,
+                icon = subscription.service,
                 size = IconSize.SMALL,
             )
         }
         Text(
-            text = subscription.name,
+            text = subscription.service.title,
             style = Theme.typography.headline2,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f),
         )
         Text(
-            text = formatCurrency(subscription.price.toDouble()),
+            text = formatCurrency(
+                value = subscription.price.toDouble(),
+                isLiteralValue = true,
+            ),
             style = Theme.typography.headline2,
         )
     }

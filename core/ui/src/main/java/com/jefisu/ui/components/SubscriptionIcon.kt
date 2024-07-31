@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.jefisu.domain.model.ServiceIcon
+import com.jefisu.domain.model.SubscriptionService
 import com.jefisu.ui.theme.AppTheme
 import com.jefisu.ui.theme.Microsoft365ContainerColor
 import com.jefisu.ui.theme.SpotifyContainerColor
@@ -26,7 +25,7 @@ import com.jefisu.ui.util.asIconResource
 
 @Composable
 fun SubscriptionIcon(
-    icon: ServiceIcon,
+    icon: SubscriptionService,
     size: IconSize,
     modifier: Modifier = Modifier,
 ) {
@@ -40,10 +39,10 @@ fun SubscriptionIcon(
         IconSize.SMALL -> 12.dp
     }
     val containerColor = when (icon) {
-        ServiceIcon.YOUTUBE_PREMIUM -> Color.Red
-        ServiceIcon.SPOTIFY -> SpotifyContainerColor
-        ServiceIcon.MICROSOFT_365 -> Microsoft365ContainerColor
-        ServiceIcon.NETFLIX, ServiceIcon.HBO_GO -> Color.Black
+        SubscriptionService.YOUTUBE_PREMIUM -> Color.Red
+        SubscriptionService.SPOTIFY -> SpotifyContainerColor
+        SubscriptionService.MICROSOFT_365 -> Microsoft365ContainerColor
+        SubscriptionService.NETFLIX, SubscriptionService.HBO_GO -> Color.Black
     }
 
     Icon(
@@ -55,8 +54,7 @@ fun SubscriptionIcon(
             Image(
                 painter = painterResource(id = icon.asIconResource()),
                 contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier.width(iconSize),
+                modifier = Modifier.size(iconSize),
             )
         },
     )
@@ -90,7 +88,7 @@ enum class IconSize {
 private fun SubscriptionIconPreview() {
     AppTheme {
         SubscriptionIcon(
-            icon = ServiceIcon.MICROSOFT_365,
+            icon = SubscriptionService.MICROSOFT_365,
             size = IconSize.SMALL,
             modifier = Modifier.padding(Theme.spacing.small),
         )

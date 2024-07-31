@@ -10,3 +10,7 @@ android {
         compose = false
     }
 }
+
+dependencies {
+    implementation(projects.core.common)
+}

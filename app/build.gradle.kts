@@ -12,6 +12,10 @@ android {
     defaultConfig {
         applicationId = "com.jefisu.trackizer"
     }
+
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+    }
 }
 
 dependencies {
@@ -22,8 +26,11 @@ dependencies {
 
     implementation(projects.core.ui)
     implementation(projects.core.common)
+    implementation(projects.core.domain)
     implementation(projects.core.data)
     implementation(projects.feature.welcome)
     implementation(projects.feature.auth)
     implementation(projects.feature.home)
+
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

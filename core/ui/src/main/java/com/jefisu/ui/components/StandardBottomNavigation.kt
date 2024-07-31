@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -46,7 +45,6 @@ import com.jefisu.ui.theme.AccentPrimary100
 import com.jefisu.ui.theme.AppTheme
 import com.jefisu.ui.theme.FabIconColor
 import com.jefisu.ui.theme.Gray30
-import com.jefisu.ui.theme.Gray80
 import com.jefisu.ui.theme.Theme
 
 @Composable
@@ -61,7 +59,7 @@ fun StandardBottomNavigation(
     val backgroundShadow = Brush.verticalGradient(
         colorStops = arrayOf(
             0f to Color.Transparent,
-            0.59f to Gray80,
+            0.51f to Theme.backgroundColor,
         ),
     )
 
@@ -75,9 +73,8 @@ fun StandardBottomNavigation(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .navigationBarsPadding()
                 .padding(
-                    bottom = Theme.spacing.medium,
+                    bottom = Theme.spacing.extraMedium,
                     start = Theme.spacing.extraMedium,
                     end = Theme.spacing.extraMedium,
                 )

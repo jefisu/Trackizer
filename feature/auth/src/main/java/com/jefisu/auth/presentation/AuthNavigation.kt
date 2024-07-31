@@ -6,34 +6,35 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.jefisu.auth.di.AUTH_SCOPE
 import com.jefisu.auth.presentation.auth_provider_pages.login.LoginViewModel
 import com.jefisu.auth.presentation.auth_provider_pages.register.RegisterViewModel
 import com.jefisu.common.navigation.Screen
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.getKoin
+import org.koin.core.qualifier.named
 
 @Serializable
-data class AuthScreen(
-    val isLoginToStart: Boolean
-) : Screen
+data class AuthScreen(val isLoginToStart: Boolean) : Screen
 
 fun NavController.navigateAuthSignUp() = navigate(
-    AuthScreen(isLoginToStart = false)
+    AuthScreen(isLoginToStart = false),
 )
 
 fun NavController.navigateAuthSignIn() = navigate(
-    AuthScreen(isLoginToStart = true)
+    AuthScreen(isLoginToStart = true),
 )
 
-fun NavGraphBuilder.authScreen(
-    onNavigateToHomeScreen: () -> Unit
-) = composable<AuthScreen> {
+fun NavGraphBuilder.authScreen(onNavigateToHomeScreen: () -> Unit) = composable<AuthScreen> {
+    val authScope = getKoin().getOrCreateScope(AUTH_SCOPE, named(AUTH_SCOPE))
+
     val args = it.toRoute<AuthScreen>()
 
-    val loginViewModel = koinViewModel<LoginViewModel>()
+    val loginViewModel: LoginViewModel = koinViewModel(scope = authScope)
     val loginState by loginViewModel.state.collectAsStateWithLifecycle()
 
-    val registerViewModel = koinViewModel<RegisterViewModel>()
+    val registerViewModel: RegisterViewModel = koinViewModel(scope = authScope)
     val registerState by registerViewModel.state.collectAsStateWithLifecycle()
 
     AuthScreen(
@@ -42,6 +43,9 @@ fun NavGraphBuilder.authScreen(
         registerState = registerState,
         onLoginAction = loginViewModel::onAction,
         onRegisterAction = registerViewModel::onAction,
-        onNavigateToHome = onNavigateToHomeScreen
+        onNavigateToHome = {
+            authScope.close()
+            onNavigateToHomeScreen()
+        },
     )
 }
