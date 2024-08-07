@@ -47,7 +47,7 @@ import com.jefisu.ui.theme.Gray50
 import com.jefisu.ui.theme.Theme
 
 @Composable
-fun StandardTextField(
+fun TextField(
     text: String,
     onTextChange: (String) -> Unit,
     fieldName: String,
@@ -150,7 +150,7 @@ fun StandardTextField(
 private fun StandardTextFieldPreview() {
     var text by remember { mutableStateOf("") }
     AppTheme {
-        StandardTextField(
+        TextField(
             text = text,
             onTextChange = { text = it },
             fieldName = "E-mail address",

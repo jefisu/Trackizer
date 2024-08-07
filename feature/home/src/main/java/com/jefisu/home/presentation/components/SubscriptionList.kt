@@ -36,13 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jefisu.domain.model.Subscription
 import com.jefisu.home.presentation.util.SampleData
-import com.jefisu.home.presentation.util.formatCurrency
 import com.jefisu.ui.components.IconSize
 import com.jefisu.ui.components.SubscriptionIcon
 import com.jefisu.ui.theme.AppTheme
 import com.jefisu.ui.theme.Gray50
 import com.jefisu.ui.theme.Gray70
 import com.jefisu.ui.theme.Theme
+import com.jefisu.ui.util.formatCurrency
 
 @Composable
 internal fun SubscriptionList(

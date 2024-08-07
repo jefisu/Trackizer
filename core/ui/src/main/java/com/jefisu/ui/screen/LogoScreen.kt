@@ -1,4 +1,4 @@
-package com.jefisu.ui.components
+package com.jefisu.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -19,14 +19,14 @@ import com.jefisu.ui.R
 import com.jefisu.ui.theme.Theme
 
 @Composable
-fun StandardScreenLogo(content: @Composable BoxScope.() -> Unit) {
+fun LogoScreen(content: @Composable BoxScope.() -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier =
-                Modifier
-                    .padding(top = 70.dp)
-                    .align(Alignment.TopCenter),
+            Modifier
+                .padding(top = 70.dp)
+                .align(Alignment.TopCenter),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.app_logo_no_background),

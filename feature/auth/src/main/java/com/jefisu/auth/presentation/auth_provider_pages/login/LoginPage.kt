@@ -21,10 +21,10 @@ import androidx.compose.ui.unit.dp
 import com.jefisu.auth.R
 import com.jefisu.auth.presentation.auth_provider_pages.login.components.ForgotPasswordBottomSheet
 import com.jefisu.auth.presentation.auth_provider_pages.login.components.RoundCheckbox
+import com.jefisu.ui.components.Button
 import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
-import com.jefisu.ui.components.StandardButton
-import com.jefisu.ui.components.StandardTextField
+import com.jefisu.ui.components.TextField
 import com.jefisu.ui.theme.Gray50
 import com.jefisu.ui.theme.Theme
 
@@ -39,14 +39,14 @@ fun LoginPage(
 
     ForgotPasswordBottomSheet(
         state = state,
-        onAction = onAction
+        onAction = onAction,
     )
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        StandardTextField(
+        TextField(
             text = state.email,
             onTextChange = { onAction(LoginAction.EmailChanged(it)) },
             fieldName = stringResource(R.string.login),
@@ -54,10 +54,10 @@ fun LoginPage(
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions {
                 focusManager.moveFocus(FocusDirection.Down)
-            }
+            },
         )
         Spacer(modifier = Modifier.height(Theme.spacing.medium))
-        StandardTextField(
+        TextField(
             text = state.password,
             onTextChange = { onAction(LoginAction.PasswordChanged(it)) },
             fieldName = stringResource(R.string.password),
@@ -66,59 +66,59 @@ fun LoginPage(
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
-            }
+            },
         )
         Spacer(modifier = Modifier.height(Theme.spacing.extraSmall))
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             RoundCheckbox(
                 isChecked = state.rememberMeCredentials,
                 onCheckedChange = {
                     onAction(LoginAction.RememberMeCredentials)
-                }
+                },
             )
             Spacer(modifier = Modifier.width(Theme.spacing.small))
             Text(
                 text = stringResource(R.string.remember_me),
                 style = Theme.typography.bodyMedium,
-                color = Gray50
+                color = Gray50,
             )
             Spacer(modifier = Modifier.weight(1f))
             TextButton(
-                onClick = { onAction(LoginAction.ToggleForgotPasswordBottomSheet) }
+                onClick = { onAction(LoginAction.ToggleForgotPasswordBottomSheet) },
             ) {
                 Text(
                     text = stringResource(R.string.forgot_password),
                     style = Theme.typography.bodyMedium,
-                    color = Gray50
+                    color = Gray50,
                 )
             }
         }
         Spacer(modifier = Modifier.height(Theme.spacing.extraSmall))
-        StandardButton(
+        Button(
             text = stringResource(R.string.sign_in),
             properties = ButtonProperties(
                 enabled = !state.isLoading,
-                isLoading = state.isLoading && !state.showForgotPasswordSheet
+                isLoading = state.isLoading && !state.showForgotPasswordSheet,
             ),
             onClick = { onAction(LoginAction.Login) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(152.dp))
         Text(
             text = stringResource(R.string.if_you_don_t_have_an_account_yet),
             style = Theme.typography.bodyMedium,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally),
         )
         Spacer(modifier = Modifier.height(20.dp))
-        StandardButton(
+        Button(
             text = stringResource(R.string.sign_up),
             properties = ButtonProperties(
-                type = ButtonType.Secondary
+                type = ButtonType.Secondary,
             ),
             onClick = onNavigateToRegisterPage,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }

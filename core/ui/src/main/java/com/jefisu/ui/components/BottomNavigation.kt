@@ -17,10 +17,7 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jefisu.ui.R
-import com.jefisu.ui.modifier.dropShadow
+import com.jefisu.ui.ext.modifier.dropShadow
 import com.jefisu.ui.theme.AccentPrimary100
 import com.jefisu.ui.theme.AppTheme
 import com.jefisu.ui.theme.FabIconColor
@@ -48,14 +45,13 @@ import com.jefisu.ui.theme.Gray30
 import com.jefisu.ui.theme.Theme
 
 @Composable
-fun StandardBottomNavigation(
+fun BottomNavigation(
+    selectedNavItem: BottomNavItem,
     onNavClick: (BottomNavItem) -> Unit,
     modifier: Modifier = Modifier,
     applyShadow: Boolean = true,
 ) {
     val bottomNavItems = BottomNavItem.entries
-    var selectedNavItem by rememberSaveable { mutableIntStateOf(0) }
-
     val backgroundShadow = Brush.verticalGradient(
         colorStops = arrayOf(
             0f to Color.Transparent,
@@ -96,11 +92,8 @@ fun StandardBottomNavigation(
                 } else {
                     BottomNavItem(
                         icon = painter,
-                        isSelected = selectedNavItem == navItem.ordinal,
-                        onClick = {
-//                            selectedNavItem = navItem.ordinal
-                            onNavClick(navItem)
-                        },
+                        isSelected = selectedNavItem == navItem,
+                        onClick = { onNavClick(navItem) },
                         modifier = Modifier.weight(1f),
                     )
                 }
@@ -113,8 +106,9 @@ fun StandardBottomNavigation(
 @Composable
 private fun StandardBottomNavBarPreview() {
     AppTheme {
-        StandardBottomNavigation(
+        BottomNavigation(
             onNavClick = { },
+            selectedNavItem = BottomNavItem.HOME,
         )
     }
 }

@@ -30,13 +30,15 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jefisu.ui.modifier.dropShadow
+import com.jefisu.ui.ext.modifier.dropShadow
 import com.jefisu.ui.theme.AccentPrimary100
+import com.jefisu.ui.theme.AppTheme
 import com.jefisu.ui.theme.Theme
 
 @Composable
-fun StandardButton(
+fun Button(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -53,35 +55,29 @@ fun StandardButton(
         LocalContentColor.current
     }
 
-    val thenModifier = if (properties.type is ButtonType.Secondary) {
-        Modifier
-    } else {
-        Modifier.dropShadow(
-            shape = CircleShape,
-            color = containerColor.copy(alpha = 0.5f),
-            blur = 25.dp,
-            offsetX = 8.dp,
-        )
+    val thenModifier = when (properties.type) {
+        ButtonType.Secondary -> Modifier
+        else -> {
+            Modifier.dropShadow(
+                shape = CircleShape,
+                color = containerColor.copy(alpha = 0.5f),
+                blur = 25.dp,
+                offsetX = 8.dp,
+            )
+        }
     }
 
     val gradientColors = if (properties.type is ButtonType.Primary) {
-        listOf(
-            Color.White.copy(0.1f),
-            Color.White.copy(0.11f),
-            Color.White.copy(0.15f),
-            Color.White.copy(0.15f),
-            Color.White.copy(0.15f),
-            Color.White.copy(0.3f),
-            Color.White.copy(0.4f),
-            Color.White.copy(0.5f),
-            Color.White.copy(0.6f),
-            Color.White.copy(0f),
+        arrayOf(
+            0f to Color.White.copy(0.1f),
+            0.8f to Color.White.copy(0.3f),
+            1f to Color.Transparent,
         )
     } else {
-        listOf(
-            Color.White.copy(0.01f),
-            Color.White.copy(0.1f),
-            Color.White.copy(0f),
+        arrayOf(
+            0f to Color.White.copy(0.01f),
+            0.6f to Color.White.copy(0.1f),
+            1f to Color.Transparent,
         )
     }
 
@@ -89,14 +85,14 @@ fun StandardButton(
         ButtonSize.Large -> {
             PaddingValues(
                 horizontal = 24.dp,
-                vertical = 14.dp
+                vertical = 14.dp,
             )
         }
 
         ButtonSize.Small -> {
             PaddingValues(
                 horizontal = 12.dp,
-                vertical = 10.dp
+                vertical = 10.dp,
             )
         }
     }
@@ -104,27 +100,27 @@ fun StandardButton(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .heightIn(max = 48.dp)
+            .heightIn(max = 60.dp)
             .then(thenModifier)
             .clip(properties.shape)
             .background(containerColor)
             .clickable(
                 enabled = properties.enabled,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple()
+                indication = rememberRipple(),
             ) { onClick() }
             .border(
                 width = 1.dp,
-                brush = Brush.sweepGradient(gradientColors),
-                shape = properties.shape
-            )
+                brush = Brush.sweepGradient(colorStops = gradientColors),
+                shape = properties.shape,
+            ),
     ) {
         Row(
             modifier = Modifier
                 .padding(contentPadding)
                 .graphicsLayer {
                     alpha = if (properties.isLoading) 0f else 1f
-                }
+                },
         ) {
             properties.leadingIconRes?.let { resId ->
                 Icon(
@@ -140,7 +136,7 @@ fun StandardButton(
             Text(
                 text = text,
                 style = Theme.typography.headline2,
-                color = contentColor
+                color = contentColor,
             )
         }
 
@@ -151,7 +147,7 @@ fun StandardButton(
                 .size(22.dp)
                 .graphicsLayer {
                     alpha = if (properties.isLoading) 1f else 0f
-                }
+                },
         )
     }
 }
@@ -174,4 +170,31 @@ sealed interface ButtonType {
 sealed interface ButtonSize {
     data object Small : ButtonSize
     data object Large : ButtonSize
+}
+
+@Preview
+@Composable
+private fun PrimaryButtonPreview() {
+    AppTheme {
+        Button(
+            text = "Get start",
+            onClick = { },
+            modifier = Modifier.width(150.dp),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SecondaryButtonPreview() {
+    AppTheme {
+        Button(
+            text = "Get start",
+            onClick = { },
+            properties = ButtonProperties(
+                type = ButtonType.Secondary,
+            ),
+            modifier = Modifier.width(150.dp),
+        )
+    }
 }

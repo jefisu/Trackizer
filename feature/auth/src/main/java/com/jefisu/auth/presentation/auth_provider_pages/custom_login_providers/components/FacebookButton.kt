@@ -25,9 +25,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.jefisu.auth.R
 import com.jefisu.auth.data.AuthMessage
+import com.jefisu.ui.components.Button
 import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
-import com.jefisu.ui.components.StandardButton
 import com.jefisu.ui.theme.facebookColor
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -38,9 +38,8 @@ object FacebookAuthUi {
     val callbackManager by lazy { CallbackManager.Factory.create() }
     val loginManager by lazy { LoginManager.getInstance() }
 
-    fun loginActivityContract(): FacebookLoginActivityResultContract {
-        return loginManager.createLogInActivityResultContract(callbackManager, null)
-    }
+    fun loginActivityContract(): FacebookLoginActivityResultContract =
+        loginManager.createLogInActivityResultContract(callbackManager, null)
 }
 
 @Composable
@@ -59,41 +58,44 @@ fun FacebookButton(
     if (isDisabledPreview) {
         facebookActivityLauncher = rememberLauncherForActivityResult(
             contract = FacebookAuthUi.loginActivityContract(),
-            onResult = {}
+            onResult = {},
         )
         DisposableEffect(Unit) {
             val loginManager = FacebookAuthUi.loginManager
             val callbackManager = FacebookAuthUi.callbackManager
 
-            loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-                override fun onCancel() {
-                    onFailureLogin(AuthMessage.Error.FACEBOOK_FAILED_TO_LOGIN)
-                }
+            loginManager.registerCallback(
+                callbackManager,
+                object : FacebookCallback<LoginResult> {
+                    override fun onCancel() {
+                        onFailureLogin(AuthMessage.Error.FACEBOOK_FAILED_TO_LOGIN)
+                    }
 
-                override fun onError(error: FacebookException) {
-                    onFailureLogin(AuthMessage.Error.FACEBOOK_FAILED_TO_LOGIN)
-                }
+                    override fun onError(error: FacebookException) {
+                        onFailureLogin(AuthMessage.Error.FACEBOOK_FAILED_TO_LOGIN)
+                    }
 
-                override fun onSuccess(result: LoginResult) {
-                    scope.launch {
-                        isLoading = true
-                        try {
-                            val token = result.accessToken.token
-                            FacebookAuthProvider.getCredential(token).also {
-                                Firebase.auth.signInWithCredential(it).await()
+                    override fun onSuccess(result: LoginResult) {
+                        scope.launch {
+                            isLoading = true
+                            try {
+                                val token = result.accessToken.token
+                                FacebookAuthProvider.getCredential(token).also {
+                                    Firebase.auth.signInWithCredential(it).await()
+                                }
+
+                                onSuccessfulLogin()
+                            } catch (e: FirebaseAuthUserCollisionException) {
+                                onFailureLogin(AuthMessage.Error.USER_ALREADY_EXISTS)
+                            } catch (e: Exception) {
+                                onFailureLogin(AuthMessage.Error.FACEBOOK_FAILED_TO_LOGIN)
+                            } finally {
+                                isLoading = false
                             }
-
-                            onSuccessfulLogin()
-                        } catch (e: FirebaseAuthUserCollisionException) {
-                            onFailureLogin(AuthMessage.Error.USER_ALREADY_EXISTS)
-                        } catch (e: Exception) {
-                            onFailureLogin(AuthMessage.Error.FACEBOOK_FAILED_TO_LOGIN)
-                        } finally {
-                            isLoading = false
                         }
                     }
-                }
-            })
+                },
+            )
 
             onDispose {
                 loginManager.unregisterCallback(callbackManager)
@@ -101,19 +103,19 @@ fun FacebookButton(
         }
     }
 
-    StandardButton(
+    Button(
         modifier = modifier,
         text = stringResource(id = R.string.sign_up_with, "Facebook"),
         properties = ButtonProperties(
             leadingIconRes = R.drawable.ic_facebook,
             type = ButtonType.DynamicColor(
                 containerColor = facebookColor,
-                contentColor = contentColor
+                contentColor = contentColor,
             ),
-            isLoading = isLoading
+            isLoading = isLoading,
         ),
         onClick = {
             facebookActivityLauncher?.launch(listOf("email", "public_profile"))
-        }
+        },
     )
 }

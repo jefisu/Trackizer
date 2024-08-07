@@ -1,4 +1,4 @@
-package com.jefisu.ui.modifier
+package com.jefisu.ui.ext.modifier
 
 import android.graphics.BlurMaskFilter
 import androidx.compose.ui.Modifier

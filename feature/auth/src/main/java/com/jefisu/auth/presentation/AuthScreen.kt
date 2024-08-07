@@ -17,7 +17,7 @@ import com.jefisu.auth.presentation.auth_provider_pages.register.RegisterState
 import com.jefisu.auth.presentation.components.EndlessHorizontalPager
 import com.jefisu.auth.presentation.util.AuthPage
 import com.jefisu.ui.components.FlashMessageContainer
-import com.jefisu.ui.components.StandardScreenLogo
+import com.jefisu.ui.screen.LogoScreen
 import com.jefisu.ui.theme.AppTheme
 import com.jefisu.ui.theme.Theme
 
@@ -43,18 +43,21 @@ fun AuthScreen(
         onDismiss = {
             onLoginAction(LoginAction.CloseMessage)
             onRegisterAction(RegisterAction.CloseMessage)
-        }
+        },
     ) {
-        StandardScreenLogo {
+        LogoScreen {
             EndlessHorizontalPager(
                 items = pages,
                 startPage = pages.indexOf(
-                    if (navArgs.isLoginToStart) AuthPage.LoginWithEmail
-                    else AuthPage.CustomLoginProviders
+                    if (navArgs.isLoginToStart) {
+                        AuthPage.LoginWithEmail
+                    } else {
+                        AuthPage.CustomLoginProviders
+                    },
                 ),
                 modifier = Modifier
                     .matchParentSize()
-                    .navigationBarsPadding()
+                    .navigationBarsPadding(),
             ) { page, onClickNextPage ->
                 Box(
                     modifier = Modifier.padding(Theme.spacing.extraMedium),
@@ -80,7 +83,7 @@ fun AuthScreen(
                             LoginPage(
                                 state = loginState,
                                 onAction = onLoginAction,
-                                onNavigateToRegisterPage = onClickNextPage
+                                onNavigateToRegisterPage = onClickNextPage,
                             )
                         }
                     }
@@ -89,7 +92,6 @@ fun AuthScreen(
         }
     }
 }
-
 
 @Preview
 @Composable

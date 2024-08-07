@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,30 +37,29 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jefisu.home.R
 import com.jefisu.home.presentation.HomeState
-import com.jefisu.home.presentation.util.formatCurrency
-import com.jefisu.ui.R as CommonRes
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.components.AnimatedText
+import com.jefisu.ui.components.Button
 import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonSize
 import com.jefisu.ui.components.ButtonType
-import com.jefisu.ui.components.StandardButton
+import com.jefisu.ui.ext.draw_scope.drawArcBlur
 import com.jefisu.ui.theme.AccentPrimary100
 import com.jefisu.ui.theme.AccentPrimary50
 import com.jefisu.ui.theme.AccentSecondary50
 import com.jefisu.ui.theme.AppTheme
 import com.jefisu.ui.theme.Black18
-import com.jefisu.ui.theme.Gray30
 import com.jefisu.ui.theme.Gray40
 import com.jefisu.ui.theme.Gray60
 import com.jefisu.ui.theme.Gray70
 import com.jefisu.ui.theme.Primary10
 import com.jefisu.ui.theme.Purple90
 import com.jefisu.ui.theme.Theme
+import com.jefisu.ui.util.formatCurrency
 import java.time.LocalDate
 
 private const val START_ANGLE = 135f
@@ -71,7 +68,6 @@ private const val SWEEP_ANGLE = 270f
 @Composable
 internal fun Header(
     state: HomeState,
-    onSettingsClick: () -> Unit,
     onSeeBudgetClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -109,19 +105,6 @@ internal fun Header(
     ) {
         ArcProgress(progress = { budgetCommittedPercentage })
 
-        IconButton(
-            onClick = onSettingsClick,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(Theme.spacing.medium),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_settings),
-                contentDescription = "Settings icon",
-                tint = Gray30,
-            )
-        }
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -130,13 +113,13 @@ internal fun Header(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = painterResource(id = CommonRes.drawable.app_logo_no_background),
+                    painter = painterResource(id = UiRes.drawable.app_logo_no_background),
                     contentDescription = null,
                     modifier = Modifier.size(20.dp),
                 )
                 Spacer(modifier = Modifier.width(Theme.spacing.small))
                 Text(
-                    text = stringResource(id = CommonRes.string.app_name).uppercase(),
+                    text = stringResource(id = UiRes.string.app_name).uppercase(),
                     style = Theme.typography.headline3,
                 )
             }
@@ -153,7 +136,7 @@ internal fun Header(
                 color = Gray40,
             )
             Spacer(modifier = Modifier.height(36.dp))
-            StandardButton(
+            Button(
                 text = stringResource(R.string.see_your_budget),
                 properties = ButtonProperties(
                     type = ButtonType.Secondary,
@@ -191,13 +174,12 @@ internal fun Header(
     }
 }
 
-@Preview(device = Devices.PIXEL_7_PRO)
+@Preview
 @Composable
 private fun HomeHeaderPreview() {
     AppTheme {
         Header(
             state = HomeState(),
-            onSettingsClick = { },
             onSeeBudgetClick = { },
         )
     }
@@ -267,24 +249,13 @@ private fun ArcProgress(progress: () -> Float) {
             )
         }
 
-        fun drawBlur() {
-            val maxBlurArcs = 20
-            for (i in 0..maxBlurArcs) {
-                drawArc(
-                    color = color.copy(alpha = i / 900f),
-                    startAngle = startAngle,
-                    sweepAngle = sweepAngle * progress,
-                    useCenter = useCenter,
-                    style = Stroke(
-                        width = 80f + (maxBlurArcs - i) * 10,
-                        cap = strokeCap,
-                    ),
-                )
-            }
-        }
-
         drawStrokeArc(thickness = thickness)
-        drawBlur()
+        drawArcBlur(
+            color = color,
+            startAngle = startAngle,
+            sweepAngle = sweepAngle * progress,
+            useCenter = useCenter,
+        )
         drawArc(
             color = color,
             startAngle = startAngle,
@@ -397,7 +368,7 @@ fun SubscriptionInfoItem(
             }
             .padding(
                 vertical = Theme.spacing.medium,
-                horizontal = 18.dp,
+                horizontal = 14.dp,
             ),
     ) {
         Text(

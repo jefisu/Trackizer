@@ -20,10 +20,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jefisu.ui.components.Button
 import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
-import com.jefisu.ui.components.StandardButton
-import com.jefisu.ui.components.StandardScreenLogo
+import com.jefisu.ui.screen.LogoScreen
 import com.jefisu.ui.theme.AppTheme
 import com.jefisu.ui.theme.Theme
 
@@ -32,7 +32,7 @@ fun WelcomeScreen(
     onNavigateToRegisterScreen: () -> Unit = {},
     onNavigateToLoginScreen: () -> Unit = {},
 ) {
-    StandardScreenLogo {
+    LogoScreen {
         Image(
             painter = painterResource(id = R.drawable.welcome_asset),
             contentDescription = null,
@@ -68,19 +68,19 @@ fun WelcomeScreen(
                 style = Theme.typography.bodyMedium,
             )
             Spacer(modifier = Modifier.height(40.dp))
-            StandardButton(
+            Button(
                 text = stringResource(R.string.get_started),
                 onClick = onNavigateToRegisterScreen,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(Theme.spacing.medium))
-            StandardButton(
+            Button(
                 text = stringResource(R.string.i_have_an_account),
                 properties = ButtonProperties(
-                    type = ButtonType.Secondary
+                    type = ButtonType.Secondary,
                 ),
                 onClick = onNavigateToLoginScreen,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }

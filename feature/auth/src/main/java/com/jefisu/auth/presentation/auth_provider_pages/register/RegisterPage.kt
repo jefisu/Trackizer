@@ -18,10 +18,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jefisu.auth.R
 import com.jefisu.auth.presentation.auth_provider_pages.register.components.PasswordStrengthMeter
+import com.jefisu.ui.components.Button
 import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
-import com.jefisu.ui.components.StandardButton
-import com.jefisu.ui.components.StandardTextField
+import com.jefisu.ui.components.TextField
 import com.jefisu.ui.theme.Gray50
 import com.jefisu.ui.theme.Theme
 
@@ -36,9 +36,9 @@ fun RegisterPage(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        StandardTextField(
+        TextField(
             text = state.email,
             onTextChange = { onAction(RegisterAction.EmailChanged(it)) },
             fieldName = stringResource(R.string.e_mail_address),
@@ -46,10 +46,10 @@ fun RegisterPage(
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions {
                 focusManager.moveFocus(FocusDirection.Down)
-            }
+            },
         )
         Spacer(modifier = Modifier.height(Theme.spacing.medium))
-        StandardTextField(
+        TextField(
             text = state.password,
             onTextChange = { onAction(RegisterAction.PasswordChanged(it)) },
             fieldName = stringResource(R.string.password),
@@ -58,43 +58,43 @@ fun RegisterPage(
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
-            }
+            },
         )
         Spacer(modifier = Modifier.height(Theme.spacing.extraMedium))
         PasswordStrengthMeter(
-            passwordStrength = state.passwordStrength
+            passwordStrength = state.passwordStrength,
         )
         Spacer(modifier = Modifier.height(Theme.spacing.medium))
         Text(
             text = stringResource(R.string.use_8_or_more_characters),
             style = Theme.typography.bodySmall,
             color = Gray50,
-            textAlign = TextAlign.Justify
+            textAlign = TextAlign.Justify,
         )
         Spacer(modifier = Modifier.height(40.dp))
-        StandardButton(
+        Button(
             text = stringResource(R.string.get_started_it_s_free),
             onClick = {
                 onAction(RegisterAction.Register)
             },
             properties = ButtonProperties(
-                isLoading = state.isLoading
+                isLoading = state.isLoading,
             ),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(130.dp))
         Text(
             text = stringResource(R.string.do_you_have_already_an_account),
-            style = Theme.typography.bodyMedium
+            style = Theme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.height(Theme.spacing.extraMedium))
-        StandardButton(
+        Button(
             text = stringResource(R.string.sign_in),
             properties = ButtonProperties(
-                type = ButtonType.Secondary
+                type = ButtonType.Secondary,
             ),
             onClick = onNavigateToLoginPage,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }

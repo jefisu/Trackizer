@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentId
 data class SubscriptionDto(
     @DocumentId val id: String = "",
     val userId: String = "",
+    val categoryId: String = "",
     val serviceName: String = "",
     val price: Float = 0f,
     val description: String = "",

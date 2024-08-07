@@ -24,9 +24,9 @@ import androidx.compose.ui.res.stringResource
 import com.jefisu.auth.R
 import com.jefisu.auth.presentation.auth_provider_pages.login.LoginAction
 import com.jefisu.auth.presentation.auth_provider_pages.login.LoginState
+import com.jefisu.ui.components.Button
 import com.jefisu.ui.components.ButtonProperties
-import com.jefisu.ui.components.StandardButton
-import com.jefisu.ui.components.StandardTextField
+import com.jefisu.ui.components.TextField
 import com.jefisu.ui.theme.Gray50
 import com.jefisu.ui.theme.Theme
 import kotlinx.coroutines.launch
@@ -47,10 +47,10 @@ fun ForgotPasswordBottomSheet(
             modifier = modifier,
             dragHandle = {},
             properties = ModalBottomSheetDefaults.properties(
-                shouldDismissOnBackPress = false
+                shouldDismissOnBackPress = false,
             ),
             containerColor = Theme.backgroundColor,
-            windowInsets = WindowInsets.ime
+            windowInsets = WindowInsets.ime,
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -61,46 +61,50 @@ fun ForgotPasswordBottomSheet(
                         start = Theme.spacing.extraMedium,
                         end = Theme.spacing.extraMedium,
                         top = Theme.spacing.extraSmall,
-                        bottom = Theme.spacing.extraMedium
-                    )
+                        bottom = Theme.spacing.extraMedium,
+                    ),
             ) {
                 IconButton(
                     onClick = {
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) onAction(LoginAction.ToggleForgotPasswordBottomSheet)
+                            if (!sheetState.isVisible) {
+                                onAction(
+                                    LoginAction.ToggleForgotPasswordBottomSheet,
+                                )
+                            }
                         }
                     },
-                    modifier = Modifier.align(Alignment.End)
+                    modifier = Modifier.align(Alignment.End),
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Close,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
                 Text(
                     text = stringResource(R.string.forgot_your_password),
-                    style = Theme.typography.headline5
+                    style = Theme.typography.headline5,
                 )
                 Spacer(modifier = Modifier.height(Theme.spacing.medium))
                 Text(
                     text = stringResource(R.string.reset_instructions_will_be_send_to_your_email),
                     style = Theme.typography.bodyMedium,
-                    color = Gray50
+                    color = Gray50,
                 )
                 Spacer(modifier = Modifier.height(Theme.spacing.extraMedium))
-                StandardTextField(
+                TextField(
                     text = state.emailResetPassword,
                     onTextChange = { onAction(LoginAction.EmailResetPasswordChanged(it)) },
-                    fieldName = stringResource(R.string.e_mail_address)
+                    fieldName = stringResource(R.string.e_mail_address),
                 )
                 Spacer(modifier = Modifier.height(Theme.spacing.extraMedium))
-                StandardButton(
+                Button(
                     text = stringResource(R.string.send),
                     onClick = { onAction(LoginAction.SendResetPassword) },
                     properties = ButtonProperties(
-                        isLoading = state.isLoading
+                        isLoading = state.isLoading,
                     ),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }

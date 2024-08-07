@@ -14,9 +14,9 @@ import com.jefisu.auth.R
 import com.jefisu.auth.data.AuthMessage
 import com.jefisu.auth.presentation.auth_provider_pages.custom_login_providers.components.FacebookButton
 import com.jefisu.auth.presentation.auth_provider_pages.custom_login_providers.components.GoogleButton
+import com.jefisu.ui.components.Button
 import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
-import com.jefisu.ui.components.StandardButton
 import com.jefisu.ui.theme.Gray50
 import com.jefisu.ui.theme.Theme
 
@@ -25,43 +25,43 @@ fun CustomLoginProvidersPage(
     onNavigateToRegisterEmailPage: () -> Unit,
     onNavigateToHome: () -> Unit,
     onShowError: (AuthMessage.Error) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         GoogleButton(
             onSuccessfulLogin = onNavigateToHome,
             onFailureLogin = onShowError,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(Theme.spacing.medium))
         FacebookButton(
             onSuccessfulLogin = onNavigateToHome,
             onFailureLogin = onShowError,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(Theme.spacing.large))
         Text(
             text = stringResource(R.string.or),
-            style = Theme.typography.headline2
+            style = Theme.typography.headline2,
         )
         Spacer(modifier = Modifier.height(Theme.spacing.large))
-        StandardButton(
+        Button(
             text = stringResource(id = R.string.sign_up_with, "E-mail"),
             properties = ButtonProperties(
-                type = ButtonType.Secondary
+                type = ButtonType.Secondary,
             ),
             onClick = onNavigateToRegisterEmailPage,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(Theme.spacing.extraMedium))
         Text(
             text = stringResource(R.string.by_registering_you_agree),
             style = Theme.typography.bodySmall,
             color = Gray50,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }

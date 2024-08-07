@@ -1,16 +1,16 @@
 package com.jefisu.trackizer.navigation
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -22,7 +22,10 @@ import com.jefisu.domain.repository.UserRepository
 import com.jefisu.home.presentation.HomeScreen
 import com.jefisu.home.presentation.homeScreen
 import com.jefisu.home.presentation.navigateToHome
-import com.jefisu.ui.components.StandardBottomNavigation
+import com.jefisu.spending_budgets.presentation.SpendingBudgetsScreen
+import com.jefisu.spending_budgets.presentation.spendingBudgetsScreen
+import com.jefisu.ui.components.BottomNavItem
+import com.jefisu.ui.screen.BottomNavigationScreen
 import com.jefisu.welcome.WelcomeScreen
 import com.jefisu.welcome.welcomeScreen
 import org.koin.compose.koinInject
@@ -32,7 +35,26 @@ fun NavGraph() {
     val navController = rememberNavController()
     val navBackStack by navController.currentBackStackEntryAsState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    val context = LocalContext.current
+    var selectedNavIndex by rememberSaveable { mutableIntStateOf(0) }
+
+    BottomNavigationScreen(
+        showBottomNavigation = navBackStack.showBottomNavigation(),
+        selectedNavItem = BottomNavItem.entries[selectedNavIndex],
+        onNavItemClick = {
+            if (it in listOf(
+                    BottomNavItem.ADD,
+                    BottomNavItem.CALENDAR,
+                    BottomNavItem.CREDIT_CARDS,
+                )
+            ) {
+                Toast.makeText(context, "Not implemented", Toast.LENGTH_SHORT).show()
+                return@BottomNavigationScreen
+            }
+            navController.navigateWithBottomNavigation(it)
+            selectedNavIndex = it.ordinal
+        },
+    ) {
         NavHost(
             navController = navController,
             startDestination = startDestination(),
@@ -45,17 +67,7 @@ fun NavGraph() {
                 onNavigateToHomeScreen = navController::navigateToHome,
             )
             homeScreen(onNavigateToSettings = {})
-        }
-
-        AnimatedVisibility(
-            visible = navBackStack.showBottomNavigation(),
-            modifier = Modifier.align(Alignment.BottomStart),
-            enter = fadeIn(),
-            exit = fadeOut(),
-        ) {
-            StandardBottomNavigation(
-                onNavClick = {},
-            )
+            spendingBudgetsScreen(onNavigateToSettings = {})
         }
     }
 }
@@ -66,4 +78,25 @@ fun startDestination(): Screen {
     return if (userRepository.isAuthenticated()) HomeScreen else WelcomeScreen
 }
 
-fun NavBackStackEntry?.showBottomNavigation() = this?.destination?.hasRoute<HomeScreen>() == true
+fun NavBackStackEntry?.showBottomNavigation(): Boolean {
+    val screensToShow = listOf(
+        HomeScreen,
+        SpendingBudgetsScreen,
+    )
+    return screensToShow.any { this?.destination?.hasRoute(it::class) == true }
+}
+
+fun NavController.navigateWithBottomNavigation(navItem: BottomNavItem) {
+    val screen = when (navItem) {
+        BottomNavItem.HOME -> HomeScreen
+        BottomNavItem.BUDGETS -> SpendingBudgetsScreen
+        else -> return
+    }
+    navigate(screen) {
+        popUpTo(graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
+}

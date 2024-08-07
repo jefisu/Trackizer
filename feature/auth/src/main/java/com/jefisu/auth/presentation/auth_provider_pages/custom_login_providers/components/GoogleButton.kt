@@ -22,9 +22,9 @@ import com.google.firebase.ktx.Firebase
 import com.jefisu.auth.BuildConfig
 import com.jefisu.auth.R
 import com.jefisu.auth.data.AuthMessage
+import com.jefisu.ui.components.Button
 import com.jefisu.ui.components.ButtonProperties
 import com.jefisu.ui.components.ButtonType
-import com.jefisu.ui.components.StandardButton
 import com.jefisu.ui.theme.Gray80
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -48,7 +48,7 @@ fun GoogleButton(
                     .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
                     .setFilterByAuthorizedAccounts(false)
                     .setAutoSelectEnabled(true)
-                    .build()
+                    .build(),
             )
             .build()
 
@@ -76,17 +76,17 @@ fun GoogleButton(
         }
     }
 
-    StandardButton(
+    Button(
         modifier = modifier,
         text = stringResource(id = R.string.sign_up_with, "Google"),
         properties = ButtonProperties(
             leadingIconRes = R.drawable.ic_google,
             type = ButtonType.DynamicColor(
                 containerColor = Color.White,
-                contentColor = contentColor
+                contentColor = contentColor,
             ),
-            isLoading = isLoading
+            isLoading = isLoading,
         ),
-        onClick = onClickSignIn
+        onClick = onClickSignIn,
     )
 }

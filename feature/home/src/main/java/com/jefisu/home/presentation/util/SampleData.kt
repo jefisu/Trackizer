@@ -15,6 +15,7 @@ internal object SampleData {
             price = it.toFloat(),
             paymentDate = LocalDate.now().plusDays(it.toLong()),
             reminder = it % 2 == 0,
+            categoryId = "category$it",
         )
     }
 }
