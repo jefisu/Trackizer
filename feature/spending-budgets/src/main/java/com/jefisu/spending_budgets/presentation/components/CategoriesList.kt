@@ -38,6 +38,7 @@ import com.jefisu.ui.theme.Theme
 import com.jefisu.ui.util.asColor
 import com.jefisu.ui.util.asIconResource
 import com.jefisu.ui.util.formatCurrency
+import kotlin.math.absoluteValue
 
 @Composable
 fun CategoriesList(
@@ -110,8 +111,12 @@ private fun CategoryItem(
                 )
                 Text(
                     text = stringResource(
-                        R.string.left_to_spend,
-                        formatCurrency(leftToSpend.toDouble()),
+                        if (leftToSpend < 0f) {
+                            R.string.exceeded_budget
+                        } else {
+                            R.string.left_to_spend
+                        },
+                        formatCurrency(leftToSpend.toDouble().absoluteValue),
                     ),
                     style = Theme.typography.bodySmall,
                     color = Gray30,
