@@ -15,11 +15,13 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,6 +38,7 @@ import com.jefisu.ui.theme.Gray60
 import com.jefisu.ui.theme.Primary10
 import com.jefisu.ui.theme.Theme
 import com.jefisu.ui.util.formatCurrency
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -79,12 +82,14 @@ private fun AnimatedSemiCircleChart(
     modifier: Modifier = Modifier,
     startAngle: Float = 180f,
     sweepAngle: Float = 180f,
-    gapDegrees: Float = 8f,
+    gapDegreesDp: Dp = 1.8.dp,
     strokeWidthBackground: Dp = 6.dp,
     strokeWidth: Dp = 10.dp,
 ) {
     val view = LocalView.current
 
+    val gapDegrees =
+        if (view.isInEditMode) 8f else with(LocalDensity.current) { gapDegreesDp.toPx() }
     val numberOfGaps = pieDataPoints.size - 1
     val remainingDegrees = sweepAngle - (gapDegrees * numberOfGaps)
     val usedValue = maxValue / remainingDegrees
