@@ -161,7 +161,7 @@ private fun ProgressBar(
             color = color,
             cornerRadius = CornerRadius(corner, corner),
             size = size.copy(
-                width = size.width * progress(),
+                width = size.width * progress().coerceAtMost(1f),
             ),
         )
     }
