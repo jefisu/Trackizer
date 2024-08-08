@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseApp
 import com.jefisu.auth.di.authModule
 import com.jefisu.data.di.dataModule
 import com.jefisu.home.di.homeModule
+import com.jefisu.spending_budgets.di.spendingBudgetsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -21,6 +22,7 @@ class TrackizerApp : Application() {
                 authModule,
                 dataModule,
                 homeModule,
+                spendingBudgetsModule,
             )
         }
     }

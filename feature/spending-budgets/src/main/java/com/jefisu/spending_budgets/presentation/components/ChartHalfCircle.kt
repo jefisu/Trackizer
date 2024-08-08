@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -103,19 +102,17 @@ private fun AnimatedSemiCircleChart(
         )
     }
 
-    LaunchedEffect(Unit) {
-        snapshotFlow { arcs }.collect { arcs ->
-            arcs.forEachIndexed { index, arc ->
-                launch {
-                    arc.animation.animateTo(
-                        targetValue = arc.targetSweepAngle,
-                        animationSpec = tween(
-                            durationMillis = 1000,
-                            easing = LinearEasing,
-                            delayMillis = index * 1000,
-                        ),
-                    )
-                }
+    LaunchedEffect(arcs) {
+        arcs.forEachIndexed { index, arc ->
+            launch {
+                arc.animation.animateTo(
+                    targetValue = arc.targetSweepAngle,
+                    animationSpec = tween(
+                        durationMillis = 1000,
+                        easing = LinearEasing,
+                        delayMillis = index * 1000,
+                    ),
+                )
             }
         }
     }

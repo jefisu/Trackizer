@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,12 +37,18 @@ fun SpendingBudgetScreen(
     state: SpendingBudgetsState = SpendingBudgetsState(),
     onNavigateToSettings: () -> Unit = {},
 ) {
-    val budget = state.categories.sumOf { it.budget.toDouble() }
-    val pieDataPoints = state.categories.map {
-        PieData(
-            value = it.usedBudget,
-            color = it.type.asColor(),
-        )
+    val budget = remember(state.categories) {
+        state.categories
+            .sumOf { it.budget.toDouble() }
+            .toFloat()
+    }
+    val pieDataPoints = remember(state.categories) {
+        state.categories.map {
+            PieData(
+                value = it.usedBudget,
+                color = it.type.asColor(),
+            )
+        }
     }
 
     BottomNavigationBody(
@@ -48,19 +56,19 @@ fun SpendingBudgetScreen(
         onSettingsClick = onNavigateToSettings,
     ) {
         ChartHalfCircle(
-            budget = budget.toFloat(),
+            budget = budget,
             pieDataPoints = pieDataPoints,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = 100.dp)
-                .statusBarsPadding()
+                .statusBarsPadding(),
         )
         Column(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = 244.dp, bottom = 120.dp)
                 .padding(horizontal = Theme.spacing.extraMedium)
-                .statusBarsPadding()
+                .statusBarsPadding(),
         ) {
             Text(
                 text = stringResource(R.string.your_budgets_are_on_track, "\uD83D\uDC4D"),
