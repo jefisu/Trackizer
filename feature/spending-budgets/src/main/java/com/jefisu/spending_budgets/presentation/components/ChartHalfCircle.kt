@@ -1,9 +1,5 @@
 package com.jefisu.spending_budgets.presentation.components
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,8 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,8 +32,6 @@ import com.jefisu.ui.theme.Gray60
 import com.jefisu.ui.theme.Primary10
 import com.jefisu.ui.theme.Theme
 import com.jefisu.ui.util.formatCurrency
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 
 @Composable
 fun ChartHalfCircle(
@@ -102,24 +94,8 @@ private fun AnimatedSemiCircleChart(
         ArcData(
             startAngle = targetStartAngle,
             targetSweepAngle = targetSweepAngle,
-            animation = Animatable(0f),
             color = pieChartData.color,
         )
-    }
-
-    LaunchedEffect(arcs) {
-        arcs.forEachIndexed { index, arc ->
-            launch {
-                arc.animation.animateTo(
-                    targetValue = arc.targetSweepAngle,
-                    animationSpec = tween(
-                        durationMillis = 1000,
-                        easing = LinearEasing,
-                        delayMillis = index * 1000,
-                    ),
-                )
-            }
-        }
     }
 
     Canvas(modifier = modifier.size(206.dp)) {
@@ -134,16 +110,10 @@ private fun AnimatedSemiCircleChart(
             ),
         )
         arcs.forEach { arcData ->
-            val arcSweepAngle = if (view.isInEditMode) {
-                arcData.targetSweepAngle
-            } else {
-                arcData.animation.value
-            }
-
             drawArcBlur(
                 color = arcData.color,
                 startAngle = arcData.startAngle,
-                sweepAngle = arcSweepAngle,
+                sweepAngle = arcData.targetSweepAngle,
                 useCenter = false,
                 maxBlurArcs = 10,
             )
@@ -151,7 +121,7 @@ private fun AnimatedSemiCircleChart(
             drawArc(
                 color = arcData.color,
                 startAngle = arcData.startAngle,
-                sweepAngle = arcSweepAngle,
+                sweepAngle = arcData.targetSweepAngle,
                 useCenter = false,
                 style = Stroke(
                     width = strokeWidth.toPx(),
@@ -164,12 +134,7 @@ private fun AnimatedSemiCircleChart(
 
 data class PieData(val value: Float, val color: Color)
 
-data class ArcData(
-    val animation: Animatable<Float, AnimationVector1D>,
-    val targetSweepAngle: Float,
-    val startAngle: Float,
-    val color: Color,
-)
+data class ArcData(val targetSweepAngle: Float, val startAngle: Float, val color: Color)
 
 @Preview
 @Composable
