@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Trackizer.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/gray80</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/avd_app_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Trackizer</item>
+    </style>
+</resources>

@@ -29,6 +29,10 @@ android {
 }
 
 dependencies {
+
+    // SplashScreen
+    implementation(libs.androidx.core.splashscreen)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     testImplementation(libs.junit)
