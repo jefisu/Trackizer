@@ -29,6 +29,8 @@ android {
 }
 
 dependencies {
+    // Feature
+    implementation(projects.feature.welcome)
 
     // SplashScreen
     implementation(libs.androidx.core.splashscreen)
