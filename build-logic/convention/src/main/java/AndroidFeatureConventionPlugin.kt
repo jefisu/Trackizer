@@ -15,6 +15,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 
             dependencies {
                 implementation(project(":core:presentation:designsystem"))
+                implementation(project(":core:domain"))
 
                 // Define common dependencies for feature modules
                 implementation(libs.findLibrary("androidx-navigation-compose").get())
