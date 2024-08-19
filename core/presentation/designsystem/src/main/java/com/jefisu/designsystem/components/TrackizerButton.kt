@@ -1,18 +1,30 @@
 package com.jefisu.designsystem.components
 
+import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -30,6 +42,8 @@ fun TrackizerButton(
     onClick: () -> Unit,
     type: ButtonType,
     modifier: Modifier = Modifier,
+    @DrawableRes leadingIconRes: Int? = null,
+    isLoading: Boolean = false,
 ) {
     val shadowModifier = if (type.hasShadow) {
         Modifier.dropShadow(
@@ -57,10 +71,35 @@ fun TrackizerButton(
             .height(TrackizerTheme.size.buttonHeight)
             .then(shadowModifier),
     ) {
-        Text(
-            text = text,
-            style = TrackizerTheme.typography.headline2,
-        )
+        AnimatedContent(
+            targetState = isLoading,
+            label = "",
+        ) { target ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (target) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(TrackizerTheme.size.circularProgressSmall),
+                        strokeCap = StrokeCap.Round,
+                        color = LocalContentColor.current,
+                    )
+                } else {
+                    leadingIconRes?.let { resId ->
+                        Icon(
+                            painter = painterResource(id = resId),
+                            contentDescription = null,
+                            modifier = Modifier.size(TrackizerTheme.size.iconExtraSmall),
+                        )
+                        Spacer(Modifier.width(TrackizerTheme.spacing.small))
+                    }
+                    Text(
+                        text = text,
+                        style = TrackizerTheme.typography.headline2,
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -88,16 +127,23 @@ sealed class ButtonType(
             1f to Color.Transparent,
         ),
     )
+
+    data class Dynamic(val container: Color, val content: Color) :
+        ButtonType(
+            containerColor = container,
+            contentColor = content,
+            hasShadow = true,
+        )
 }
 
-private class ButtonPreviewParamater : PreviewParameterProvider<ButtonType> {
+private class ButtonPreviewParameter : PreviewParameterProvider<ButtonType> {
     override val values get() = sequenceOf(ButtonType.Primary, ButtonType.Secondary)
 }
 
 @Preview
 @Composable
 private fun TrackizerButtonPreview(
-    @PreviewParameter(ButtonPreviewParamater::class) type: ButtonType,
+    @PreviewParameter(ButtonPreviewParameter::class) type: ButtonType,
 ) {
     TrackizerTheme {
         TrackizerButton(
@@ -105,6 +151,21 @@ private fun TrackizerButtonPreview(
             onClick = {},
             type = type,
             modifier = Modifier.padding(TrackizerTheme.spacing.small),
+            isLoading = false,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun LoadingTrackizerButtonPreview() {
+    TrackizerTheme {
+        TrackizerButton(
+            text = "Get Started",
+            onClick = {},
+            type = ButtonType.Primary,
+            modifier = Modifier.padding(TrackizerTheme.spacing.small),
+            isLoading = true,
         )
     }
 }
