@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
@@ -30,9 +29,8 @@ fun TrackizerLogoBox(content: @Composable BoxScope.() -> Unit) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .safeDrawingPadding()
                 .padding(top = 70.dp)
-                .align(Alignment.TopCenter)
+                .align(Alignment.TopCenter),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.app_logo_no_background),

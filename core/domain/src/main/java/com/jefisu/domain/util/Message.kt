@@ -1,4 +1,4 @@
-package com.jefisu.common.util
+package com.jefisu.domain.util
 
 interface Message
 

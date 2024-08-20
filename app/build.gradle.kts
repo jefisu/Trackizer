@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.trackizer.android.application)
     alias(libs.plugins.trackizer.android.application.compose)
     alias(libs.plugins.trackizer.android.hilt)
+    alias(libs.plugins.trackizer.android.firebase)
 }
 
 android {
@@ -31,6 +32,7 @@ android {
 dependencies {
     // Feature
     implementation(projects.feature.welcome)
+    implementation(projects.feature.auth)
 
     // SplashScreen
     implementation(libs.androidx.core.splashscreen)

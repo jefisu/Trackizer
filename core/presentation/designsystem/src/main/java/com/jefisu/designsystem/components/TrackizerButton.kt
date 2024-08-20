@@ -1,7 +1,6 @@
 package com.jefisu.designsystem.components
 
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -71,33 +70,28 @@ fun TrackizerButton(
             .height(TrackizerTheme.size.buttonHeight)
             .then(shadowModifier),
     ) {
-        AnimatedContent(
-            targetState = isLoading,
-            label = "",
-        ) { target ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                if (target) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(TrackizerTheme.size.circularProgressSmall),
-                        strokeCap = StrokeCap.Round,
-                        color = LocalContentColor.current,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(TrackizerTheme.size.circularProgressSmall),
+                    strokeCap = StrokeCap.Round,
+                    color = LocalContentColor.current,
+                )
+            } else {
+                leadingIconRes?.let { resId ->
+                    Icon(
+                        painter = painterResource(id = resId),
+                        contentDescription = null,
+                        modifier = Modifier.size(TrackizerTheme.size.iconExtraSmall),
                     )
-                } else {
-                    leadingIconRes?.let { resId ->
-                        Icon(
-                            painter = painterResource(id = resId),
-                            contentDescription = null,
-                            modifier = Modifier.size(TrackizerTheme.size.iconExtraSmall),
-                        )
-                        Spacer(Modifier.width(TrackizerTheme.spacing.small))
-                    }
-                    Text(
-                        text = text,
-                        style = TrackizerTheme.typography.headline2,
-                    )
+                    Spacer(Modifier.width(TrackizerTheme.spacing.small))
                 }
+                Text(
+                    text = text,
+                    style = TrackizerTheme.typography.headline2,
+                )
             }
         }
     }

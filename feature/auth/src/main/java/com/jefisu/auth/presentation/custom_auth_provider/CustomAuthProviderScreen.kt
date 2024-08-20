@@ -11,29 +11,38 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.jefisu.auth.R
-import com.jefisu.designsystem.FacebookColor
+import com.jefisu.auth.presentation.custom_auth_provider.components.FacebookButton
+import com.jefisu.auth.presentation.custom_auth_provider.components.GoogleButton
 import com.jefisu.designsystem.Gray50
-import com.jefisu.designsystem.Gray80
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.domain.util.Message
 
 @Composable
-fun CustomAuthProviderRoot(navigateToRegister: () -> Unit) {
+fun CustomAuthProviderRoot(
+    navigateToRegister: () -> Unit,
+    navigateToHome: () -> Unit,
+) {
     CustomAuthProviderScreen(
+        onError = {},
         navigateToRegister = navigateToRegister,
+        navigateToHome = navigateToHome,
     )
 }
 
 @Composable
-internal fun CustomAuthProviderScreen(navigateToRegister: () -> Unit) {
+internal fun CustomAuthProviderScreen(
+    onError: (Message) -> Unit,
+    navigateToRegister: () -> Unit,
+    navigateToHome: () -> Unit,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom,
@@ -41,26 +50,14 @@ internal fun CustomAuthProviderScreen(navigateToRegister: () -> Unit) {
             .fillMaxSize()
             .padding(TrackizerTheme.spacing.extraMedium),
     ) {
-        TrackizerButton(
-            text = stringResource(id = R.string.sign_up_with, "Google"),
-            type = ButtonType.Dynamic(
-                container = Color.White,
-                content = Gray80,
-            ),
-            leadingIconRes = R.drawable.ic_google,
-            onClick = { },
-            modifier = Modifier.fillMaxWidth(),
+        GoogleButton(
+            onSuccessAuth = navigateToHome,
+            onFailureAuth = onError,
         )
         Spacer(Modifier.height(TrackizerTheme.spacing.medium))
-        TrackizerButton(
-            text = stringResource(id = R.string.sign_up_with, "Facebook"),
-            type = ButtonType.Dynamic(
-                container = FacebookColor,
-                content = Color.White,
-            ),
-            leadingIconRes = R.drawable.ic_facebook,
-            onClick = { },
-            modifier = Modifier.fillMaxWidth(),
+        FacebookButton(
+            onSuccessAuth = navigateToHome,
+            onFailureAuth = onError,
         )
         Spacer(Modifier.height(TrackizerTheme.spacing.large))
         Text(
@@ -89,7 +86,9 @@ internal fun CustomAuthProviderScreen(navigateToRegister: () -> Unit) {
 private fun CustomAuthProviderScreenPreview() {
     TrackizerTheme {
         CustomAuthProviderScreen(
+            onError = {},
             navigateToRegister = {},
+            navigateToHome = { },
         )
     }
 }
