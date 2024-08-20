@@ -14,24 +14,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jefisu.auth.R
+import com.jefisu.auth.domain.AuthMessage
 import com.jefisu.auth.presentation.custom_auth_provider.components.FacebookButton
 import com.jefisu.auth.presentation.custom_auth_provider.components.GoogleButton
+import com.jefisu.auth.presentation.util.asMessageText
 import com.jefisu.designsystem.Gray50
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
+import com.jefisu.designsystem.components.FlashMessageDialog
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import com.jefisu.domain.util.Message
 
 @Composable
 fun CustomAuthProviderRoot(
     navigateToRegister: () -> Unit,
     navigateToHome: () -> Unit,
 ) {
+    val viewModel = viewModel<CustomAuthProviderViewModel>()
+
+    FlashMessageDialog(
+        message = viewModel.error?.asMessageText(),
+        onDismiss = viewModel::closeError,
+    )
+
     CustomAuthProviderScreen(
-        onError = {},
+        onError = viewModel::showError,
         navigateToRegister = navigateToRegister,
         navigateToHome = navigateToHome,
     )
@@ -39,7 +49,7 @@ fun CustomAuthProviderRoot(
 
 @Composable
 internal fun CustomAuthProviderScreen(
-    onError: (Message) -> Unit,
+    onError: (AuthMessage) -> Unit,
     navigateToRegister: () -> Unit,
     navigateToHome: () -> Unit,
 ) {
