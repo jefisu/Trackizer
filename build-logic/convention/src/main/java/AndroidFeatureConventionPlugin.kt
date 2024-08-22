@@ -10,6 +10,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             pluginManager.apply {
                 apply("trackizer.android.library")
                 apply("trackizer.android.hilt")
+                apply("trackizer.android.library.compose")
                 apply("org.jetbrains.kotlin.plugin.serialization")
             }
 

@@ -17,6 +17,7 @@ internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*,
             implementation(platform(bom))
             androidTestImplementation(platform(bom))
             implementation(libs.findLibrary("androidx.compose.material3").get())
+            implementation(libs.findLibrary("androidx-material-icons-extended").get())
             debugImplementation(libs.findLibrary("androidx-compose-ui-tooling").get())
             implementation(libs.findLibrary("androidx-compose-ui-tooling-preview").get())
         }
