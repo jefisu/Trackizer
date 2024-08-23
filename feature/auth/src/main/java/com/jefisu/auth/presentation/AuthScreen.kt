@@ -7,6 +7,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.jefisu.auth.presentation.components.EndlessHorizontalPager
 import com.jefisu.auth.presentation.custom_auth_provider.CustomAuthProviderRoot
 import com.jefisu.auth.presentation.login.LoginScreenRoot
+import com.jefisu.auth.presentation.register.RegisterScreenRoot
 import com.jefisu.auth.presentation.util.AuthPage
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.TrackizerLogoBox
@@ -35,7 +36,13 @@ fun AuthScreen(
                     )
                 }
 
-                AuthPage.RegisterWithEmail -> Unit
+                AuthPage.RegisterWithEmail -> {
+                    RegisterScreenRoot(
+                        navigateToHome = navigateToHome,
+                        navigateToLogin = onNextPageClick,
+                    )
+                }
+
                 AuthPage.LoginWithEmail -> {
                     LoginScreenRoot(
                         navigateToHome = navigateToHome,

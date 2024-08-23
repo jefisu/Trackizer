@@ -28,6 +28,14 @@ class AuthRepositoryImpl : AuthRepository {
         Unit
     }
 
+    override suspend fun signUp(
+        email: String,
+        password: String,
+    ): EmptyAuthResult = runCatch {
+        auth.createUserWithEmailAndPassword(email, password).await()
+        Unit
+    }
+
     override suspend fun sendPasswordResetEmail(email: String): OneMessageAuthResult = runCatch {
         auth.sendPasswordResetEmail(email).await()
         AuthMessage.Success.SENT_PASSWORD_RESET_EMAIL

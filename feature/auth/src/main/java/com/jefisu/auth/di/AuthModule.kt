@@ -3,6 +3,7 @@ package com.jefisu.auth.di
 import com.jefisu.auth.data.AuthRepositoryImpl
 import com.jefisu.auth.domain.AuthRepository
 import com.jefisu.auth.domain.validation.ValidateEmail
+import com.jefisu.auth.domain.validation.ValidatePassword
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,4 +21,8 @@ object AuthModule {
     @Provides
     @ViewModelScoped
     fun provideValidateEmail() = ValidateEmail()
+
+    @Provides
+    @ViewModelScoped
+    fun provideValidatePassword() = ValidatePassword()
 }

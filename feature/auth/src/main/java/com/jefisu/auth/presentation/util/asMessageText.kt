@@ -3,6 +3,7 @@ package com.jefisu.auth.presentation.util
 import com.jefisu.auth.R
 import com.jefisu.auth.domain.AuthMessage
 import com.jefisu.auth.domain.validation.ValidateEmail
+import com.jefisu.auth.domain.validation.ValidatePassword
 import com.jefisu.domain.util.MessageText
 import com.jefisu.domain.util.UiText
 
@@ -52,4 +53,8 @@ fun ValidateEmail.Error.asMessageText(): MessageText = MessageText.Error(
             R.string.invalid_email_format_error,
         )
     },
+)
+
+fun ValidatePassword.Error.asMessageText(): MessageText = MessageText.Error(
+    UiText.StringResource(R.string.password_error),
 )

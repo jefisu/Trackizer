@@ -11,5 +11,10 @@ interface AuthRepository {
         password: String,
     ): EmptyAuthResult
 
+    suspend fun signUp(
+        email: String,
+        password: String,
+    ): EmptyAuthResult
+
     suspend fun sendPasswordResetEmail(email: String): OneMessageAuthResult
 }
