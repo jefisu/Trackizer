@@ -66,6 +66,7 @@ desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref 
 # Firebase, Google and Facebook auth
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom"}
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx"}
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebookLogin" }
@@ -106,6 +107,7 @@ trackizer-android-firebase = { id = "trackizer.android.firebase", version = "uns
 [bundles]
 auth = [
     "firebase-auth",
+    "firebase-firestore",
     "googleid",
     "facebook-login",
     "androidx-credentials",
