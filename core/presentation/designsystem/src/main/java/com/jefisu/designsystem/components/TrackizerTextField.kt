@@ -29,7 +29,6 @@ import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.TrackizerTextFieldDefaults
-import com.jefisu.designsystem.util.automaticallyClearFocus
 
 @Composable
 fun TrackizerTextField(
@@ -54,7 +53,6 @@ fun TrackizerTextField(
             keyboardOptions = keyboardOptions,
             modifier = Modifier
                 .weight(1f)
-                .automaticallyClearFocus()
                 .onFocusChanged { isFocused = it.isFocused },
         )
         if (text.isNotEmpty()) {
@@ -80,10 +78,12 @@ fun TrackizerTextField(
 @Preview
 @Composable
 private fun TrackizerTextFieldPreview() {
+    var text by rememberSaveable { mutableStateOf("") }
+
     TrackizerTheme {
         TrackizerTextField(
-            text = "",
-            onTextChange = {},
+            text = text,
+            onTextChange = { text = it },
             fieldName = "E-mail",
         )
     }

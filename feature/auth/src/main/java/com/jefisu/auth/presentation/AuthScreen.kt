@@ -1,9 +1,12 @@
 package com.jefisu.auth.presentation
 
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.jefisu.auth.presentation.components.EndlessHorizontalPager
 import com.jefisu.auth.presentation.custom_auth_provider.CustomAuthProviderRoot
+import com.jefisu.auth.presentation.login.LoginScreenRoot
 import com.jefisu.auth.presentation.util.AuthPage
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.TrackizerLogoBox
@@ -22,6 +25,7 @@ fun AuthScreen(
         EndlessHorizontalPager(
             items = AuthPage.entries,
             startPage = startPage.ordinal,
+            modifier = Modifier.navigationBarsPadding(),
         ) { page, onNextPageClick ->
             when (page) {
                 AuthPage.CustomAuthProviders -> {
@@ -32,7 +36,12 @@ fun AuthScreen(
                 }
 
                 AuthPage.RegisterWithEmail -> Unit
-                AuthPage.LoginWithEmail -> Unit
+                AuthPage.LoginWithEmail -> {
+                    LoginScreenRoot(
+                        navigateToHome = navigateToHome,
+                        navigateToRegister = onNextPageClick,
+                    )
+                }
             }
         }
     }

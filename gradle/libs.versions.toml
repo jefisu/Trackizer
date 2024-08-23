@@ -26,6 +26,9 @@ googleid = "1.1.1"
 secretGradle = "2.0.1"
 facebookLogin = "latest.release"
 materialIconsExtended = "1.6.8"
+datastorePreferences = "1.1.1"
+appcompat = "1.7.0"
+material = "1.12.0"
 
 [libraries]
 # Compose
@@ -66,6 +69,7 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx"}
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebookLogin" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -75,6 +79,8 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
 junit = { group = "junit", name = "junit", version.ref = "baseJunit" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -98,6 +104,10 @@ trackizer-android-hilt = { id = "trackizer.android.hilt", version = "unspecified
 trackizer-android-firebase = { id = "trackizer.android.firebase", version = "unspecified" }
 
 [bundles]
-firebase = [
-    "firebase-auth"
+auth = [
+    "firebase-auth",
+    "googleid",
+    "facebook-login",
+    "androidx-credentials",
+    "androidx-datastore-preferences"
 ]

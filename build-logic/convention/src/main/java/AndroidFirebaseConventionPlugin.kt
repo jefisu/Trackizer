@@ -9,10 +9,7 @@ class AndroidFirebaseConventionPlugin : Plugin<Project> {
         with(target) {
             dependencies {
                 implementation(platform(libs.findLibrary("firebase-bom").get()))
-                implementation(libs.findBundle("firebase").get())
-                implementation(libs.findLibrary("googleid").get())
-                implementation(libs.findLibrary("androidx-credentials").get())
-                implementation(libs.findLibrary("facebook-login").get())
+                implementation(libs.findBundle("auth").get())
             }
         }
     }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -22,11 +23,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jefisu.auth.R
+import com.jefisu.auth.presentation.login.components.ForgotPasswordBottomSheet
 import com.jefisu.auth.presentation.login.components.RoundCheckbox
 import com.jefisu.designsystem.Gray50
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
+import com.jefisu.designsystem.components.FlashMessageDialog
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.components.TrackizerPasswordTextField
 import com.jefisu.designsystem.components.TrackizerTextField
@@ -34,11 +38,21 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 
 @Composable
-fun LoginScreenRoot() {
+fun LoginScreenRoot(
+    navigateToHome: () -> Unit,
+    navigateToRegister: () -> Unit,
+) {
+    val viewModel = hiltViewModel<LoginViewModel>()
+    val state = viewModel.state
+
+    LaunchedEffect(state.isLoggedIn) {
+        if (state.isLoggedIn) navigateToHome()
+    }
+
     LoginScreen(
-        state = LoginState(),
-        onAction = {},
-        navigateToRegisterScreen = {},
+        state = state,
+        onAction = viewModel::onAction,
+        navigateToRegisterScreen = navigateToRegister,
     )
 }
 
@@ -49,6 +63,16 @@ internal fun LoginScreen(
     navigateToRegisterScreen: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
+
+    FlashMessageDialog(
+        message = state.message,
+        onDismiss = { onAction(LoginAction.CloseMessage) },
+    )
+
+    ForgotPasswordBottomSheet(
+        state = state,
+        onAction = onAction,
+    )
 
     Column(
         verticalArrangement = Arrangement.Bottom,

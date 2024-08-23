@@ -9,7 +9,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.jefisu.auth.domain.AuthMessage
 import com.jefisu.auth.domain.AuthRepository
-import com.jefisu.domain.util.EmptyResult
+import com.jefisu.auth.domain.EmptyAuthResult
+import com.jefisu.auth.domain.OneMessageAuthResult
 import com.jefisu.domain.util.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -22,9 +23,14 @@ class AuthRepositoryImpl : AuthRepository {
     override suspend fun signIn(
         email: String,
         password: String,
-    ): EmptyResult = runCatch {
+    ): EmptyAuthResult = runCatch {
         auth.signInWithEmailAndPassword(email, password).await()
         Unit
+    }
+
+    override suspend fun sendPasswordResetEmail(email: String): OneMessageAuthResult = runCatch {
+        auth.sendPasswordResetEmail(email).await()
+        AuthMessage.Success.SENT_PASSWORD_RESET_EMAIL
     }
 
     private suspend fun <T> runCatch(block: suspend () -> T): Result<T, AuthMessage.Error> =

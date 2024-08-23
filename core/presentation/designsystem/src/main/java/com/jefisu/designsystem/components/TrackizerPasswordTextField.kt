@@ -35,7 +35,6 @@ import com.jefisu.designsystem.R
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.util.TrackizerTextFieldDefaults
-import com.jefisu.designsystem.util.automaticallyClearFocus
 
 @Composable
 fun TrackizerPasswordTextField(
@@ -63,9 +62,7 @@ fun TrackizerPasswordTextField(
                 } else {
                     PasswordVisualTransformation()
                 },
-                modifier = Modifier
-                    .automaticallyClearFocus()
-                    .onFocusChanged { isFocused = it.isFocused },
+                modifier = Modifier.onFocusChanged { isFocused = it.isFocused },
             )
         }
         Spacer(Modifier.width(TrackizerTheme.spacing.small))

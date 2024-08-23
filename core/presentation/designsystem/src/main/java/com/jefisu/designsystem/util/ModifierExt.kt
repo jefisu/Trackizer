@@ -1,28 +1,14 @@
-@file:OptIn(ExperimentalLayoutApi::class)
-
 package com.jefisu.designsystem.util
 
 import android.graphics.BlurMaskFilter
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.isImeVisible
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -53,19 +39,4 @@ fun Modifier.dropShadow(
         canvas.drawOutline(shadowOutline, paint)
         canvas.restore()
     }
-}
-
-fun Modifier.automaticallyClearFocus() = composed {
-    var isFocused by rememberSaveable { mutableStateOf(false) }
-    val focusManager = LocalFocusManager.current
-    val isVisibleKeyboard = WindowInsets.isImeVisible
-
-    onFocusChanged { isFocused = it.isFocused }
-
-    LaunchedEffect(Unit) {
-        snapshotFlow { isFocused && !isVisibleKeyboard }.collect {
-            if (it) focusManager.clearFocus()
-        }
-    }
-    this
 }

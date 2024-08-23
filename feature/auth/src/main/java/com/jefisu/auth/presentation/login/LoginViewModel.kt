@@ -8,17 +8,28 @@ import androidx.lifecycle.viewModelScope
 import com.jefisu.auth.domain.AuthMessage
 import com.jefisu.auth.domain.AuthRepository
 import com.jefisu.auth.domain.validation.ValidateEmail
+import com.jefisu.auth.presentation.util.asMessageText
+import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
     private val validateEmail: ValidateEmail,
 ) : ViewModel() {
 
     var state by mutableStateOf(LoginState())
         private set
+
+    init {
+        rememberUserEmail()
+    }
 
     fun onAction(action: LoginAction) {
         when (action) {
@@ -45,6 +56,20 @@ class LoginViewModel(
             }
 
             is LoginAction.SendResetPassword -> sendResetPassword()
+
+            is LoginAction.CloseMessage -> {
+                state = state.copy(message = null)
+            }
+        }
+    }
+
+    private fun rememberUserEmail() {
+        viewModelScope.launch {
+            val emailSaved = userRepository.email.firstOrNull()
+            state = state.copy(
+                email = emailSaved.orEmpty(),
+                rememberMeCredentials = emailSaved != null,
+            )
         }
     }
 
@@ -53,16 +78,36 @@ class LoginViewModel(
             validateAction(email, password) {
                 authRepository.signIn(email, password)
                     .onSuccess {
-                        state = state.copy(isLoggedIn = true)
+                        state = copy(isLoggedIn = true)
+                        if (rememberMeCredentials) {
+                            userRepository.rememberEmail(email)
+                        } else {
+                            userRepository.forgetEmail()
+                        }
                     }
                     .onError { error ->
-                        state = state.copy(message = error)
+                        state = copy(message = error.asMessageText())
                     }
             }
         }
     }
 
     private fun sendResetPassword() {
+        with(state) {
+            validateAction(emailResetPassword) {
+                authRepository.sendPasswordResetEmail(emailResetPassword)
+                    .onSuccess { message ->
+                        state = copy(
+                            message = message.asMessageText(),
+                            showForgotPasswordSheet = false,
+                            emailResetPassword = "",
+                        )
+                    }
+                    .onError { error ->
+                        state = copy(message = error.asMessageText())
+                    }
+            }
+        }
     }
 
     private fun validateAction(
@@ -72,13 +117,17 @@ class LoginViewModel(
     ) {
         val emailResult = validateEmail.execute(email)
         emailResult.error?.let { error ->
-            state = state.copy(message = error)
+            state = state.copy(message = error.asMessageText())
             return
         }
 
         password?.let { pass ->
             if (pass.isBlank()) {
-                state = state.copy(message = AuthMessage.Error.INVALID_EMAIL_OR_PASSWORD)
+                state = state.copy(
+                    message = AuthMessage.Error
+                        .INVALID_EMAIL_OR_PASSWORD
+                        .asMessageText(),
+                )
                 return
             }
         }
