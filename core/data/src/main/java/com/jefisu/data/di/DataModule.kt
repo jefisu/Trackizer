@@ -2,7 +2,9 @@ package com.jefisu.data.di
 
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
+import com.jefisu.data.repository.SubscriptionRepositoryImpl
 import com.jefisu.data.repository.UserRepositoryImpl
+import com.jefisu.domain.repository.SubscriptionRepository
 import com.jefisu.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
@@ -21,6 +23,10 @@ object DataModule {
         UserRepositoryImpl(
             dataStore = context.dataStore,
         )
+
+    @Provides
+    @Singleton
+    fun provideSubscriptionRepository(): SubscriptionRepository = SubscriptionRepositoryImpl()
 }
 
 val Context.dataStore by preferencesDataStore("user_pref")

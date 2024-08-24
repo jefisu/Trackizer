@@ -2,6 +2,7 @@ package com.jefisu.designsystem.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -43,6 +44,7 @@ fun TrackizerButton(
     modifier: Modifier = Modifier,
     @DrawableRes leadingIconRes: Int? = null,
     isLoading: Boolean = false,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
 ) {
     val shadowModifier = if (type.hasShadow) {
         Modifier.dropShadow(
@@ -65,6 +67,7 @@ fun TrackizerButton(
             containerColor = type.containerColor,
             contentColor = type.contentColor,
         ),
+        contentPadding = contentPadding,
         modifier = modifier
             .widthIn(max = TrackizerTheme.size.buttonMaxWidth)
             .height(TrackizerTheme.size.buttonHeight)

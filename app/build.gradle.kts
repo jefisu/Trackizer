@@ -33,6 +33,10 @@ dependencies {
     // Feature
     implementation(projects.feature.welcome)
     implementation(projects.feature.auth)
+    implementation(projects.feature.home)
+
+    // Modules
+    implementation(projects.core.domain)
 
     // SplashScreen
     implementation(libs.androidx.core.splashscreen)
