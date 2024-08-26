@@ -22,10 +22,13 @@ import com.jefisu.designsystem.components.TrackizerBottomNavigation
 import com.jefisu.home.presentation.HomeScreen
 import com.jefisu.home.presentation.homeScreen
 import com.jefisu.home.presentation.navigateHome
+import com.jefisu.spending_budgets.presentation.SpendingBudgetsScreen
+import com.jefisu.spending_budgets.presentation.spendingBudgetsScreen
 import com.jefisu.welcome.welcomeScreen
 
 private val bottomScreens = listOf(
     HomeScreen,
+    SpendingBudgetsScreen,
 )
 
 @Composable
@@ -62,16 +65,22 @@ fun AppNavHost(
                 navigateToHome = navController::navigateHome,
             )
             homeScreen(
-                navigateToSpendingBudgets = {},
                 navigateToSettings = {},
+                navigateToSpendingBudgets = {
+                    navController.navigateBottomNav(BottomNavItem.BUDGETS)
+                },
+            )
+            spendingBudgetsScreen(
+                onNavigateToSettings = {},
             )
         }
     }
 }
 
 fun NavController.navigateBottomNav(navItem: BottomNavItem) {
-    val screen = when (navItem) {
+    val screen: Any = when (navItem) {
         BottomNavItem.HOME -> HomeScreen
+        BottomNavItem.BUDGETS -> SpendingBudgetsScreen
         else -> return
     }
     navigate(screen) {

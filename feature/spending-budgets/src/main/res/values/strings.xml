@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    // Category
+    <string name="of_budget">of %s budget</string>
+    <string name="left_to_spend">%s left to spend</string>
+    <string name="exceeded_budget">%s exceeded budget</string>
+    <string name="of">of %s</string>
+    <string name="add_new_category">Add new category</string>
+    <string name="your_budgets_are_on_track">Your budgets are on track %s</string>
+    <string name="spending_budgets_title"><![CDATA[Spending & Budgets]]></string>
+</resources>

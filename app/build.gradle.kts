@@ -34,6 +34,7 @@ dependencies {
     implementation(projects.feature.welcome)
     implementation(projects.feature.auth)
     implementation(projects.feature.home)
+    implementation(projects.feature.spendingBudgets)
 
     // Modules
     implementation(projects.core.domain)
