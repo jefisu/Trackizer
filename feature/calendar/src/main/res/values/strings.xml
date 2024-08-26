@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subscriptions_for_today">subscriptions for today</string>
+    <string name="calendar_title">Calendar</string>
+    <string name="subs_schedule">Subs\nSchedule</string>
+    <string name="in_upcoming_bills">in upcoming bills</string>
+    <string name="apply">Apply</string>
+</resources>

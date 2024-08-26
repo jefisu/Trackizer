@@ -17,6 +17,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jefisu.auth.presentation.authScreen
 import com.jefisu.auth.presentation.navigateAuthSignIn
 import com.jefisu.auth.presentation.navigateAuthSignUp
+import com.jefisu.calendar.presentation.CalendarScreen
+import com.jefisu.calendar.presentation.calendarScreen
 import com.jefisu.designsystem.components.BottomNavItem
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
 import com.jefisu.home.presentation.HomeScreen
@@ -29,6 +31,7 @@ import com.jefisu.welcome.welcomeScreen
 private val bottomScreens = listOf(
     HomeScreen,
     SpendingBudgetsScreen,
+    CalendarScreen,
 )
 
 @Composable
@@ -73,6 +76,9 @@ fun AppNavHost(
             spendingBudgetsScreen(
                 onNavigateToSettings = {},
             )
+            calendarScreen(
+                onNavigateToSettings = {},
+            )
         }
     }
 }
@@ -81,6 +87,7 @@ fun NavController.navigateBottomNav(navItem: BottomNavItem) {
     val screen: Any = when (navItem) {
         BottomNavItem.HOME -> HomeScreen
         BottomNavItem.BUDGETS -> SpendingBudgetsScreen
+        BottomNavItem.CALENDAR -> CalendarScreen
         else -> return
     }
     navigate(screen) {
