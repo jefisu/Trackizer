@@ -7,8 +7,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -51,6 +49,7 @@ import com.jefisu.designsystem.R
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.util.dropShadow
+import com.jefisu.designsystem.util.rippleClickable
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -193,11 +192,9 @@ private fun FabIcon(
                 }
                 .paint(painter)
                 .clip(CircleShape)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(),
-                    onClick = onClick,
-                ),
+                .rippleClickable {
+                    onClick()
+                },
         )
     }
 }
@@ -220,8 +217,7 @@ private fun BottomNavItem(
                 painter = icon,
                 colorFilter = ColorFilter.tint(color),
             )
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
+            .rippleClickable(
                 indication = rememberRipple(
                     bounded = false,
                     radius = 24.dp,

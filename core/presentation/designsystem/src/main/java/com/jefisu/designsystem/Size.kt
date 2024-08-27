@@ -15,6 +15,8 @@ data class Size(
     val buttonMaxWidth: Dp = 280.dp,
     val circularProgressSmall: Dp = 30.dp,
     val textFieldHeight: Dp = 48.dp,
+    val creditCardWidth: Dp = 232.dp,
+    val creditCardHeight: Dp = 349.dp,
 )
 
 val TrackizerTheme.size: Size get() = Size()

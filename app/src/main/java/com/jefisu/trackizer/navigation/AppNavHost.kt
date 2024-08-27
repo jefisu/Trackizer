@@ -19,6 +19,8 @@ import com.jefisu.auth.presentation.navigateAuthSignIn
 import com.jefisu.auth.presentation.navigateAuthSignUp
 import com.jefisu.calendar.presentation.CalendarScreen
 import com.jefisu.calendar.presentation.calendarScreen
+import com.jefisu.credit_cards.presentation.CreditCardScreen
+import com.jefisu.credit_cards.presentation.creditCardScreen
 import com.jefisu.designsystem.components.BottomNavItem
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
 import com.jefisu.home.presentation.HomeScreen
@@ -32,6 +34,7 @@ private val bottomScreens = listOf(
     HomeScreen,
     SpendingBudgetsScreen,
     CalendarScreen,
+    CreditCardScreen,
 )
 
 @Composable
@@ -79,6 +82,9 @@ fun AppNavHost(
             calendarScreen(
                 onNavigateToSettings = {},
             )
+            creditCardScreen(
+                onNavigateToSettings = {},
+            )
         }
     }
 }
@@ -88,7 +94,7 @@ fun NavController.navigateBottomNav(navItem: BottomNavItem) {
         BottomNavItem.HOME -> HomeScreen
         BottomNavItem.BUDGETS -> SpendingBudgetsScreen
         BottomNavItem.CALENDAR -> CalendarScreen
-        else -> return
+        BottomNavItem.CREDIT_CARDS -> CreditCardScreen
     }
     navigate(screen) {
         popUpTo(graph.findStartDestination().id) {

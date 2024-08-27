@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
@@ -39,6 +40,7 @@ fun TrackizerTextField(
     fieldNameStyle: TextStyle = TrackizerTheme.typography.bodyMedium,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     var isFocused by rememberSaveable { mutableStateOf(false) }
 
@@ -51,6 +53,7 @@ fun TrackizerTextField(
             textStyle = LocalTextStyle.current,
             keyboardActions = keyboardActions,
             keyboardOptions = keyboardOptions,
+            visualTransformation = visualTransformation,
             modifier = Modifier
                 .weight(1f)
                 .onFocusChanged { isFocused = it.isFocused },

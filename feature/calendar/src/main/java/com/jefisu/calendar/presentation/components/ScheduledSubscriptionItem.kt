@@ -1,17 +1,13 @@
 package com.jefisu.calendar.presentation.components
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -30,6 +26,7 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.SampleData
 import com.jefisu.designsystem.util.formatCurrency
+import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.domain.model.Subscription
 
 @Composable
@@ -46,11 +43,9 @@ internal fun ScheduledSubscriptionItem(
                 minHeight = 168.dp,
             )
             .clip(RoundedCornerShape(cornerDp))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(),
-                onClick = onClick,
-            )
+            .rippleClickable {
+                onClick()
+            }
             .drawBehind {
                 val (width, height) = size
                 val cornerRadius = CornerRadius(cornerDp.toPx(), cornerDp.toPx())

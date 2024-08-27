@@ -30,6 +30,7 @@ fun TrackizerNavigationBody(
     scrolledContainerColor: Color = Color.Transparent,
     topAppBarScrollBehavior: TopAppBarScrollBehavior? = null,
     actionIcon: @Composable RowScope.() -> Unit = {},
+    bottomBar: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ) {
     val backgroundColor = Color.Transparent
@@ -68,6 +69,7 @@ fun TrackizerNavigationBody(
         content = content,
         containerColor = backgroundColor,
         topBar = topBar,
+        bottomBar = bottomBar,
         modifier = Modifier
             .then(scrollBehaviorModifier),
     )

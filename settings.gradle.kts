@@ -17,6 +17,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { setUrl("https://jitpack.io") }
     }
 }
 
@@ -31,3 +32,4 @@ include(":core:data")
 include(":feature:home")
 include(":feature:spending-budgets")
 include(":feature:calendar")
+include(":feature:credit-cards")

@@ -7,6 +7,7 @@ data class SubscriptionDto(
     @DocumentId val id: String = "",
     val userId: String = "",
     val categoryId: String = "",
+    val cardId: String = "",
     val serviceName: String = "",
     val price: Float = 0f,
     val description: String = "",

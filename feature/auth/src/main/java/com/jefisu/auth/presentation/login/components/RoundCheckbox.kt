@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -30,6 +29,7 @@ import com.jefisu.designsystem.Gray70
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
+import com.jefisu.designsystem.util.rippleClickable
 
 @Composable
 fun RoundCheckbox(
@@ -51,7 +51,7 @@ fun RoundCheckbox(
         modifier = modifier
             .size(size)
             .clip(shape)
-            .clickable {
+            .rippleClickable {
                 onCheckedChange()
             }
             .border(

@@ -1,6 +1,12 @@
 package com.jefisu.designsystem.util
 
 import android.graphics.BlurMaskFilter
+import androidx.compose.foundation.Indication
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Size
@@ -51,7 +57,7 @@ fun DrawScope.drawBlur(
     useCenter: Boolean,
     maxBlurArcs: Int = 20,
     cap: StrokeCap = StrokeCap.Round,
-    size: Size = this.size
+    size: Size = this.size,
 ) {
     for (i in 0..maxBlurArcs) {
         drawArc(
@@ -63,7 +69,19 @@ fun DrawScope.drawBlur(
                 width = 80f + (maxBlurArcs - i) * 10,
                 cap = cap,
             ),
-            size = size
+            size = size,
         )
     }
 }
+
+@Composable
+fun Modifier.rippleClickable(
+    enabled: Boolean = true,
+    indication: Indication = rememberRipple(),
+    onClick: () -> Unit,
+) = clickable(
+    interactionSource = remember { MutableInteractionSource() },
+    indication = indication,
+    enabled = enabled,
+    onClick = onClick,
+)

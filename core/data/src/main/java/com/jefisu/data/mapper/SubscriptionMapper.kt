@@ -14,4 +14,5 @@ fun SubscriptionDto.toSubscription() = Subscription(
     paymentDate = LocalDate.ofInstant(firstPayment.toInstant(), ZoneId.systemDefault()),
     reminder = reminder,
     categoryId = categoryId,
+    cardId = cardId
 )
