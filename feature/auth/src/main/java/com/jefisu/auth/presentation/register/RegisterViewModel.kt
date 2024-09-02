@@ -6,22 +6,19 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jefisu.auth.domain.AuthRepository
-import com.jefisu.auth.domain.validation.ValidateEmail
-import com.jefisu.auth.domain.validation.ValidatePassword
+import com.jefisu.auth.domain.validation.emailValidate
+import com.jefisu.auth.domain.validation.passwordValidate
 import com.jefisu.auth.presentation.register.util.getPasswordStrength
 import com.jefisu.auth.presentation.util.asMessageText
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
-internal class RegisterViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val validateEmail: ValidateEmail,
-    private val validatePassword: ValidatePassword,
-) : ViewModel() {
+internal class RegisterViewModel @Inject constructor(private val authRepository: AuthRepository) :
+    ViewModel() {
 
     var state by mutableStateOf(RegisterState())
         private set
@@ -49,13 +46,13 @@ internal class RegisterViewModel @Inject constructor(
 
     private fun register() = viewModelScope.launch {
         with(state) {
-            val emailResult = validateEmail.execute(email)
+            val emailResult = emailValidate.validate(email)
             if (!emailResult.successfully) {
                 emailResult.error?.let { state = copy(messageText = it.asMessageText()) }
                 return@launch
             }
 
-            val passwordResult = validatePassword.execute(password)
+            val passwordResult = passwordValidate.validate(password)
             if (!passwordResult.successfully) {
                 passwordResult.error?.let {
                     state = copy(messageText = it.first().asMessageText())

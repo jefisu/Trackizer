@@ -1,6 +1,7 @@
 package com.jefisu.auth.presentation.register.util
 
-import com.jefisu.auth.domain.validation.ValidatePassword
+import com.jefisu.auth.domain.validation.PassswordValidateError
+import com.jefisu.auth.domain.validation.passwordValidate
 
 internal enum class PasswordStrength {
     VULNERABLE,
@@ -12,8 +13,8 @@ internal enum class PasswordStrength {
 internal fun getPasswordStrength(password: String): PasswordStrength? {
     if (password.isEmpty()) return null
 
-    val validationResult = ValidatePassword().execute(password)
-    val totalErrorCriteria = ValidatePassword.Error.entries.size
+    val validationResult = passwordValidate.validate(password)
+    val totalErrorCriteria = PassswordValidateError.entries.size
 
     val passedChecks = totalErrorCriteria - (validationResult.error?.size ?: 0)
 

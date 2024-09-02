@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jefisu.auth.domain.AuthMessage
 import com.jefisu.auth.domain.AuthRepository
-import com.jefisu.auth.domain.validation.ValidateEmail
+import com.jefisu.auth.domain.validation.emailValidate
 import com.jefisu.auth.presentation.util.asMessageText
 import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.onError
@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository,
-    private val validateEmail: ValidateEmail,
 ) : ViewModel() {
 
     var state by mutableStateOf(LoginState())
@@ -115,7 +114,7 @@ class LoginViewModel @Inject constructor(
         password: String? = null,
         block: suspend () -> Unit,
     ) {
-        val emailResult = validateEmail.execute(email)
+        val emailResult = emailValidate.validate(email)
         emailResult.error?.let { error ->
             state = state.copy(message = error.asMessageText())
             return
