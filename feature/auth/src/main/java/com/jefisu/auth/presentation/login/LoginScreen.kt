@@ -30,7 +30,6 @@ import com.jefisu.auth.presentation.login.components.RoundCheckbox
 import com.jefisu.designsystem.Gray50
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
-import com.jefisu.designsystem.components.FlashMessageDialog
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.components.TrackizerPasswordTextField
 import com.jefisu.designsystem.components.TrackizerTextField
@@ -63,11 +62,6 @@ internal fun LoginScreen(
     navigateToRegisterScreen: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
-
-    FlashMessageDialog(
-        message = state.message,
-        onDismiss = { onAction(LoginAction.CloseMessage) },
-    )
 
     ForgotPasswordBottomSheet(
         state = state,

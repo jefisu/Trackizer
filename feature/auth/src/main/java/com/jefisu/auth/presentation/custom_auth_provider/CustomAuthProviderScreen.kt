@@ -9,12 +9,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jefisu.auth.R
 import com.jefisu.auth.domain.AuthMessage
 import com.jefisu.auth.presentation.custom_auth_provider.components.FacebookButton
@@ -23,25 +23,18 @@ import com.jefisu.auth.presentation.util.asMessageText
 import com.jefisu.designsystem.Gray50
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
-import com.jefisu.designsystem.components.FlashMessageDialog
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.MessageController
+import kotlinx.coroutines.launch
 
 @Composable
 fun CustomAuthProviderRoot(
     navigateToRegister: () -> Unit,
     navigateToHome: () -> Unit,
 ) {
-    val viewModel = viewModel<CustomAuthProviderViewModel>()
-
-    FlashMessageDialog(
-        message = viewModel.error?.asMessageText(),
-        onDismiss = viewModel::closeError,
-    )
-
     CustomAuthProviderScreen(
-        onError = viewModel::showError,
         navigateToRegister = navigateToRegister,
         navigateToHome = navigateToHome,
     )
@@ -49,10 +42,16 @@ fun CustomAuthProviderRoot(
 
 @Composable
 internal fun CustomAuthProviderScreen(
-    onError: (AuthMessage) -> Unit,
     navigateToRegister: () -> Unit,
     navigateToHome: () -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
+    val onSendMessageClick: (AuthMessage) -> Unit = {
+        scope.launch {
+            MessageController.sendMessage(it.asMessageText())
+        }
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom,
@@ -62,12 +61,12 @@ internal fun CustomAuthProviderScreen(
     ) {
         GoogleButton(
             onSuccessAuth = navigateToHome,
-            onFailureAuth = onError,
+            onFailureAuth = onSendMessageClick,
         )
         Spacer(Modifier.height(TrackizerTheme.spacing.medium))
         FacebookButton(
             onSuccessAuth = navigateToHome,
-            onFailureAuth = onError,
+            onFailureAuth = onSendMessageClick,
         )
         Spacer(Modifier.height(TrackizerTheme.spacing.large))
         Text(
@@ -96,7 +95,6 @@ internal fun CustomAuthProviderScreen(
 private fun CustomAuthProviderScreenPreview() {
     TrackizerTheme {
         CustomAuthProviderScreen(
-            onError = {},
             navigateToRegister = {},
             navigateToHome = { },
         )

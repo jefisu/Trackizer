@@ -9,13 +9,14 @@ import com.jefisu.auth.domain.AuthMessage
 import com.jefisu.auth.domain.AuthRepository
 import com.jefisu.auth.domain.validation.emailValidate
 import com.jefisu.auth.presentation.util.asMessageText
+import com.jefisu.designsystem.util.MessageController
 import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -55,10 +56,6 @@ class LoginViewModel @Inject constructor(
             }
 
             is LoginAction.SendResetPassword -> sendResetPassword()
-
-            is LoginAction.CloseMessage -> {
-                state = state.copy(message = null)
-            }
         }
     }
 
@@ -85,7 +82,7 @@ class LoginViewModel @Inject constructor(
                         }
                     }
                     .onError { error ->
-                        state = copy(message = error.asMessageText())
+                        MessageController.sendMessage(error.asMessageText())
                     }
             }
         }
@@ -96,14 +93,14 @@ class LoginViewModel @Inject constructor(
             validateAction(emailResetPassword) {
                 authRepository.sendPasswordResetEmail(emailResetPassword)
                     .onSuccess { message ->
+                        MessageController.sendMessage(message.asMessageText())
                         state = copy(
-                            message = message.asMessageText(),
                             showForgotPasswordSheet = false,
                             emailResetPassword = "",
                         )
                     }
                     .onError { error ->
-                        state = copy(message = error.asMessageText())
+                        MessageController.sendMessage(error.asMessageText())
                     }
             }
         }
@@ -114,25 +111,23 @@ class LoginViewModel @Inject constructor(
         password: String? = null,
         block: suspend () -> Unit,
     ) {
-        val emailResult = emailValidate.validate(email)
-        emailResult.error?.let { error ->
-            state = state.copy(message = error.asMessageText())
-            return
-        }
-
-        password?.let { pass ->
-            if (pass.isBlank()) {
-                state = state.copy(
-                    message = AuthMessage.Error
-                        .INVALID_EMAIL_OR_PASSWORD
-                        .asMessageText(),
-                )
-                return
-            }
-        }
-
-        state = state.copy(isLoading = true)
         viewModelScope.launch {
+            val emailResult = emailValidate.validate(email)
+            emailResult.error?.let { error ->
+                MessageController.sendMessage(error.asMessageText())
+                return@launch
+            }
+
+            password?.let { pass ->
+                if (pass.isBlank()) {
+                    MessageController.sendMessage(
+                        AuthMessage.Error.INVALID_EMAIL_OR_PASSWORD.asMessageText(),
+                    )
+                    return@launch
+                }
+            }
+
+            state = state.copy(isLoading = true)
             block()
             state = state.copy(isLoading = false)
         }

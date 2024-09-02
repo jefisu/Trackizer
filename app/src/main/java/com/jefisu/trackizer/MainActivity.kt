@@ -4,10 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.jefisu.designsystem.TrackizerTheme
+import com.jefisu.designsystem.components.FlashMessageDialog
+import com.jefisu.designsystem.util.MessageController
 import com.jefisu.domain.repository.UserRepository
 import com.jefisu.home.presentation.HomeScreen
 import com.jefisu.trackizer.navigation.AppNavHost
@@ -28,7 +32,13 @@ class MainActivity : ComponentActivity() {
         systemBarColor()
         setContent {
             val navController = rememberNavController()
+            val message by MessageController.message.collectAsStateWithLifecycle()
             TrackizerTheme {
+                FlashMessageDialog(
+                    message = message,
+                    onDismiss = MessageController::closeMessage,
+                )
+
                 AppNavHost(
                     navController = navController,
                     startDestination = startDestination(),

@@ -3,7 +3,6 @@ package com.jefisu.credit_cards.presentation
 import com.jefisu.domain.model.Card
 import com.jefisu.domain.model.CardFlag
 import com.jefisu.domain.model.SubscriptionService
-import com.jefisu.domain.util.MessageText
 
 data class CreditCardState(
     val creditCards: Map<Card, List<SubscriptionService>> = emptyMap(),
@@ -16,5 +15,4 @@ data class CreditCardState(
     val expirationDate: String = "",
     val cvv: String = "",
     val flag: CardFlag = CardFlag.UNKNOWN,
-    val message: MessageText? = null,
 )

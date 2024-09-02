@@ -11,5 +11,4 @@ sealed interface CreditCardAction {
     data class ExpirationDateChanged(val expirationDate: String) : CreditCardAction
     data class CvvCodeChanged(val cvv: String) : CreditCardAction
     data object SaveCard : CreditCardAction
-    data object CloseMessage : CreditCardAction
 }

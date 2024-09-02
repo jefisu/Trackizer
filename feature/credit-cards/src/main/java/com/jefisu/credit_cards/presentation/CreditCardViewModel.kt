@@ -10,6 +10,7 @@ import com.jefisu.credit_cards.domain.validation.cardNameValidate
 import com.jefisu.credit_cards.domain.validation.cardNumberValidate
 import com.jefisu.credit_cards.presentation.util.asCardFlag
 import com.jefisu.credit_cards.presentation.util.asMessageText
+import com.jefisu.designsystem.util.MessageController
 import com.jefisu.designsystem.util.UiEventController
 import com.jefisu.designsystem.util.formatExpirationDate
 import com.jefisu.domain.model.Card
@@ -108,10 +109,6 @@ class CreditCardViewModel @Inject constructor(
             }
 
             is CreditCardAction.SaveCard -> saveCard()
-
-            is CreditCardAction.CloseMessage -> _state.update {
-                it.copy(message = null)
-            }
         }
     }
 
@@ -131,7 +128,7 @@ class CreditCardViewModel @Inject constructor(
                     cvvResult.error,
                 )
                 if (errors.isNotEmpty()) {
-                    _state.update { it.copy(message = errors.first().asMessageText()) }
+                    MessageController.sendMessage(errors.first().asMessageText())
                     return@launch
                 }
 
@@ -154,7 +151,7 @@ class CreditCardViewModel @Inject constructor(
                         UiEventController.sendEvent(CreditCardUiEvent.HideBottomSheet)
                     }
                     .onError { message ->
-                        _state.update { it.copy(message = message as MessageText.Error) }
+                        MessageController.sendMessage(message as MessageText.Error)
                     }
             }
         }

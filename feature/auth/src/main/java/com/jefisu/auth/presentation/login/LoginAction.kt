@@ -8,5 +8,4 @@ sealed interface LoginAction {
     data object ToggleForgotPasswordBottomSheet : LoginAction
     data class EmailResetPasswordChanged(val email: String) : LoginAction
     data object SendResetPassword : LoginAction
-    data object CloseMessage : LoginAction
 }

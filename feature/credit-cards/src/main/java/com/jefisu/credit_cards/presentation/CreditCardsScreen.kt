@@ -35,10 +35,10 @@ import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.presentation.components.AddCreditCardBottomSheet
 import com.jefisu.credit_cards.presentation.components.CreditCard
 import com.jefisu.designsystem.Gray70
+import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.CubeOutRotationEndlessTransition
-import com.jefisu.designsystem.components.FlashMessageDialog
 import com.jefisu.designsystem.components.SubscriptionIcon
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
 import com.jefisu.designsystem.components.TrackizerIcon
@@ -49,7 +49,6 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.SampleData
 import com.jefisu.domain.model.SubscriptionService
-import com.jefisu.designsystem.R as DesignSystemRes
 
 @Composable
 internal fun CreditCardsScreen(
@@ -59,12 +58,6 @@ internal fun CreditCardsScreen(
 ) {
     val isEmptyCards = state.creditCards.keys.isEmpty()
     val isEmptySubscriptions = with(state) { creditCards[selectedCard]?.isEmpty() == true }
-
-    FlashMessageDialog(
-        message = state.message,
-        onDismiss = { onAction(CreditCardAction.CloseMessage) },
-        modifier = Modifier.padding(bottom = TrackizerTheme.spacing.extraMedium),
-    )
 
     AddCreditCardBottomSheet(
         state = state,
