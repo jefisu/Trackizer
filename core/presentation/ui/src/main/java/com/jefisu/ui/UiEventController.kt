@@ -1,4 +1,4 @@
-package com.jefisu.designsystem.util
+package com.jefisu.ui
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

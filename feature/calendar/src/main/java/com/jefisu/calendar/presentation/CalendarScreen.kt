@@ -47,15 +47,17 @@ import com.jefisu.designsystem.Gray70
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
-import com.jefisu.designsystem.components.TrackizerNavigationBody
+import com.jefisu.designsystem.components.TrackizerScaffold
+import com.jefisu.designsystem.components.TrackizerTopBar
+import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import com.jefisu.designsystem.util.SampleData
-import com.jefisu.designsystem.util.formatCurrency
-import com.jefisu.designsystem.util.formatMonthName
-import com.jefisu.designsystem.util.toDateFormat
 import com.jefisu.domain.model.Subscription
 import com.jefisu.domain.model.util.filterUpcomingBills
+import com.jefisu.ui.ext.formatCurrency
+import com.jefisu.ui.ext.formatMonthName
+import com.jefisu.ui.ext.toDateFormat
+import com.jefisu.ui.util.SampleData
 import java.time.LocalDate
 
 @Composable
@@ -72,10 +74,20 @@ internal fun CalendarScreen(
     }
     val total = upcomingBills.sumOf { it.price.toDouble() }
 
-    TrackizerNavigationBody(
-        title = stringResource(R.string.calendar_title),
-        onSettingsClick = onNavigateToSettings,
-        topBarContainerColor = Gray70,
+    TrackizerScaffold(
+        topBar = {
+            TrackizerTopBar(
+                title = stringResource(R.string.calendar_title),
+                colors = TrackizerTopBarDefaults.colors.copy(
+                    containerColor = Gray70,
+                ),
+                actions = {
+                    TrackizerTopBarDefaults.settingsActionIcon(
+                        onClick = onNavigateToSettings,
+                    )
+                },
+            )
+        },
     ) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding),
@@ -234,7 +246,7 @@ fun ScheduledSubscriptionsPerDay(
     val showDivider by remember {
         derivedStateOf {
             lazyGridState.firstVisibleItemIndex > 0 ||
-                lazyGridState.firstVisibleItemScrollOffset > 0
+                    lazyGridState.firstVisibleItemScrollOffset > 0
         }
     }
 

@@ -35,20 +35,22 @@ import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.presentation.components.AddCreditCardBottomSheet
 import com.jefisu.credit_cards.presentation.components.CreditCard
 import com.jefisu.designsystem.Gray70
-import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.CubeOutRotationEndlessTransition
 import com.jefisu.designsystem.components.SubscriptionIcon
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
 import com.jefisu.designsystem.components.TrackizerIcon
-import com.jefisu.designsystem.components.TrackizerNavigationBody
 import com.jefisu.designsystem.components.TrackizerOutlinedButton
+import com.jefisu.designsystem.components.TrackizerScaffold
+import com.jefisu.designsystem.components.TrackizerTopBar
+import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import com.jefisu.designsystem.util.SampleData
 import com.jefisu.domain.model.SubscriptionService
+import com.jefisu.ui.util.SampleData
+import com.jefisu.designsystem.R as DesignSystemRes
 
 @Composable
 internal fun CreditCardsScreen(
@@ -64,9 +66,17 @@ internal fun CreditCardsScreen(
         onAction = onAction,
     )
 
-    TrackizerNavigationBody(
-        title = stringResource(R.string.credit_cards_title),
-        onSettingsClick = onNavigateToSettings,
+    TrackizerScaffold(
+        topBar = {
+            TrackizerTopBar(
+                title = stringResource(R.string.credit_cards_title),
+                actions = {
+                    TrackizerTopBarDefaults.settingsActionIcon(
+                        onClick = onNavigateToSettings,
+                    )
+                },
+            )
+        },
         bottomBar = {
             Box(
                 modifier = Modifier

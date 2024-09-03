@@ -15,15 +15,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
-import com.jefisu.designsystem.components.TrackizerNavigationBody
+import com.jefisu.designsystem.components.TrackizerScaffold
+import com.jefisu.designsystem.components.TrackizerTopBar
+import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
-import com.jefisu.designsystem.util.SampleData
 import com.jefisu.domain.model.util.filterUpcomingBills
 import com.jefisu.home.R
 import com.jefisu.home.presentation.components.HorizontalTabs
 import com.jefisu.home.presentation.components.SubscriptionDashboard
 import com.jefisu.home.presentation.components.SubscriptionList
 import com.jefisu.home.presentation.components.SubscriptionTab
+import com.jefisu.ui.util.SampleData
 
 @Composable
 internal fun HomeScreen(
@@ -31,9 +33,17 @@ internal fun HomeScreen(
     onNavigateToSpendingBudgets: () -> Unit = {},
     onNavigateToSettings: () -> Unit = {},
 ) {
-    TrackizerNavigationBody(
-        title = null,
-        onSettingsClick = onNavigateToSettings,
+    TrackizerScaffold(
+        topBar = {
+            TrackizerTopBar(
+                title = null,
+                actions = {
+                    TrackizerTopBarDefaults.settingsActionIcon(
+                        onClick = onNavigateToSettings,
+                    )
+                },
+            )
+        },
     ) {
         Column {
             SubscriptionDashboard(

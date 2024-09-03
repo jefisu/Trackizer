@@ -40,8 +40,8 @@ import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import com.jefisu.designsystem.util.SampleData
-import com.jefisu.designsystem.util.formatExpirationDate
+import com.jefisu.ui.util.SampleData
+import com.jefisu.ui.ext.formatExpirationDate
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.domain.model.Card
 

@@ -47,8 +47,8 @@ import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.SubscriptionIcon
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import com.jefisu.designsystem.util.SampleData
-import com.jefisu.designsystem.util.formatCurrency
+import com.jefisu.ui.util.SampleData
+import com.jefisu.ui.ext.formatCurrency
 import com.jefisu.domain.model.Subscription
 import com.jefisu.home.R
 

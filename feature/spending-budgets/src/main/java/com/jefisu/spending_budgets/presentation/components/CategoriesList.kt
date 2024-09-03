@@ -31,7 +31,7 @@ import com.jefisu.designsystem.Purple90
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import com.jefisu.designsystem.util.formatCurrency
+import com.jefisu.ui.ext.formatCurrency
 import com.jefisu.domain.model.Category
 import com.jefisu.domain.model.CategoryType
 import com.jefisu.spending_budgets.R

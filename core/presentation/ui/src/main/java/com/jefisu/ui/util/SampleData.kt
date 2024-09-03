@@ -1,4 +1,4 @@
-package com.jefisu.designsystem.util
+package com.jefisu.ui.util
 
 import com.jefisu.domain.model.Card
 import com.jefisu.domain.model.CardFlag

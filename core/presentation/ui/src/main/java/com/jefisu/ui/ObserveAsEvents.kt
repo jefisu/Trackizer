@@ -1,4 +1,4 @@
-package com.jefisu.designsystem.util
+package com.jefisu.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

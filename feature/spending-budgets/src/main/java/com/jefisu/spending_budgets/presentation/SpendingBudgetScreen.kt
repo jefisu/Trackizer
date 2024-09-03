@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,16 +33,18 @@ import androidx.compose.ui.unit.dp
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
-import com.jefisu.designsystem.components.TrackizerNavigationBody
 import com.jefisu.designsystem.components.TrackizerOutlinedButton
+import com.jefisu.designsystem.components.TrackizerScaffold
+import com.jefisu.designsystem.components.TrackizerTopBar
+import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import com.jefisu.designsystem.util.SampleData
 import com.jefisu.spending_budgets.R
-import com.jefisu.spending_budgets.presentation.components.CategoryItem
 import com.jefisu.spending_budgets.presentation.components.BudgetGauge
+import com.jefisu.spending_budgets.presentation.components.CategoryItem
 import com.jefisu.spending_budgets.presentation.components.PieData
 import com.jefisu.spending_budgets.presentation.util.asColor
+import com.jefisu.ui.util.SampleData
 
 @Composable
 internal fun SpendingBudgetScreen(
@@ -49,6 +52,7 @@ internal fun SpendingBudgetScreen(
     navigateToSettings: () -> Unit = {},
     navigateToAddCategory: () -> Unit = {},
 ) {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val budget = remember(state.categories) {
         state.categories
             .sumOf { it.budget.toDouble() }
@@ -69,19 +73,25 @@ internal fun SpendingBudgetScreen(
         }
     }
 
-    TrackizerNavigationBody(
-        title = stringResource(R.string.spending_budgets_title),
-        onSettingsClick = navigateToSettings,
-        topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
-        actionIcon = {
-            AnimatedVisibility(visible = showActionIcon) {
-                IconButton(onClick = navigateToAddCategory) {
-                    Icon(
-                        imageVector = Icons.Rounded.AddCircleOutline,
-                        contentDescription = stringResource(R.string.add_new_category),
+    TrackizerScaffold(
+        topBar = {
+            TrackizerTopBar(
+                title = stringResource(R.string.spending_budgets_title),
+                scrollBehavior = scrollBehavior,
+                actions = {
+                    TrackizerTopBarDefaults.settingsActionIcon(
+                        onClick = navigateToSettings,
                     )
-                }
-            }
+                    AnimatedVisibility(visible = showActionIcon) {
+                        IconButton(onClick = navigateToAddCategory) {
+                            Icon(
+                                imageVector = Icons.Rounded.AddCircleOutline,
+                                contentDescription = stringResource(R.string.add_new_category),
+                            )
+                        }
+                    }
+                },
+            )
         },
     ) { innerPadding ->
         LazyColumn(
@@ -90,6 +100,7 @@ internal fun SpendingBudgetScreen(
             contentPadding = PaddingValues(bottom = 78.dp),
             modifier = Modifier
                 .fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .padding(innerPadding)
                 .padding(horizontal = TrackizerTheme.spacing.extraMedium),
         ) {

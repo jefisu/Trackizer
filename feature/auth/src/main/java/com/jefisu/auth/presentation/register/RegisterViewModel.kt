@@ -10,7 +10,7 @@ import com.jefisu.auth.domain.validation.emailValidate
 import com.jefisu.auth.domain.validation.passwordValidate
 import com.jefisu.auth.presentation.register.util.getPasswordStrength
 import com.jefisu.auth.presentation.util.asMessageText
-import com.jefisu.designsystem.util.MessageController
+import com.jefisu.ui.MessageController
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel

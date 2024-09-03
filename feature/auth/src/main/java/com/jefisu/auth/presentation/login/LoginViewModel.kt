@@ -9,7 +9,7 @@ import com.jefisu.auth.domain.AuthMessage
 import com.jefisu.auth.domain.AuthRepository
 import com.jefisu.auth.domain.validation.emailValidate
 import com.jefisu.auth.presentation.util.asMessageText
-import com.jefisu.designsystem.util.MessageController
+import com.jefisu.ui.MessageController
 import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess

@@ -58,7 +58,7 @@ import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.drawBlur
-import com.jefisu.designsystem.util.formatCurrency
+import com.jefisu.ui.ext.formatCurrency
 import com.jefisu.home.R
 import com.jefisu.home.presentation.HomeState
 import java.time.LocalDate

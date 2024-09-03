@@ -27,12 +27,11 @@ import com.jefisu.designsystem.Gray30
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.Primary10
 import com.jefisu.designsystem.TrackizerTheme
-import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.drawBlur
-import com.jefisu.designsystem.util.formatCurrency
 import com.jefisu.spending_budgets.R
+import com.jefisu.ui.ext.formatCurrency
 
 @Composable
 internal fun BudgetGauge(
@@ -54,7 +53,7 @@ internal fun BudgetGauge(
                 .padding(top = 59.dp)
                 .widthIn(max = 150.dp),
         ) {
-            AnimatedText(
+            Text(
                 text = formatCurrency(usedBudget),
                 style = TrackizerTheme.typography.headline5,
             )

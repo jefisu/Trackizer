@@ -26,7 +26,7 @@ import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import com.jefisu.designsystem.util.MessageController
+import com.jefisu.ui.MessageController
 import kotlinx.coroutines.launch
 
 @Composable

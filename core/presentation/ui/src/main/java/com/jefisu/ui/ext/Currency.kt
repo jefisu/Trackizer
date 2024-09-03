@@ -1,4 +1,4 @@
-package com.jefisu.designsystem.util
+package com.jefisu.ui.ext
 
 import android.icu.text.CompactDecimalFormat
 import java.text.NumberFormat

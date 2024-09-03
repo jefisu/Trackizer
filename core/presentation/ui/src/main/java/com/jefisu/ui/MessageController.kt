@@ -1,4 +1,4 @@
-package com.jefisu.designsystem.util
+package com.jefisu.ui
 
 import com.jefisu.domain.util.MessageText
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -40,6 +40,7 @@ dependencies {
 
     // Modules
     implementation(projects.core.domain)
+    implementation(projects.core.presentation.ui)
 
     // SplashScreen
     implementation(libs.androidx.core.splashscreen)
