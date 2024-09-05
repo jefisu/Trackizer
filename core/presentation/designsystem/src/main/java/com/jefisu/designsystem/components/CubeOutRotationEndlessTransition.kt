@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -15,6 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import com.jefisu.designsystem.util.calculateCurrentOffsetForPage
+import com.jefisu.designsystem.util.getEndlessItem
+import com.jefisu.designsystem.util.rememberEndlessPagerState
 import kotlin.math.absoluteValue
 
 @Composable
@@ -24,19 +26,17 @@ fun <T> CubeOutRotationEndlessTransition(
     onItemVisibleChanged: (T) -> Unit,
     content: @Composable (T) -> Unit,
 ) {
-    val pagerState = rememberPagerState { Int.MAX_VALUE }
+    val pagerState = rememberEndlessPagerState()
     val enabledScroll by remember(items) {
         derivedStateOf { items.size > 1 }
     }
 
-    fun getItem(index: Int) = items[index % items.size]
-
     LaunchedEffect(Unit) {
         snapshotFlow { pagerState.currentPage }.collect { index ->
-            onItemVisibleChanged(getItem(index))
+            onItemVisibleChanged(items.getEndlessItem(index))
         }
         snapshotFlow { items.firstOrNull() }.collect { item ->
-            val selectedItem = getItem(pagerState.currentPage)
+            val selectedItem = items.getEndlessItem(pagerState.currentPage)
             if (item != selectedItem) {
                 onItemVisibleChanged(selectedItem)
             }
@@ -54,7 +54,7 @@ fun <T> CubeOutRotationEndlessTransition(
                 .cubeOutScalingTransition(pageIndex, pagerState)
                 .fillMaxWidth(),
         ) {
-            content(getItem(pageIndex))
+            content(items.getEndlessItem(pageIndex))
         }
     }
 }
@@ -93,6 +93,3 @@ private fun Modifier.cubeOutScalingTransition(
         }
     }
 }
-
-private fun PagerState.calculateCurrentOffsetForPage(page: Int): Float =
-    (currentPage - page) + currentPageOffsetFraction
