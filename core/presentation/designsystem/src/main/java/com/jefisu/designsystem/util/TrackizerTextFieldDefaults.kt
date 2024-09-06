@@ -46,6 +46,7 @@ internal object TrackizerTextFieldDefaults {
         activeColor: Color = Color.White,
         inactiveColor: Color = Gray50,
         fieldNameStyle: TextStyle = TrackizerTheme.typography.bodyMedium,
+        horizontalAlignment: Alignment.Horizontal = Alignment.Start,
         textField: @Composable RowScope.() -> Unit,
     ) {
         val colorAnim by animateColorAsState(
@@ -55,7 +56,10 @@ internal object TrackizerTextFieldDefaults {
 
         ObserveKeyboard(isFocused)
 
-        Column(modifier = modifier) {
+        Column(
+            horizontalAlignment = horizontalAlignment,
+            modifier = modifier,
+        ) {
             CompositionLocalProvider(
                 LocalContentColor provides colorAnim,
                 LocalTextStyle provides TrackizerTheme.typography.bodyLarge.copy(

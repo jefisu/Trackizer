@@ -1,8 +1,5 @@
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package com.jefisu.designsystem.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -20,15 +17,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
-import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.TrackizerTextFieldDefaults
 
 @Composable
@@ -37,10 +33,10 @@ fun TrackizerTextField(
     onTextChange: (String) -> Unit,
     fieldName: String,
     modifier: Modifier = Modifier,
-    fieldNameStyle: TextStyle = TrackizerTheme.typography.bodyMedium,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
 ) {
     var isFocused by rememberSaveable { mutableStateOf(false) }
 
@@ -72,9 +68,9 @@ fun TrackizerTextField(
     TrackizerTextFieldDefaults.DecorationBox(
         fieldName = fieldName,
         modifier = modifier,
-        fieldNameStyle = fieldNameStyle,
         isFocused = isFocused,
         textField = textField,
+        horizontalAlignment = horizontalAlignment,
     )
 }
 

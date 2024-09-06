@@ -51,6 +51,7 @@ object TrackizerTopBarDefaults {
             scrolledContainerColor = Color.Transparent,
             titleContentColor = Gray30,
             actionIconContentColor = Gray30,
+            navigationIconContentColor = Gray30,
         )
 
     @Composable

@@ -4,10 +4,15 @@ import android.graphics.BlurMaskFilter
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -19,6 +24,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 
 fun Modifier.dropShadow(
@@ -85,3 +91,12 @@ fun Modifier.rippleClickable(
     enabled = enabled,
     onClick = onClick,
 )
+
+fun Modifier.imeOffset() = composed {
+    val imePadding = WindowInsets.ime.asPaddingValues()
+    offset {
+        IntOffset.Zero.copy(
+            y = -imePadding.calculateBottomPadding().roundToPx(),
+        )
+    }
+}

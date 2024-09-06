@@ -8,7 +8,7 @@ data class Size(
     val iconDefault: Dp = 24.dp,
     val iconMedium: Dp = 40.dp,
     val iconLarge: Dp = 106.dp,
-    val iconExtraLarge: Dp = 161.dp,
+    val iconExtraLarge: Dp = 100.dp,
     val appLogoSmall: Dp = 29.dp,
     val buttonHeightSmall: Dp = 36.dp,
     val buttonHeight: Dp = 48.dp,

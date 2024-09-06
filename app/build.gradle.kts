@@ -37,6 +37,7 @@ dependencies {
     implementation(projects.feature.spendingBudgets)
     implementation(projects.feature.calendar)
     implementation(projects.feature.creditCards)
+    implementation(projects.feature.addSubscription)
 
     // Modules
     implementation(projects.core.domain)

@@ -14,6 +14,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.jefisu.add_subscription.addSubscriptionScreen
+import com.jefisu.add_subscription.navigateAddSubscription
 import com.jefisu.auth.presentation.authScreen
 import com.jefisu.auth.presentation.navigateAuthSignIn
 import com.jefisu.auth.presentation.navigateAuthSignUp
@@ -28,6 +30,9 @@ import com.jefisu.home.presentation.homeScreen
 import com.jefisu.home.presentation.navigateHome
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsScreen
 import com.jefisu.spending_budgets.presentation.spendingBudgetsScreen
+import com.jefisu.ui.ObserveAsEvents
+import com.jefisu.ui.UiEventController
+import com.jefisu.ui.event.NavigationEvent
 import com.jefisu.welcome.welcomeScreen
 
 private val bottomScreens = listOf(
@@ -53,10 +58,19 @@ fun AppNavHost(
         }
     }
 
+    ObserveAsEvents(UiEventController.events) { event ->
+        when (event) {
+            is NavigationEvent.NavigateUp -> navController.navigateUp()
+            else -> Unit
+        }
+    }
+
     TrackizerBottomNavigation(
         isVisibleBottmNav = navBackStackEntry.showBottomNavigation(),
         selectedNavItem = BottomNavItem.entries[selectedNavIndex],
-        onFabClick = {},
+        onFabClick = {
+            navController.navigateAddSubscription()
+        },
         onNavClick = navController::navigateBottomNav,
     ) {
         NavHost(
@@ -85,6 +99,7 @@ fun AppNavHost(
             creditCardScreen(
                 onNavigateToSettings = {},
             )
+            addSubscriptionScreen()
         }
     }
 }

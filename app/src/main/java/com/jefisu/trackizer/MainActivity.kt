@@ -11,10 +11,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.FlashMessageDialog
-import com.jefisu.ui.MessageController
 import com.jefisu.domain.repository.UserRepository
 import com.jefisu.home.presentation.HomeScreen
 import com.jefisu.trackizer.navigation.AppNavHost
+import com.jefisu.ui.MessageController
 import com.jefisu.welcome.WelcomeScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
