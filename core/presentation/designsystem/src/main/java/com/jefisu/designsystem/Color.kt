@@ -1,5 +1,6 @@
 package com.jefisu.designsystem
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val Gray100 = Color(0xFF0E0E12)
@@ -39,3 +40,9 @@ val SpotifyContainerColor = Color(0xFF1ED760)
 val Microsoft365ContainerColor = Color(0xFFACDCF5)
 val FabIconColor = Color(0xFFFF7F37)
 val CreditCardColor = Color(0xFF252530)
+
+val BorderBrush = Brush.sweepGradient(
+    0.2f to Color.Transparent,
+    0.5f to Purple90.copy(0.15f),
+    0.85f to Color.Transparent,
+)

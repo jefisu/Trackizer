@@ -12,22 +12,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jefisu.designsystem.BorderBrush
 import com.jefisu.designsystem.Gray60
-import com.jefisu.designsystem.Purple90
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.SubscriptionIcon
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import com.jefisu.ui.util.SampleData
-import com.jefisu.ui.ext.formatCurrency
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.domain.model.Subscription
+import com.jefisu.ui.ext.formatCurrency
+import com.jefisu.ui.util.SampleData
 
 @Composable
 internal fun ScheduledSubscriptionItem(
@@ -47,17 +44,13 @@ internal fun ScheduledSubscriptionItem(
                 onClick()
             }
             .drawBehind {
-                val (width, height) = size
-                val cornerRadius = CornerRadius(cornerDp.toPx(), cornerDp.toPx())
+                val cornerRadius = CornerRadius(cornerDp.toPx())
                 drawRoundRect(
                     color = Gray60.copy(0.2f),
                     cornerRadius = cornerRadius,
                 )
                 drawRoundRect(
-                    brush = Brush.linearGradient(
-                        colors = listOf(Purple90.copy(0.15f), Color.Transparent),
-                        end = Offset(width * 0.5f, height),
-                    ),
+                    brush = BorderBrush,
                     cornerRadius = cornerRadius,
                     style = Stroke(width = 1.5.dp.toPx()),
                 )

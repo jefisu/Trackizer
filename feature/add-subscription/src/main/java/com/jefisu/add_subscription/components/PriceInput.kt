@@ -33,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
@@ -45,11 +44,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import com.jefisu.add_subscription.R
 import com.jefisu.add_subscription.util.CurrencyVisualTransformation
+import com.jefisu.designsystem.BorderBrush
 import com.jefisu.designsystem.Gray20
 import com.jefisu.designsystem.Gray40
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.Gray70
-import com.jefisu.designsystem.Purple90
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
@@ -149,12 +148,7 @@ private fun Modifier.roundedSquare() = this
     .border(
         width = 1.dp,
         shape = RoundedCornerShape(16.dp),
-        brush = Brush.linearGradient(
-            colorStops = arrayOf(
-                0f to Purple90.copy(0.15f),
-                0.5f to Color.Transparent,
-            ),
-        ),
+        brush = BorderBrush,
     )
 
 @Preview

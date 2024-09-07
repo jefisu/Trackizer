@@ -31,19 +31,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.presentation.util.asFlagResource
+import com.jefisu.designsystem.BorderBrush
 import com.jefisu.designsystem.CreditCardColor
 import com.jefisu.designsystem.Gray20
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.Gray80
-import com.jefisu.designsystem.Purple90
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import com.jefisu.ui.util.SampleData
-import com.jefisu.ui.ext.formatExpirationDate
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.domain.model.Card
+import com.jefisu.ui.ext.formatExpirationDate
+import com.jefisu.ui.util.SampleData
 
 @Composable
 fun CreditCard(
@@ -187,11 +187,7 @@ private fun DrawScope.drawCardEdge(
 
 private fun DrawScope.drawStroke(cornerPx: Float) {
     drawRoundRect(
-        brush = Brush.sweepGradient(
-            0.2f to Color.Transparent,
-            0.5f to Purple90.copy(0.15f),
-            0.85f to Color.Transparent,
-        ),
+        brush = BorderBrush,
         cornerRadius = CornerRadius(cornerPx),
         style = Stroke(width = 1.5.dp.toPx()),
     )

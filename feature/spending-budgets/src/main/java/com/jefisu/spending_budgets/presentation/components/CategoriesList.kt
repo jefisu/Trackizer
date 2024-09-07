@@ -17,26 +17,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jefisu.designsystem.BorderBrush
 import com.jefisu.designsystem.Gray30
 import com.jefisu.designsystem.Gray60
-import com.jefisu.designsystem.Purple90
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import com.jefisu.ui.ext.formatCurrency
 import com.jefisu.domain.model.Category
 import com.jefisu.domain.model.CategoryType
 import com.jefisu.spending_budgets.R
 import com.jefisu.spending_budgets.presentation.util.asColor
 import com.jefisu.spending_budgets.presentation.util.asIconResource
+import com.jefisu.ui.ext.formatCurrency
 import kotlin.math.absoluteValue
 
 @Composable
@@ -55,20 +53,11 @@ internal fun CategoryItem(
                 val corner = 16.dp.toPx()
                 drawRoundRect(
                     color = Gray60.copy(0.2f),
-                    cornerRadius = CornerRadius(corner, corner),
+                    cornerRadius = CornerRadius(corner),
                 )
                 drawRoundRect(
-                    brush = Brush.linearGradient(
-                        colorStops = arrayOf(
-                            0f to Purple90.copy(0.2f),
-                            1f to Color.Transparent,
-                        ),
-                        end = Offset(
-                            x = center.x,
-                            y = size.height,
-                        ),
-                    ),
-                    cornerRadius = CornerRadius(corner, corner),
+                    brush = BorderBrush,
+                    cornerRadius = CornerRadius(corner),
                     style = Stroke(width = 1.dp.toPx()),
                 )
             }
