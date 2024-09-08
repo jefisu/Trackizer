@@ -11,20 +11,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object HomeScreen
 
-fun NavController.navigateHome() = navigate(HomeScreen)
+fun NavController.navigateToHome() = navigate(HomeScreen)
 
-fun NavGraphBuilder.homeScreen(
-    navigateToSpendingBudgets: () -> Unit,
-    navigateToSettings: () -> Unit,
-) {
+fun NavGraphBuilder.homeScreen() {
     composable<HomeScreen> {
         val viewModel = hiltViewModel<HomeViewModel>()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
         HomeScreen(
             state = state,
-            onNavigateToSpendingBudgets = navigateToSpendingBudgets,
-            onNavigateToSettings = navigateToSettings,
         )
     }
 }

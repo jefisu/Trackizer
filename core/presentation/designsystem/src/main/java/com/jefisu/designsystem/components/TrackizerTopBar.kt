@@ -23,6 +23,7 @@ import com.jefisu.designsystem.typography
 @Composable
 fun TrackizerTopBar(
     title: String?,
+    modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     colors: TopAppBarColors = TrackizerTopBarDefaults.colors,
     navigationIcon: @Composable () -> Unit = {},
@@ -39,6 +40,7 @@ fun TrackizerTopBar(
         actions = actions,
         colors = colors,
         scrollBehavior = scrollBehavior,
+        modifier = modifier,
     )
 }
 

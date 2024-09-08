@@ -32,9 +32,9 @@ import com.jefisu.designsystem.typography
 import com.jefisu.domain.model.Category
 import com.jefisu.domain.model.CategoryType
 import com.jefisu.spending_budgets.R
-import com.jefisu.spending_budgets.presentation.util.asColor
-import com.jefisu.spending_budgets.presentation.util.asIconResource
 import com.jefisu.ui.ext.formatCurrency
+import com.jefisu.ui.util.asColor
+import com.jefisu.ui.util.asIconResource
 import kotlin.math.absoluteValue
 
 @Composable

@@ -34,6 +34,7 @@ val WarningContainerColor = Color(0xFFF88F01)
 val HelpContainerColor = Color(0xFF0070AC)
 
 val Black18 = Color(0xFF282833)
+val Black23 = Color(0xFF353542)
 val Purple90 = Color(0xFFCFCFFC)
 
 val SpotifyContainerColor = Color(0xFF1ED760)

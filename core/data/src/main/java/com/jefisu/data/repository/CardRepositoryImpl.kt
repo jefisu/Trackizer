@@ -9,6 +9,7 @@ import com.google.firebase.ktx.Firebase
 import com.jefisu.data.dto.CardDto
 import com.jefisu.data.mapper.toCard
 import com.jefisu.data.mapper.toCardDto
+import com.jefisu.domain.DispatcherProvider
 import com.jefisu.domain.model.Card
 import com.jefisu.domain.repository.CardRepository
 import com.jefisu.domain.util.EmptyResult
@@ -17,19 +18,20 @@ import com.jefisu.domain.util.Result
 import com.jefisu.domain.util.UiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class CardRepositoryImpl : CardRepository {
+class CardRepositoryImpl(private val dispatcher: DispatcherProvider) : CardRepository {
 
     private val userIdField = "userId"
     private val userId = Firebase.auth.currentUser?.uid
 
-    private val cardCollection = Firebase.firestore.collection("cards")
+    private val collection = Firebase.firestore.collection("cards")
 
-    override val cards: Flow<List<Card>> = cardCollection
+    override val cards: Flow<List<Card>> = collection
         .whereEqualTo(userIdField, userId)
         .snapshots()
         .map { query ->
@@ -39,18 +41,22 @@ class CardRepositoryImpl : CardRepository {
         }
         .flowOn(Dispatchers.IO)
 
-    override suspend fun saveCard(card: Card): EmptyResult = withContext(Dispatchers.IO) {
+    override suspend fun getCardById(id: String): Card? = withContext(dispatcher.io) {
+        cards.first().firstOrNull { it.id == id }
+    }
+
+    override suspend fun saveCard(card: Card): EmptyResult = withContext(dispatcher.io) {
         try {
             val cardDto = card.toCardDto().copy(userId = userId!!)
             cardDto.id?.let { id ->
-                cardCollection
+                collection
                     .document(id)
                     .set(cardDto)
                     .await()
                 return@withContext Result.Success(Unit)
             }
 
-            cardCollection
+            collection
                 .add(cardDto)
                 .await()
             Result.Success(Unit)

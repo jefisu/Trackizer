@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,21 +26,26 @@ import com.jefisu.home.presentation.components.HorizontalTabs
 import com.jefisu.home.presentation.components.SubscriptionDashboard
 import com.jefisu.home.presentation.components.SubscriptionList
 import com.jefisu.home.presentation.components.SubscriptionTab
+import com.jefisu.ui.UiEventController
+import com.jefisu.ui.event.NavigationEvent
 import com.jefisu.ui.util.SampleData
+import kotlinx.coroutines.launch
 
 @Composable
-internal fun HomeScreen(
-    state: HomeState,
-    onNavigateToSpendingBudgets: () -> Unit = {},
-    onNavigateToSettings: () -> Unit = {},
-) {
+internal fun HomeScreen(state: HomeState) {
+    val scope = rememberCoroutineScope()
+
     TrackizerScaffold(
         topBar = {
             TrackizerTopBar(
                 title = null,
                 actions = {
                     TrackizerTopBarDefaults.settingsActionIcon(
-                        onClick = onNavigateToSettings,
+                        onClick = {
+                            scope.launch {
+                                UiEventController.sendEvent(NavigationEvent.NavigateToSettings)
+                            }
+                        },
                     )
                 },
             )
@@ -48,7 +54,11 @@ internal fun HomeScreen(
         Column {
             SubscriptionDashboard(
                 state = state,
-                onSeeBudgetClick = onNavigateToSpendingBudgets,
+                onSeeBudgetClick = {
+                    scope.launch {
+                        UiEventController.sendEvent(NavigationEvent.NavigateToSpendingBudgets)
+                    }
+                },
             )
             Spacer(modifier = Modifier.height(20.dp))
             HorizontalTabs(

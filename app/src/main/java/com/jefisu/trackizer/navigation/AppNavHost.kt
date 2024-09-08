@@ -17,8 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jefisu.add_subscription.addSubscriptionScreen
 import com.jefisu.add_subscription.navigateAddSubscription
 import com.jefisu.auth.presentation.authScreen
-import com.jefisu.auth.presentation.navigateAuthSignIn
-import com.jefisu.auth.presentation.navigateAuthSignUp
+import com.jefisu.auth.presentation.navigateToAuth
 import com.jefisu.calendar.presentation.CalendarScreen
 import com.jefisu.calendar.presentation.calendarScreen
 import com.jefisu.credit_cards.presentation.CreditCardScreen
@@ -27,9 +26,11 @@ import com.jefisu.designsystem.components.BottomNavItem
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
 import com.jefisu.home.presentation.HomeScreen
 import com.jefisu.home.presentation.homeScreen
-import com.jefisu.home.presentation.navigateHome
+import com.jefisu.home.presentation.navigateToHome
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsScreen
 import com.jefisu.spending_budgets.presentation.spendingBudgetsScreen
+import com.jefisu.subscription_info.presentation.navigateToSubscriptionInfo
+import com.jefisu.subscription_info.presentation.subscriptionInfoScreen
 import com.jefisu.ui.ObserveAsEvents
 import com.jefisu.ui.UiEventController
 import com.jefisu.ui.event.NavigationEvent
@@ -61,6 +62,18 @@ fun AppNavHost(
     ObserveAsEvents(UiEventController.events) { event ->
         when (event) {
             is NavigationEvent.NavigateUp -> navController.navigateUp()
+            is NavigationEvent.NavigateToAuth -> navController.navigateToAuth(event.isLogin)
+
+            is NavigationEvent.NavigateToSubscriptionInfo -> {
+                navController.navigateToSubscriptionInfo(event.id)
+            }
+
+            is NavigationEvent.NavigateToHome -> navController.navigateToHome()
+            is NavigationEvent.NavigateToSpendingBudgets -> {
+                navController.navigate(SpendingBudgetsScreen)
+            }
+
+            is NavigationEvent.NavigateToSettings -> Unit
             else -> Unit
         }
     }
@@ -77,29 +90,14 @@ fun AppNavHost(
             navController = navController,
             startDestination = startDestination,
         ) {
-            welcomeScreen(
-                navigateToRegisterScreen = navController::navigateAuthSignUp,
-                navigateToLoginScreen = navController::navigateAuthSignIn,
-            )
-            authScreen(
-                navigateToHome = navController::navigateHome,
-            )
-            homeScreen(
-                navigateToSettings = {},
-                navigateToSpendingBudgets = {
-                    navController.navigateBottomNav(BottomNavItem.BUDGETS)
-                },
-            )
-            spendingBudgetsScreen(
-                onNavigateToSettings = {},
-            )
-            calendarScreen(
-                onNavigateToSettings = {},
-            )
-            creditCardScreen(
-                onNavigateToSettings = {},
-            )
+            welcomeScreen()
+            authScreen()
+            homeScreen()
+            spendingBudgetsScreen()
+            calendarScreen()
+            creditCardScreen()
             addSubscriptionScreen()
+            subscriptionInfoScreen()
         }
     }
 }

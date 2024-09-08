@@ -16,14 +16,14 @@ fun SubscriptionDto.toSubscription() = Subscription(
     price = price,
     paymentDate = LocalDate.ofInstant(firstPayment.toInstant(), ZoneId.systemDefault()),
     reminder = reminder,
-    categoryId = categoryId.orEmpty(),
-    cardId = cardId.orEmpty(),
+    category = null,
+    card = null,
 )
 
 fun Subscription.toSubscriptionDto() = SubscriptionDto(
     id = id.ifEmpty { null },
-    categoryId = categoryId.ifEmpty { null },
-    cardId = cardId.ifEmpty { null },
+    categoryId = category?.id,
+    cardId = card?.id,
     serviceName = service.name,
     description = description,
     price = price,

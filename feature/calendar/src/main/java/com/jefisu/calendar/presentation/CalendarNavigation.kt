@@ -8,15 +8,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object CalendarScreen
 
-fun NavGraphBuilder.calendarScreen(onNavigateToSettings: () -> Unit) {
+fun NavGraphBuilder.calendarScreen() {
     composable<CalendarScreen> {
         val viewModel = hiltViewModel<CalendarViewModel>()
 
         CalendarScreen(
             state = viewModel.state,
             onAction = viewModel::onAction,
-            onNavigateToSettings = onNavigateToSettings,
-            onNavigateToDetails = {}
         )
     }
 }

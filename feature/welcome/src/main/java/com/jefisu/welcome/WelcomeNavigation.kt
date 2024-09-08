@@ -7,14 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object WelcomeScreen
 
-fun NavGraphBuilder.welcomeScreen(
-    navigateToRegisterScreen: () -> Unit,
-    navigateToLoginScreen: () -> Unit,
-) {
+fun NavGraphBuilder.welcomeScreen() {
     composable<WelcomeScreen> {
-        WelcomeScreen(
-            onNavigateToRegisterScreen = navigateToRegisterScreen,
-            onNavigateToLoginScreen = navigateToLoginScreen,
-        )
+        WelcomeScreen()
     }
 }

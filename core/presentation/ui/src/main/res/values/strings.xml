@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subscription_deleted">The subscription has been successfully deleted.</string>
+    <string name="subscription_not_deleted">There was an issue, and it was not possible to delete the subscription.</string>
+</resources>

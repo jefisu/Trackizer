@@ -10,14 +10,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SpendingBudgetsScreen
 
-fun NavGraphBuilder.spendingBudgetsScreen(onNavigateToSettings: () -> Unit) {
+fun NavGraphBuilder.spendingBudgetsScreen() {
     composable<SpendingBudgetsScreen> {
         val viewModel = hiltViewModel<SpendingBudgetsViewModel>()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
         SpendingBudgetScreen(
-            state = state,
-            navigateToSettings = onNavigateToSettings,
+            state = state
         )
     }
 }

@@ -8,4 +8,5 @@ interface CardRepository {
     val cards: Flow<List<Card>>
 
     suspend fun saveCard(card: Card): EmptyResult
+    suspend fun getCardById(id: String): Card?
 }

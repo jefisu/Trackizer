@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -47,10 +48,14 @@ import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.SubscriptionIcon
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.domain.model.Subscription
 import com.jefisu.home.R
+import com.jefisu.ui.UiEventController
+import com.jefisu.ui.event.NavigationEvent
 import com.jefisu.ui.ext.formatCurrency
 import com.jefisu.ui.util.SampleData
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun SubscriptionList(
@@ -68,6 +73,7 @@ internal fun SubscriptionList(
         }
     }
     val bottomPadding = 70.dp
+    val scope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize()) {
         AnimatedVisibility(
@@ -111,6 +117,13 @@ internal fun SubscriptionList(
                         SubscriptionItem(
                             subscription = sub,
                             upcomingBill = upcomingBill,
+                            modifier = Modifier.rippleClickable {
+                                scope.launch {
+                                    UiEventController.sendEvent(
+                                        NavigationEvent.NavigateToSubscriptionInfo(sub.id),
+                                    )
+                                }
+                            },
                         )
                     }
                     item {

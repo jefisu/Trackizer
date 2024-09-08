@@ -29,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,19 +55,21 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.domain.model.Subscription
 import com.jefisu.domain.model.util.filterUpcomingBills
+import com.jefisu.ui.UiEventController
+import com.jefisu.ui.event.NavigationEvent
 import com.jefisu.ui.ext.formatCurrency
 import com.jefisu.ui.ext.formatMonthName
 import com.jefisu.ui.ext.toDateFormat
 import com.jefisu.ui.util.SampleData
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
 internal fun CalendarScreen(
     state: CalendarState,
     onAction: (CalendarAction) -> Unit,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToDetails: (Subscription) -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
     val upcomingBills = remember(state) {
         state.subscriptions
             .filterUpcomingBills()
@@ -83,7 +86,11 @@ internal fun CalendarScreen(
                 ),
                 actions = {
                     TrackizerTopBarDefaults.settingsActionIcon(
-                        onClick = onNavigateToSettings,
+                        onClick = {
+                            scope.launch {
+                                UiEventController.sendEvent(NavigationEvent.NavigateToSettings)
+                            }
+                        },
                     )
                 },
             )
@@ -117,7 +124,6 @@ internal fun CalendarScreen(
             Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
             ScheduledSubscriptionsPerDay(
                 subscriptions = upcomingBills,
-                onSubscriptionClick = onNavigateToDetails,
             )
         }
     }
@@ -238,15 +244,13 @@ private fun CalendarRow(
 }
 
 @Composable
-fun ScheduledSubscriptionsPerDay(
-    subscriptions: List<Subscription>,
-    onSubscriptionClick: (Subscription) -> Unit,
-) {
+fun ScheduledSubscriptionsPerDay(subscriptions: List<Subscription>) {
+    val scope = rememberCoroutineScope()
     val lazyGridState = rememberLazyGridState()
     val showDivider by remember {
         derivedStateOf {
             lazyGridState.firstVisibleItemIndex > 0 ||
-                    lazyGridState.firstVisibleItemScrollOffset > 0
+                lazyGridState.firstVisibleItemScrollOffset > 0
         }
     }
 
@@ -271,7 +275,13 @@ fun ScheduledSubscriptionsPerDay(
             ) { subscription ->
                 ScheduledSubscriptionItem(
                     subscription = subscription,
-                    onClick = { onSubscriptionClick(subscription) },
+                    onClick = {
+                        scope.launch {
+                            UiEventController.sendEvent(
+                                NavigationEvent.NavigateToSubscriptionInfo(subscription.id),
+                            )
+                        }
+                    },
                 )
             }
         }
@@ -290,8 +300,6 @@ private fun CalendarScreenPreview() {
                     },
                 ),
                 onAction = {},
-                onNavigateToSettings = {},
-                onNavigateToDetails = {},
             )
         }
     }

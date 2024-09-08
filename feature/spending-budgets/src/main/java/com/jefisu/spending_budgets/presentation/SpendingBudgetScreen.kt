@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -43,15 +44,15 @@ import com.jefisu.spending_budgets.R
 import com.jefisu.spending_budgets.presentation.components.BudgetGauge
 import com.jefisu.spending_budgets.presentation.components.CategoryItem
 import com.jefisu.spending_budgets.presentation.components.PieData
-import com.jefisu.spending_budgets.presentation.util.asColor
+import com.jefisu.ui.UiEventController
+import com.jefisu.ui.event.NavigationEvent
 import com.jefisu.ui.util.SampleData
+import com.jefisu.ui.util.asColor
+import kotlinx.coroutines.launch
 
 @Composable
-internal fun SpendingBudgetScreen(
-    state: SpendingBudgetsState,
-    navigateToSettings: () -> Unit = {},
-    navigateToAddCategory: () -> Unit = {},
-) {
+internal fun SpendingBudgetScreen(state: SpendingBudgetsState) {
+    val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val budget = remember(state.categories) {
         state.categories
@@ -80,10 +81,14 @@ internal fun SpendingBudgetScreen(
                 scrollBehavior = scrollBehavior,
                 actions = {
                     TrackizerTopBarDefaults.settingsActionIcon(
-                        onClick = navigateToSettings,
+                        onClick = {
+                            scope.launch {
+                                UiEventController.sendEvent(NavigationEvent.NavigateToSettings)
+                            }
+                        },
                     )
                     AnimatedVisibility(visible = showActionIcon) {
-                        IconButton(onClick = navigateToAddCategory) {
+                        IconButton(onClick = {}) {
                             Icon(
                                 imageVector = Icons.Rounded.AddCircleOutline,
                                 contentDescription = stringResource(R.string.add_new_category),
@@ -134,7 +139,7 @@ internal fun SpendingBudgetScreen(
                 TrackizerOutlinedButton(
                     text = stringResource(R.string.add_new_category),
                     contentPadding = PaddingValues(TrackizerTheme.spacing.large),
-                    onClick = navigateToAddCategory,
+                    onClick = {},
                     modifier = Modifier.padding(bottom = TrackizerTheme.spacing.small),
                 )
             }

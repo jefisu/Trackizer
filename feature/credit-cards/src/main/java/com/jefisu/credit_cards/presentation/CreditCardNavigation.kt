@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object CreditCardScreen
 
-fun NavGraphBuilder.creditCardScreen(onNavigateToSettings: () -> Unit) {
+fun NavGraphBuilder.creditCardScreen() {
     composable<CreditCardScreen> {
         val viewModel = hiltViewModel<CreditCardViewModel>()
         val state by viewModel.state.collectAsStateWithLifecycle()
@@ -18,7 +18,6 @@ fun NavGraphBuilder.creditCardScreen(onNavigateToSettings: () -> Unit) {
         CreditCardsScreen(
             state = state,
             onAction = viewModel::onAction,
-            onNavigateToSettings = onNavigateToSettings,
         )
     }
 }

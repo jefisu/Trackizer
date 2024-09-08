@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -25,12 +26,14 @@ import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.components.TrackizerLogoBox
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.ui.UiEventController
+import com.jefisu.ui.event.NavigationEvent
+import kotlinx.coroutines.launch
 
 @Composable
-internal fun WelcomeScreen(
-    onNavigateToRegisterScreen: () -> Unit,
-    onNavigateToLoginScreen: () -> Unit,
-) {
+internal fun WelcomeScreen() {
+    val scope = rememberCoroutineScope()
+
     TrackizerLogoBox {
         Image(
             painter = painterResource(id = R.drawable.welcome_asset),
@@ -55,7 +58,7 @@ internal fun WelcomeScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .safeDrawingPadding()
-                .padding(TrackizerTheme.spacing.extraMedium)
+                .padding(TrackizerTheme.spacing.extraMedium),
         ) {
             Text(
                 text = stringResource(R.string.congue_malesuada_in),
@@ -66,14 +69,22 @@ internal fun WelcomeScreen(
             TrackizerButton(
                 text = stringResource(R.string.get_started),
                 type = ButtonType.Primary,
-                onClick = onNavigateToRegisterScreen,
+                onClick = {
+                    scope.launch {
+                        UiEventController.sendEvent(NavigationEvent.NavigateToAuth(isLogin = false))
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
             TrackizerButton(
                 text = stringResource(R.string.i_have_an_account),
                 type = ButtonType.Secondary,
-                onClick = onNavigateToLoginScreen,
+                onClick = {
+                    scope.launch {
+                        UiEventController.sendEvent(NavigationEvent.NavigateToAuth(isLogin = true))
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -84,9 +95,6 @@ internal fun WelcomeScreen(
 @Composable
 private fun WelcomeScreenPreview() {
     TrackizerTheme {
-        WelcomeScreen(
-            onNavigateToRegisterScreen = {},
-            onNavigateToLoginScreen = {},
-        )
+        WelcomeScreen()
     }
 }

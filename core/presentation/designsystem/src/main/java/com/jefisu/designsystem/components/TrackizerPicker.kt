@@ -30,30 +30,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import java.time.Month
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import java.time.Month
 
 @Composable
-fun rememberPickerState() = remember { PickerState() }
+fun <T> rememberPickerState() = remember { PickerState<T>() }
 
-class PickerState {
-    var selectedItem by mutableStateOf("")
+class PickerState<T> {
+    var selectedItem by mutableStateOf<T?>(null)
 }
 
 @Composable
-fun TrackizerPicker(
-    items: List<String>,
+fun <T> TrackizerPicker(
+    items: List<T>,
     modifier: Modifier = Modifier,
-    state: PickerState = rememberPickerState(),
+    state: PickerState<T> = rememberPickerState(),
     startIndex: Int = 0,
     visibleItemsCount: Int = 3,
-    textStyle: TextStyle = TrackizerTheme.typography.headline4,
+    itemContent: @Composable (T) -> Unit,
 ) {
     val visibleItemsMiddle = visibleItemsCount / 2
     val listScrollCount = Int.MAX_VALUE
@@ -74,9 +75,9 @@ fun TrackizerPicker(
 
     LaunchedEffect(Unit) {
         snapshotFlow { listState.firstVisibleItemIndex }
-            .map { index -> getItem(index + visibleItemsMiddle) }
+            .map { it + visibleItemsMiddle }
             .distinctUntilChanged()
-            .collect { item -> state.selectedItem = item }
+            .collect { state.selectedItem = getItem(it) }
     }
 
     Box(modifier = modifier) {
@@ -90,14 +91,13 @@ fun TrackizerPicker(
                 .fadingEdge(fadingEdgeGradient),
         ) {
             items(listScrollCount) { index ->
-                Text(
-                    text = getItem(index),
-                    maxLines = 1,
-                    style = textStyle,
+                Box(
                     modifier = Modifier
                         .graphicsLayer { itemHeightDp = size.height.toDp() }
                         .padding(TrackizerTheme.spacing.extraSmall),
-                )
+                ) {
+                    itemContent(getItem(index))
+                }
             }
         }
 
@@ -108,6 +108,22 @@ fun TrackizerPicker(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color.White.copy(0.1f)),
+        )
+    }
+}
+
+object TrackizerPickerDefaults {
+
+    @Composable
+    fun TextPickerItem(
+        text: String,
+        textStyle: TextStyle = TrackizerTheme.typography.headline4,
+    ) {
+        Text(
+            text = text,
+            maxLines = 1,
+            style = textStyle,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -127,6 +143,9 @@ fun NumberPickerDemo() {
         TrackizerPicker(
             items = months,
             visibleItemsCount = 5,
+            itemContent = { text ->
+                TrackizerPickerDefaults.TextPickerItem(text)
+            },
         )
     }
 }

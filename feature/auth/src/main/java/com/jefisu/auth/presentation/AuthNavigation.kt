@@ -9,20 +9,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AuthRoute(val isLogin: Boolean = false)
 
-fun NavController.navigateAuthSignUp() = navigate(
-    AuthRoute(isLogin = false),
+fun NavController.navigateToAuth(isLogin: Boolean) = navigate(
+    AuthRoute(isLogin = isLogin),
 )
 
-fun NavController.navigateAuthSignIn() = navigate(
-    AuthRoute(isLogin = true),
-)
-
-fun NavGraphBuilder.authScreen(navigateToHome: () -> Unit) {
+fun NavGraphBuilder.authScreen() {
     composable<AuthRoute> {
         val navArgs = it.toRoute<AuthRoute>()
-        AuthScreen(
-            navArgs = navArgs,
-            navigateToHome = navigateToHome,
-        )
+        AuthScreen(navArgs = navArgs)
     }
 }

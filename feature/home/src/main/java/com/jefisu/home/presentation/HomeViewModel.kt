@@ -2,20 +2,23 @@ package com.jefisu.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jefisu.domain.repository.CategoryRepository
 import com.jefisu.domain.repository.SubscriptionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
 
 @HiltViewModel
-internal class HomeViewModel @Inject constructor(private val repository: SubscriptionRepository) :
-    ViewModel() {
+internal class HomeViewModel @Inject constructor(
+    private val subscriptionRepository: SubscriptionRepository,
+    private val categoryRepository: CategoryRepository,
+) : ViewModel() {
 
     val state = combine(
-        repository.categories,
-        repository.subscriptions,
+        categoryRepository.categories,
+        subscriptionRepository.subscriptions,
     ) { categories, subscriptions ->
         HomeState(
             subscriptions = subscriptions,

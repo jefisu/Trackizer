@@ -1,11 +1,11 @@
-package com.jefisu.spending_budgets.presentation.util
+package com.jefisu.ui.util
 
 import androidx.compose.ui.graphics.Color
 import com.jefisu.designsystem.AccentPrimary50
 import com.jefisu.designsystem.AccentSecondary100
 import com.jefisu.designsystem.Primary10
 import com.jefisu.domain.model.CategoryType
-import com.jefisu.spending_budgets.R
+import com.jefisu.ui.R
 
 fun CategoryType.asIconResource(): Int = when (this) {
     CategoryType.Transport -> R.drawable.ic_transport

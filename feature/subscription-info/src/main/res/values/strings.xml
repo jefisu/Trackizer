@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="category">Category</string>
+    <string name="first_payment">First payment</string>
+    <string name="reminder">Reminder</string>
+    <string name="save">Save</string>
+    <string name="subscription_info">Subscription Info</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="forever">Forever</string>
+    <string name="never">Never</string>
+    <string name="no_category">No category</string>
+    <string name="no_credit_card">No credit card</string>
+    <string name="no_description">No description</string>
+    <string name="select_a_category">Select a category</string>
+    <string name="select_a_credit_card">Select a credit card</string>
+    <string name="select">Select</string>
+    <string name="reminder_for_the_upcoming_months">Reminder for the upcoming months?</string>
+    <string name="delete_subscription">Delete subscription</string>
+    <string name="are_you_sure_you_want_to_delete_this_subscription">Are you sure want to delete this subscription?</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+</resources>

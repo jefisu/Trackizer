@@ -49,8 +49,6 @@ class AddSubscriptionViewModel @Inject constructor(
             val price = state.price.toFloat() / 100f
             val subscription = Subscription(
                 id = "",
-                cardId = "",
-                categoryId = "",
                 service = state.selectedService,
                 description = state.description,
                 price = price,

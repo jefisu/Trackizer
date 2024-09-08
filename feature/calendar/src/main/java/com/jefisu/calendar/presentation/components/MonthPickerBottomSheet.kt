@@ -22,6 +22,7 @@ import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.TrackizerBottomSheet
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.components.TrackizerPicker
+import com.jefisu.designsystem.components.TrackizerPickerDefaults
 import com.jefisu.designsystem.components.hideSheet
 import com.jefisu.designsystem.components.rememberPickerState
 import com.jefisu.designsystem.spacing
@@ -35,7 +36,7 @@ internal fun MonthPickerBottomSheet(
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     val months = Month.entries.map { it.name }
-    val pickerState = rememberPickerState()
+    val pickerState = rememberPickerState<String>()
 
     TrackizerBottomSheet(
         isVisible = state.showMonthPicker,
@@ -53,14 +54,16 @@ internal fun MonthPickerBottomSheet(
                 visibleItemsCount = 5,
                 state = pickerState,
                 startIndex = months.indexOf(state.selectedMonth.month.name),
-            )
+            ) { month ->
+                TrackizerPickerDefaults.TextPickerItem(text = month)
+            }
             Spacer(modifier = Modifier.height(TrackizerTheme.spacing.small))
             TrackizerButton(
                 text = stringResource(R.string.apply),
                 type = ButtonType.Primary,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    val month = Month.valueOf(pickerState.selectedItem)
+                    val month = Month.valueOf(pickerState.selectedItem.orEmpty())
                     onAction(CalendarAction.SelectMonth(month))
                     sheetState.hideSheet(
                         scope = scope,

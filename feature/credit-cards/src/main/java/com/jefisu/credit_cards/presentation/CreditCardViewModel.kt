@@ -10,9 +10,6 @@ import com.jefisu.credit_cards.domain.validation.cardNameValidate
 import com.jefisu.credit_cards.domain.validation.cardNumberValidate
 import com.jefisu.credit_cards.presentation.util.asCardFlag
 import com.jefisu.credit_cards.presentation.util.asMessageText
-import com.jefisu.ui.MessageController
-import com.jefisu.ui.UiEventController
-import com.jefisu.ui.ext.formatExpirationDate
 import com.jefisu.domain.model.Card
 import com.jefisu.domain.model.CardType
 import com.jefisu.domain.repository.CardRepository
@@ -20,6 +17,9 @@ import com.jefisu.domain.repository.SubscriptionRepository
 import com.jefisu.domain.util.MessageText
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
+import com.jefisu.ui.MessageController
+import com.jefisu.ui.UiEventController
+import com.jefisu.ui.ext.formatExpirationDate
 import com.steliospapamichail.creditcardmasker.utils.getCardTypeFromNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
@@ -48,7 +48,7 @@ class CreditCardViewModel @Inject constructor(
             .filter { it.type == CardType.CREDIT }
             .associateWith { card ->
                 subscriptions
-                    .filter { it.cardId == card.id }
+                    .filter { it.card?.id == card.id }
                     .map { it.service }
             }
 

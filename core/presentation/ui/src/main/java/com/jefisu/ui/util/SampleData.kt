@@ -20,8 +20,6 @@ object SampleData {
             price = it.toFloat(),
             paymentDate = LocalDate.of(2024, 7, 10).plusDays(it.toLong()),
             reminder = index == 0,
-            categoryId = "category$it",
-            cardId = "card$it",
         )
     }
 

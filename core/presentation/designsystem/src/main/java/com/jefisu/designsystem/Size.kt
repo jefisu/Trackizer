@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 data class Size(
+    val iconSmall: Dp = 12.dp,
     val iconExtraSmall: Dp = 16.dp,
     val iconDefault: Dp = 24.dp,
     val iconMedium: Dp = 40.dp,

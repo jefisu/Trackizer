@@ -4,13 +4,13 @@ import java.time.LocalDate
 
 data class Subscription(
     val id: String,
-    val categoryId: String,
-    val cardId: String,
     val service: SubscriptionService,
     val description: String,
     val price: Float,
     val paymentDate: LocalDate,
     val reminder: Boolean,
+    val category: Category? = null,
+    val card: Card? = null,
 )
 
 enum class SubscriptionService(val title: String) {
