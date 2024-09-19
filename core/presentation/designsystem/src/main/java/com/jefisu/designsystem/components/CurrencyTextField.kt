@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalLayoutApi::class)
 
-package com.jefisu.add_subscription.components
+package com.jefisu.designsystem.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,14 +36,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
-import com.jefisu.add_subscription.R
-import com.jefisu.add_subscription.util.CurrencyVisualTransformation
 import com.jefisu.designsystem.BorderBrush
 import com.jefisu.designsystem.Gray20
 import com.jefisu.designsystem.Gray40
@@ -52,13 +49,15 @@ import com.jefisu.designsystem.Gray70
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.CurrencyVisualTransformation
 import com.jefisu.designsystem.util.rippleClickable
 
 @Composable
-internal fun PriceInput(
+fun CurrencyTextField(
     text: String,
     onTextChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    label: String? = null,
     maxLength: Int = 8,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -115,11 +114,13 @@ internal fun PriceInput(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
-                    Text(
-                        text = stringResource(R.string.monthly_price),
-                        style = TrackizerTheme.typography.headline1,
-                        color = Gray40,
-                    )
+                    label?.let {
+                        Text(
+                            text = it,
+                            style = TrackizerTheme.typography.headline1,
+                            color = Gray40,
+                        )
+                    }
                     textFieldContent()
                     HorizontalDivider(
                         color = Gray70,
@@ -141,6 +142,14 @@ internal fun PriceInput(
     }
 }
 
+fun String.toDecimalValue(): Float {
+    if (this.isDigitsOnly()) {
+        return this.toFloat() / 100f
+    }
+
+    return 0f
+}
+
 private fun Modifier.roundedSquare() = this
     .size(48.dp)
     .clip(RoundedCornerShape(16.dp))
@@ -157,9 +166,10 @@ private fun PriceInputPreview() {
     var text by remember { mutableStateOf("") }
 
     TrackizerTheme {
-        PriceInput(
+        CurrencyTextField(
             text = text,
             onTextChange = { text = it },
+            label = "Montly Price",
             modifier = Modifier.padding(TrackizerTheme.spacing.medium),
         )
     }

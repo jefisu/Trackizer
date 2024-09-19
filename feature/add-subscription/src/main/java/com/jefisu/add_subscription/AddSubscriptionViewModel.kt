@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jefisu.designsystem.components.toDecimalValue
 import com.jefisu.domain.model.Subscription
 import com.jefisu.domain.repository.SubscriptionRepository
 import com.jefisu.domain.util.MessageText
@@ -46,12 +47,11 @@ class AddSubscriptionViewModel @Inject constructor(
 
     private fun addSubscription() {
         viewModelScope.launch {
-            val price = state.price.toFloat() / 100f
             val subscription = Subscription(
                 id = "",
                 service = state.selectedService,
                 description = state.description,
-                price = price,
+                price = state.price.toDecimalValue(),
                 paymentDate = LocalDate.now(),
                 reminder = false,
             )

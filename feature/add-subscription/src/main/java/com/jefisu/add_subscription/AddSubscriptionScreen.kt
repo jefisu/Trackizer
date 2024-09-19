@@ -31,11 +31,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jefisu.add_subscription.components.PriceInput
 import com.jefisu.add_subscription.components.SubscriptionServicePageItem
 import com.jefisu.designsystem.Gray70
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
+import com.jefisu.designsystem.components.CurrencyTextField
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.components.TrackizerScaffold
 import com.jefisu.designsystem.components.TrackizerTextField
@@ -137,9 +137,10 @@ internal fun AddSubscriptionScreen(
                         focusManager.moveFocus(FocusDirection.Down)
                     },
                 )
-                PriceInput(
+                CurrencyTextField(
                     text = state.price,
                     onTextChange = { onAction(AddSubscriptionAction.PriceChanged(it)) },
+                    label = stringResource(R.string.monthly_price),
                     keyboardActions = KeyboardActions {
                         focusManager.clearFocus()
                     },

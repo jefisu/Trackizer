@@ -1,4 +1,4 @@
-package com.jefisu.add_subscription.util
+package com.jefisu.designsystem.util
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
