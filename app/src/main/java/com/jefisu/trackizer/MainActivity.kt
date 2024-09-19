@@ -1,5 +1,7 @@
 package com.jefisu.trackizer
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,6 +32,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         enableEdgeToEdge()
         systemBarColor()
+        setPortraitOrientationOnly()
         setContent {
             val navController = rememberNavController()
             val message by MessageController.message.collectAsStateWithLifecycle()
@@ -54,4 +57,9 @@ class MainActivity : ComponentActivity() {
 
     private fun startDestination(): Any =
         if (userRepository.isAuthenticated()) HomeScreen else WelcomeScreen
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    private fun setPortraitOrientationOnly() {
+        this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
 }
