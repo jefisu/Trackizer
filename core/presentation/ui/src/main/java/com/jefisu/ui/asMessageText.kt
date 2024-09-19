@@ -12,4 +12,11 @@ fun DataMessage.asMessageText(): MessageText = when (this) {
     DataMessage.SUBSCRIPTION_NOT_DELETED -> MessageText.Error(
         UiText.StringResource(R.string.subscription_not_deleted),
     )
+    DataMessage.CATEGORY_NAME_CAN_T_BE_BLANK -> MessageText.Error(
+        UiText.StringResource(R.string.category_can_t_be_blank),
+    )
+
+    DataMessage.CATEGORY_BUDGET_CAN_T_BE_ZERO -> MessageText.Error(
+        UiText.StringResource(R.string.category_budget_can_t_be_zero),
+    )
 }

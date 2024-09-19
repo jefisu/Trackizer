@@ -16,7 +16,8 @@ fun NavGraphBuilder.spendingBudgetsScreen() {
         val state by viewModel.state.collectAsStateWithLifecycle()
 
         SpendingBudgetScreen(
-            state = state
+            state = state,
+            onAction = viewModel::onAction,
         )
     }
 }

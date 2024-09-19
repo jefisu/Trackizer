@@ -2,4 +2,6 @@
 <resources>
     <string name="subscription_deleted">The subscription has been successfully deleted.</string>
     <string name="subscription_not_deleted">There was an issue, and it was not possible to delete the subscription.</string>
+    <string name="category_can_t_be_blank">The category name can\'t be blank</string>
+    <string name="category_budget_can_t_be_zero">The category budget can\'t be zero</string>
 </resources>

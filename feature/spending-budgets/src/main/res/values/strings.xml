@@ -9,4 +9,9 @@
     <string name="add_new_category">Add new category</string>
     <string name="your_budgets_are_on_track">Your budgets are on track %s</string>
     <string name="spending_budgets_title"><![CDATA[Spending & Budgets]]></string>
+    <string name="select_a_category_type">Select a category type</string>
+    <string name="select">Select</string>
+    <string name="add_category">Add category</string>
+    <string name="edit_category">Edit category</string>
+    <string name="category_type">Category type</string>
 </resources>

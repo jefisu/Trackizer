@@ -40,7 +40,9 @@ import com.jefisu.designsystem.components.TrackizerTopBar
 import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.spending_budgets.R
+import com.jefisu.spending_budgets.presentation.components.AddCategoryBottomSheet
 import com.jefisu.spending_budgets.presentation.components.BudgetGauge
 import com.jefisu.spending_budgets.presentation.components.CategoryItem
 import com.jefisu.spending_budgets.presentation.components.PieData
@@ -51,7 +53,10 @@ import com.jefisu.ui.util.asColor
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun SpendingBudgetScreen(state: SpendingBudgetsState) {
+internal fun SpendingBudgetScreen(
+    state: SpendingBudgetsState,
+    onAction: (SpendingBudgetsAction) -> Unit,
+) {
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val budget = remember(state.categories) {
@@ -74,6 +79,11 @@ internal fun SpendingBudgetScreen(state: SpendingBudgetsState) {
         }
     }
 
+    AddCategoryBottomSheet(
+        state = state,
+        onAction = onAction,
+    )
+
     TrackizerScaffold(
         topBar = {
             TrackizerTopBar(
@@ -88,7 +98,11 @@ internal fun SpendingBudgetScreen(state: SpendingBudgetsState) {
                         },
                     )
                     AnimatedVisibility(visible = showActionIcon) {
-                        IconButton(onClick = {}) {
+                        IconButton(
+                            onClick = {
+                                onAction(SpendingBudgetsAction.ToggleAddCategoryBottomSheet())
+                            },
+                        ) {
                             Icon(
                                 imageVector = Icons.Rounded.AddCircleOutline,
                                 contentDescription = stringResource(R.string.add_new_category),
@@ -139,7 +153,9 @@ internal fun SpendingBudgetScreen(state: SpendingBudgetsState) {
                 TrackizerOutlinedButton(
                     text = stringResource(R.string.add_new_category),
                     contentPadding = PaddingValues(TrackizerTheme.spacing.large),
-                    onClick = {},
+                    onClick = {
+                        onAction(SpendingBudgetsAction.ToggleAddCategoryBottomSheet())
+                    },
                     modifier = Modifier.padding(bottom = TrackizerTheme.spacing.small),
                 )
             }
@@ -149,7 +165,11 @@ internal fun SpendingBudgetScreen(state: SpendingBudgetsState) {
             ) { category ->
                 CategoryItem(
                     category = category,
-                    modifier = Modifier.padding(bottom = TrackizerTheme.spacing.small),
+                    modifier = Modifier
+                        .padding(bottom = TrackizerTheme.spacing.small)
+                        .rippleClickable {
+                            onAction(SpendingBudgetsAction.ToggleAddCategoryBottomSheet(category))
+                        },
                 )
             }
         }
@@ -165,6 +185,7 @@ private fun SpendingBudgetScreenPreview() {
                 state = SpendingBudgetsState(
                     categories = SampleData.categories,
                 ),
+                onAction = {},
             )
         }
     }
