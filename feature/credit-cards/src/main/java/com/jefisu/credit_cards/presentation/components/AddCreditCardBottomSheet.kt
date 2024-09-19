@@ -4,13 +4,10 @@ package com.jefisu.credit_cards.presentation.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -85,131 +82,123 @@ fun AddCreditCardBottomSheet(
         sheetState = sheetState,
         onDismiss = { onAction(CreditCardAction.ToogleAddCreditCardBottomSheet()) },
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .padding(horizontal = TrackizerTheme.spacing.extraMedium)
-                .padding(bottom = TrackizerTheme.spacing.extraMedium),
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = title,
-                    style = TrackizerTheme.typography.headline4,
-                    modifier = Modifier.weight(1f),
-                )
-                Spacer(Modifier.width(TrackizerTheme.spacing.medium))
-                IconButton(
-                    onClick = {
-                        sheetState.hideSheet(
-                            scope = scope,
-                            onDismiss = {
-                                onAction(CreditCardAction.ToogleAddCreditCardBottomSheet())
-                            },
-                        )
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = "Close add card bottom sheet",
+            Text(
+                text = title,
+                style = TrackizerTheme.typography.headline4,
+                modifier = Modifier.weight(1f),
+            )
+            Spacer(Modifier.width(TrackizerTheme.spacing.medium))
+            IconButton(
+                onClick = {
+                    sheetState.hideSheet(
+                        scope = scope,
+                        onDismiss = {
+                            onAction(CreditCardAction.ToogleAddCreditCardBottomSheet())
+                        },
                     )
+                },
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = "Close add card bottom sheet",
+                )
+            }
+        }
+        Spacer(Modifier.height(TrackizerTheme.spacing.small))
+        TrackizerTextField(
+            text = state.cardName,
+            onTextChange = {
+                if (it.length <= CardConstants.CARD_NAME_LENGTH) {
+                    onAction(CreditCardAction.CardNameChanged(it))
                 }
-            }
-            Spacer(Modifier.height(TrackizerTheme.spacing.small))
+            },
+            fieldName = stringResource(R.string.card_name),
+        )
+        Spacer(Modifier.height(TrackizerTheme.spacing.medium))
+        TrackizerTextField(
+            text = state.cardHolder,
+            onTextChange = {
+                if (it.length <= CardConstants.CARD_HOLDER_LENGTH) {
+                    onAction(CreditCardAction.CardHolderChanged(it))
+                }
+            },
+            fieldName = stringResource(R.string.card_holder),
+        )
+        Spacer(Modifier.height(TrackizerTheme.spacing.medium))
+        Row {
             TrackizerTextField(
-                text = state.cardName,
+                text = state.cardNumber,
                 onTextChange = {
-                    if (it.length <= CardConstants.CARD_NAME_LENGTH) {
-                        onAction(CreditCardAction.CardNameChanged(it))
+                    if (it.length <= CardConstants.CARD_NUMBER_LENGTH) {
+                        onAction(CreditCardAction.CardNumberChanged(it))
                     }
                 },
-                fieldName = stringResource(R.string.card_name),
+                fieldName = stringResource(R.string.card_number),
+                visualTransformation = CardNumberMask(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                ),
+                modifier = Modifier.weight(1f),
             )
-            Spacer(Modifier.height(TrackizerTheme.spacing.medium))
-            TrackizerTextField(
-                text = state.cardHolder,
-                onTextChange = {
-                    if (it.length <= CardConstants.CARD_HOLDER_LENGTH) {
-                        onAction(CreditCardAction.CardHolderChanged(it))
-                    }
-                },
-                fieldName = stringResource(R.string.card_holder),
-            )
-            Spacer(Modifier.height(TrackizerTheme.spacing.medium))
-            Row {
-                TrackizerTextField(
-                    text = state.cardNumber,
-                    onTextChange = {
-                        if (it.length <= CardConstants.CARD_NUMBER_LENGTH) {
-                            onAction(CreditCardAction.CardNumberChanged(it))
-                        }
-                    },
-                    fieldName = stringResource(R.string.card_number),
-                    visualTransformation = CardNumberMask(),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
+            Spacer(Modifier.width(TrackizerTheme.spacing.medium))
+            Box(
+                modifier = Modifier
+                    .width(70.dp)
+                    .height(TrackizerTheme.size.textFieldHeight)
+                    .align(Alignment.Bottom)
+                    .clip(Shapes().large)
+                    .border(
+                        width = 1.dp,
+                        color = Gray50,
+                        shape = Shapes().large,
+                    )
+                    .scale(0.6f)
+                    .paint(
+                        painter = painterResource(state.flag.asFlagResource()),
+                        contentScale = ContentScale.FillWidth,
                     ),
-                    modifier = Modifier.weight(1f),
-                )
-                Spacer(Modifier.width(TrackizerTheme.spacing.medium))
-                Box(
-                    modifier = Modifier
-                        .width(70.dp)
-                        .height(TrackizerTheme.size.textFieldHeight)
-                        .align(Alignment.Bottom)
-                        .clip(Shapes().large)
-                        .border(
-                            width = 1.dp,
-                            color = Gray50,
-                            shape = Shapes().large,
-                        )
-                        .scale(0.6f)
-                        .paint(
-                            painter = painterResource(state.flag.asFlagResource()),
-                            contentScale = ContentScale.FillWidth,
-                        ),
-                )
-            }
-            Spacer(Modifier.height(TrackizerTheme.spacing.medium))
-            Row {
-                TrackizerTextField(
-                    text = state.expirationDate,
-                    onTextChange = {
-                        if (it.length <= CardConstants.EXPIRATION_DATE_LENGTH) {
-                            onAction(CreditCardAction.ExpirationDateChanged(it))
-                        }
-                    },
-                    fieldName = stringResource(R.string.expiration_date),
-                    visualTransformation = ExpirationDateMask(),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                    ),
-                    modifier = Modifier.weight(1f),
-                )
-                Spacer(Modifier.width(TrackizerTheme.spacing.medium))
-                TrackizerTextField(
-                    text = state.cvv,
-                    onTextChange = {
-                        if (it.length <= CardConstants.CVV_LENGTH) {
-                            onAction(CreditCardAction.CvvCodeChanged(it))
-                        }
-                    },
-                    fieldName = stringResource(R.string.cvv),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                    ),
-                    modifier = Modifier.weight(1f),
-                )
-            }
-            Spacer(Modifier.height(TrackizerTheme.spacing.large))
-            TrackizerButton(
-                text = buttonText,
-                type = ButtonType.Primary,
-                onClick = { onAction(CreditCardAction.SaveCard) },
-                modifier = Modifier.fillMaxWidth(),
             )
         }
+        Spacer(Modifier.height(TrackizerTheme.spacing.medium))
+        Row {
+            TrackizerTextField(
+                text = state.expirationDate,
+                onTextChange = {
+                    if (it.length <= CardConstants.EXPIRATION_DATE_LENGTH) {
+                        onAction(CreditCardAction.ExpirationDateChanged(it))
+                    }
+                },
+                fieldName = stringResource(R.string.expiration_date),
+                visualTransformation = ExpirationDateMask(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                ),
+                modifier = Modifier.weight(1f),
+            )
+            Spacer(Modifier.width(TrackizerTheme.spacing.medium))
+            TrackizerTextField(
+                text = state.cvv,
+                onTextChange = {
+                    if (it.length <= CardConstants.CVV_LENGTH) {
+                        onAction(CreditCardAction.CvvCodeChanged(it))
+                    }
+                },
+                fieldName = stringResource(R.string.cvv),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                ),
+                modifier = Modifier.weight(1f),
+            )
+        }
+        Spacer(Modifier.height(TrackizerTheme.spacing.large))
+        TrackizerButton(
+            text = buttonText,
+            type = ButtonType.Primary,
+            onClick = { onAction(CreditCardAction.SaveCard) },
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }

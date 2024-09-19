@@ -2,17 +2,13 @@
 
 package com.jefisu.auth.presentation.login.components
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.jefisu.auth.R
@@ -39,41 +35,29 @@ fun ForgotPasswordBottomSheet(
         sheetState = sheetState,
         onDismiss = { onAction(LoginAction.ToggleForgotPasswordBottomSheet) },
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    bottom = TrackizerTheme.spacing.extraMedium,
-                    start = TrackizerTheme.spacing.extraMedium,
-                    end = TrackizerTheme.spacing.extraMedium,
-                )
-                .navigationBarsPadding(),
-        ) {
-            Text(
-                text = stringResource(R.string.forgot_your_password),
-                style = TrackizerTheme.typography.headline5,
-            )
-            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
-            Text(
-                text = stringResource(R.string.reset_instructions_will_be_send_to_your_email),
-                style = TrackizerTheme.typography.bodyMedium,
-                color = Gray50,
-            )
-            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
-            TrackizerTextField(
-                text = state.emailResetPassword,
-                onTextChange = { onAction(LoginAction.EmailResetPasswordChanged(it)) },
-                fieldName = stringResource(R.string.e_mail_address),
-            )
-            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
-            TrackizerButton(
-                text = stringResource(R.string.send),
-                onClick = { onAction(LoginAction.SendResetPassword) },
-                type = ButtonType.Primary,
-                isLoading = state.isLoading,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
+        Text(
+            text = stringResource(R.string.forgot_your_password),
+            style = TrackizerTheme.typography.headline5,
+        )
+        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
+        Text(
+            text = stringResource(R.string.reset_instructions_will_be_send_to_your_email),
+            style = TrackizerTheme.typography.bodyMedium,
+            color = Gray50,
+        )
+        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
+        TrackizerTextField(
+            text = state.emailResetPassword,
+            onTextChange = { onAction(LoginAction.EmailResetPasswordChanged(it)) },
+            fieldName = stringResource(R.string.e_mail_address),
+        )
+        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
+        TrackizerButton(
+            text = stringResource(R.string.send),
+            onClick = { onAction(LoginAction.SendResetPassword) },
+            type = ButtonType.Primary,
+            isLoading = state.isLoading,
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }

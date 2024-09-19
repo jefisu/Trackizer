@@ -3,12 +3,10 @@
 package com.jefisu.subscription_info.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -67,6 +65,7 @@ fun SubscriptionInfoBottomSheet(
         TrackizerBottomSheet(
             isVisible = state.showSubscriptionInfoSheet,
             sheetState = sheetState,
+            horizontalAligment = Alignment.Start,
             onDismiss = { onAction(SubscriptionInfoAction.ToggleSubscriptionInfoSheet()) },
         ) {
             BottomSheetContent(
@@ -91,115 +90,105 @@ private fun BottomSheetContent(
     onAction: (SubscriptionInfoAction) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    Column(
-        modifier = Modifier
-            .navigationBarsPadding()
-            .fillMaxWidth()
-            .padding(
-                bottom = TrackizerTheme.spacing.extraMedium,
-                start = TrackizerTheme.spacing.extraMedium,
-                end = TrackizerTheme.spacing.extraMedium,
-            ),
-    ) {
-        state.selectedInfoRow?.let { infoRow ->
-            when (infoRow.type) {
-                InfoRowType.Description -> {
-                    TrackizerTextField(
-                        text = state.description,
-                        onTextChange = {
-                            onAction(SubscriptionInfoAction.DescriptionChanged(it))
-                        },
-                        fieldName = stringResource(R.string.description),
-                    )
-                }
 
-                InfoRowType.Category -> {
-                    CategoryPicker(
-                        categories = state.categories,
-                        state = categoryPickerState,
-                        initialCategory = state.subscription?.category,
-                    )
-                }
-
-                InfoRowType.FirstPayment -> {
-                    TrackizerDatePicker(
-                        state = datePickerState,
-                    )
-                }
-
-                InfoRowType.Reminder -> {
-                    LabeledCheckbox(
-                        isChecked = state.reminder,
-                        onCheckedChange = {
-                            onAction(SubscriptionInfoAction.ReminderChanged(it))
-                        },
-                        label = stringResource(R.string.reminder_for_the_upcoming_months),
-                    )
-                }
-
-                InfoRowType.CreditCard -> {
-                    CreditCardPicker(
-                        creditCards = state.creditCards,
-                        state = cardPickerState,
-                        initialCreditCard = state.subscription?.card,
-                    )
-                }
-
-                else -> Unit
+    state.selectedInfoRow?.let { infoRow ->
+        when (infoRow.type) {
+            InfoRowType.Description -> {
+                TrackizerTextField(
+                    text = state.description,
+                    onTextChange = {
+                        onAction(SubscriptionInfoAction.DescriptionChanged(it))
+                    },
+                    fieldName = stringResource(R.string.description),
+                )
             }
-            Spacer(Modifier.height(TrackizerTheme.spacing.extraMedium))
-            TrackizerButton(
-                text = when (infoRow.type) {
-                    InfoRowType.Description -> stringResource(R.string.save)
-                    else -> stringResource(R.string.select)
-                },
-                type = ButtonType.Primary,
-                onClick = {
-                    when (state.selectedInfoRow.type) {
-                        InfoRowType.Description -> onAction(
-                            SubscriptionInfoAction.DescriptionChanged(
-                                state.description,
-                                applyChanges = true,
-                            ),
-                        )
 
-                        InfoRowType.Category -> onAction(
-                            SubscriptionInfoAction.CategoryChanged(
-                                categoryPickerState.selectedItem!!,
-                            ),
-                        )
+            InfoRowType.Category -> {
+                CategoryPicker(
+                    categories = state.categories,
+                    state = categoryPickerState,
+                    initialCategory = state.subscription?.category,
+                )
+            }
 
-                        InfoRowType.FirstPayment -> onAction(
-                            SubscriptionInfoAction.FirstPaymentChanged(
-                                datePickerState.date,
-                            ),
-                        )
+            InfoRowType.FirstPayment -> {
+                TrackizerDatePicker(
+                    state = datePickerState,
+                )
+            }
 
-                        InfoRowType.Reminder -> onAction(
-                            SubscriptionInfoAction.ReminderChanged(
-                                state.reminder,
-                                applyChanges = true,
-                            ),
-                        )
+            InfoRowType.Reminder -> {
+                LabeledCheckbox(
+                    isChecked = state.reminder,
+                    onCheckedChange = {
+                        onAction(SubscriptionInfoAction.ReminderChanged(it))
+                    },
+                    label = stringResource(R.string.reminder_for_the_upcoming_months),
+                )
+            }
 
-                        InfoRowType.CreditCard -> onAction(
-                            SubscriptionInfoAction.CreditCardChanged(
-                                cardPickerState.selectedItem!!,
-                            ),
-                        )
+            InfoRowType.CreditCard -> {
+                CreditCardPicker(
+                    creditCards = state.creditCards,
+                    state = cardPickerState,
+                    initialCreditCard = state.subscription?.card,
+                )
+            }
 
-                        else -> Unit
-                    }
-                    sheetState.hideSheet(
-                        scope = scope,
-                        onDismiss = {
-                            onAction(SubscriptionInfoAction.ToggleSubscriptionInfoSheet())
-                        },
-                    )
-                },
-                modifier = Modifier.fillMaxWidth(),
-            )
+            else -> Unit
         }
+        Spacer(Modifier.height(TrackizerTheme.spacing.extraMedium))
+        TrackizerButton(
+            text = when (infoRow.type) {
+                InfoRowType.Description -> stringResource(R.string.save)
+                else -> stringResource(R.string.select)
+            },
+            type = ButtonType.Primary,
+            onClick = {
+                when (state.selectedInfoRow.type) {
+                    InfoRowType.Description -> onAction(
+                        SubscriptionInfoAction.DescriptionChanged(
+                            state.description,
+                            applyChanges = true,
+                        ),
+                    )
+
+                    InfoRowType.Category -> onAction(
+                        SubscriptionInfoAction.CategoryChanged(
+                            categoryPickerState.selectedItem!!,
+                        ),
+                    )
+
+                    InfoRowType.FirstPayment -> onAction(
+                        SubscriptionInfoAction.FirstPaymentChanged(
+                            datePickerState.date,
+                        ),
+                    )
+
+                    InfoRowType.Reminder -> onAction(
+                        SubscriptionInfoAction.ReminderChanged(
+                            state.reminder,
+                            applyChanges = true,
+                        ),
+                    )
+
+                    InfoRowType.CreditCard -> onAction(
+                        SubscriptionInfoAction.CreditCardChanged(
+                            cardPickerState.selectedItem!!,
+                        ),
+                    )
+
+                    else -> Unit
+                }
+                sheetState.hideSheet(
+                    scope = scope,
+                    onDismiss = {
+                        onAction(SubscriptionInfoAction.ToggleSubscriptionInfoSheet())
+                    },
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 

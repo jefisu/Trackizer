@@ -2,12 +2,9 @@
 
 package com.jefisu.calendar.presentation.components
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -43,34 +40,27 @@ internal fun MonthPickerBottomSheet(
         sheetState = sheetState,
         onDismiss = { onAction(CalendarAction.ToggleMonthPicker) },
     ) {
-        Column(
-            modifier = Modifier
-                .navigationBarsPadding()
-                .padding(bottom = TrackizerTheme.spacing.extraMedium)
-                .padding(horizontal = TrackizerTheme.spacing.extraMedium),
-        ) {
-            TrackizerPicker(
-                items = months,
-                visibleItemsCount = 5,
-                state = pickerState,
-                startIndex = months.indexOf(state.selectedMonth.month.name),
-            ) { month ->
-                TrackizerPickerDefaults.TextPickerItem(text = month)
-            }
-            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.small))
-            TrackizerButton(
-                text = stringResource(R.string.apply),
-                type = ButtonType.Primary,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    val month = Month.valueOf(pickerState.selectedItem.orEmpty())
-                    onAction(CalendarAction.SelectMonth(month))
-                    sheetState.hideSheet(
-                        scope = scope,
-                        onDismiss = { onAction(CalendarAction.ToggleMonthPicker) },
-                    )
-                },
-            )
+        TrackizerPicker(
+            items = months,
+            visibleItemsCount = 5,
+            state = pickerState,
+            startIndex = months.indexOf(state.selectedMonth.month.name),
+        ) { month ->
+            TrackizerPickerDefaults.TextPickerItem(text = month)
         }
+        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.small))
+        TrackizerButton(
+            text = stringResource(R.string.apply),
+            type = ButtonType.Primary,
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                val month = Month.valueOf(pickerState.selectedItem.orEmpty())
+                onAction(CalendarAction.SelectMonth(month))
+                sheetState.hideSheet(
+                    scope = scope,
+                    onDismiss = { onAction(CalendarAction.ToggleMonthPicker) },
+                )
+            },
+        )
     }
 }
