@@ -1,4 +1,4 @@
-package com.jefisu.add_subscription
+package com.jefisu.add_subscription.presentation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween

@@ -14,8 +14,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.jefisu.add_subscription.addSubscriptionScreen
-import com.jefisu.add_subscription.navigateAddSubscription
+import com.jefisu.add_subscription.presentation.addSubscriptionScreen
+import com.jefisu.add_subscription.presentation.navigateAddSubscription
 import com.jefisu.auth.presentation.authScreen
 import com.jefisu.auth.presentation.navigateToAuth
 import com.jefisu.calendar.presentation.CalendarScreen

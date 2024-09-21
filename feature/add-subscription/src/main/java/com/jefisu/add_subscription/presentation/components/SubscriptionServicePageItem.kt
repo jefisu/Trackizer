@@ -1,4 +1,4 @@
-package com.jefisu.add_subscription.components
+package com.jefisu.add_subscription.presentation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

@@ -1,4 +1,4 @@
-package com.jefisu.add_subscription
+package com.jefisu.add_subscription.presentation
 
 import com.jefisu.domain.model.SubscriptionService
 
