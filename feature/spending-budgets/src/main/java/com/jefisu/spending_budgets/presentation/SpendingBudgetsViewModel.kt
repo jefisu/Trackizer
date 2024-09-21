@@ -68,18 +68,11 @@ class SpendingBudgetsViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         showAddCategoryBottomSheet = !it.showAddCategoryBottomSheet,
-                        category = null,
+                        category = action.category,
+                        categoryName = action.category?.name.orEmpty(),
+                        categoryBudget = toCurrencyString(action.category?.budget ?: 0f),
+                        categoryType = action.category?.type ?: state.value.categoryType,
                     )
-                }
-                action.category?.let {
-                    _state.update {
-                        it.copy(
-                            category = action.category,
-                            categoryName = action.category.name,
-                            categoryBudget = toCurrencyString(action.category.budget),
-                            categoryType = action.category.type,
-                        )
-                    }
                 }
             }
 
