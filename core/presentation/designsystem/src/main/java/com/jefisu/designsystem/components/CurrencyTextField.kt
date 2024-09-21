@@ -143,7 +143,7 @@ fun CurrencyTextField(
 }
 
 fun String.toDecimalValue(): Float {
-    if (this.isDigitsOnly()) {
+    if (this.isDigitsOnly() && this.isNotBlank()) {
         return this.toFloat() / 100f
     }
 

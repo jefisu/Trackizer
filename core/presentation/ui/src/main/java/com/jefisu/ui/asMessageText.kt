@@ -27,4 +27,8 @@ fun DataMessage.asMessageText(): MessageText = when (this) {
     DataMessage.CATEGORY_NOT_DELETED -> MessageText.Error(
         UiText.StringResource(R.string.category_not_deleted),
     )
+
+    DataMessage.SUBSCRIPTION_PRICE_CAN_T_BE_ZERO -> MessageText.Error(
+        UiText.StringResource(R.string.subscription_price_can_t_be_zero),
+    )
 }
