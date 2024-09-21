@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -74,32 +73,15 @@ private fun SemiCircleChart(
     modifier: Modifier = Modifier,
     startAngle: Float = 180f,
     sweepAngle: Float = 180f,
-    gapDegreesDp: Dp = 1.dp,
+    gapDegreesDp: Dp = 3.dp,
     strokeWidthBackground: Dp = 6.dp,
     strokeWidth: Dp = 10.dp,
     size: Dp = 206.dp,
 ) {
-    val view = LocalView.current
-
-    val gapDegrees =
-        if (view.isInEditMode) 8f else with(LocalDensity.current) { gapDegreesDp.toPx() }
+    val gapDegrees = with(LocalDensity.current) { gapDegreesDp.toPx() }
     val numberOfGaps = pieDataPoints.size - 1
     val remainingDegrees = sweepAngle - (gapDegrees * numberOfGaps)
     val usedValue = maxValue / remainingDegrees
-
-    val firstItemWithValueIndex = pieDataPoints.indexOfFirst { it.value > 0f }
-    var currentSum = 0f
-    val arcs = pieDataPoints.mapIndexed { index, pieChartData ->
-        val gap = if (index == firstItemWithValueIndex) 0f else gapDegrees
-        val targetStartAngle = startAngle + currentSum + (index * gap)
-        val targetSweepAngle = pieChartData.value / usedValue
-        currentSum += targetSweepAngle
-        ArcData(
-            startAngle = targetStartAngle,
-            targetSweepAngle = targetSweepAngle,
-            color = pieChartData.color,
-        )
-    }
 
     Canvas(
         modifier = modifier
@@ -107,6 +89,21 @@ private fun SemiCircleChart(
             .height(size / 2),
     ) {
         val arcSize = with(this.size) { copy(height = height * 2) }
+
+        var currentSum = 0f
+        val firstItemWithValueIndex = pieDataPoints.indexOfFirst { it.value > 0f }
+        val arcs = pieDataPoints.mapIndexed { index, pieChartData ->
+            val gap = if (index == firstItemWithValueIndex) 0f else gapDegrees
+            val targetStartAngle = startAngle + currentSum + (index * gap)
+            val targetSweepAngle = pieChartData.value / usedValue
+            currentSum += targetSweepAngle
+            ArcData(
+                startAngle = targetStartAngle,
+                targetSweepAngle = targetSweepAngle,
+                color = pieChartData.color,
+            )
+        }
+
         drawArc(
             color = Gray60,
             startAngle = startAngle,
