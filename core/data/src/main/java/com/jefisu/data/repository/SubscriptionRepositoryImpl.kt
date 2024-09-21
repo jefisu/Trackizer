@@ -23,6 +23,7 @@ import com.jefisu.domain.util.Result
 import com.jefisu.domain.util.UiText
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
@@ -37,15 +38,30 @@ class SubscriptionRepositoryImpl(
     private val userId = Firebase.auth.currentUser?.uid
     private val collection = Firebase.firestore.collection("subscriptions")
 
-    override val subscriptions: Flow<List<Subscription>> = collection
-        .fromCurrentUser()
-        .snapshots()
-        .map { query ->
-            query
-                .toObjects<SubscriptionDto>()
-                .map { it.toSubscription() }
+    override val subscriptions: Flow<List<Subscription>> = run {
+        val subscriptionsDtoFlow = collection
+            .fromCurrentUser()
+            .snapshots()
+            .map { query ->
+                query.toObjects<SubscriptionDto>()
+            }
+            .flowOn(dispatcher.io)
+
+        combine(
+            subscriptionsDtoFlow,
+            categoryRepository.categories,
+            cardRepository.cards,
+        ) { subscriptionsDto, categories, cards ->
+            subscriptionsDto.map {
+                val category = categories.find { category -> category.id == it.categoryId }
+                val card = cards.find { card -> card.id == it.cardId }
+                it.toSubscription().copy(
+                    category = category,
+                    card = card,
+                )
+            }
         }
-        .flowOn(dispatcher.io)
+    }
 
     override suspend fun getSubscriptionById(id: String): Subscription? =
         withContext(dispatcher.io) {
@@ -55,7 +71,8 @@ class SubscriptionRepositoryImpl(
                 .await()
                 .toObject<SubscriptionDto>()
 
-            val cardJob = async { cardRepository.getCardById(subscriptionDto?.cardId.orEmpty()) }
+            val cardJob =
+                async { cardRepository.getCardById(subscriptionDto?.cardId.orEmpty()) }
             val categoryJob = async {
                 categoryRepository.getCategoryById(subscriptionDto?.categoryId.orEmpty())
             }
