@@ -49,23 +49,20 @@ class SubscriptionRepositoryImpl(
 
     override suspend fun getSubscriptionById(id: String): Subscription? =
         withContext(dispatcher.io) {
-            collection
+            val subscriptionDto = collection
                 .document(id)
                 .get()
                 .await()
                 .toObject<SubscriptionDto>()
-                .let {
-                    val categoryJob = async {
-                        categoryRepository.getCategoryById(it?.id ?: return@async null)
-                    }
-                    val cardJob = async {
-                        cardRepository.getCardById(it?.id ?: return@async null)
-                    }
-                    it?.toSubscription()?.copy(
-                        category = categoryJob.await(),
-                        card = cardJob.await(),
-                    )
-                }
+
+            val cardJob = async { cardRepository.getCardById(subscriptionDto?.cardId.orEmpty()) }
+            val categoryJob = async {
+                categoryRepository.getCategoryById(subscriptionDto?.categoryId.orEmpty())
+            }
+            subscriptionDto?.toSubscription()?.copy(
+                category = categoryJob.await(),
+                card = cardJob.await(),
+            )
         }
 
     override suspend fun addSubscription(subscription: Subscription): EmptyResult =
