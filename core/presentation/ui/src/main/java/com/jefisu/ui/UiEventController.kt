@@ -1,16 +1,16 @@
 package com.jefisu.ui
 
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 interface UiEvent
 
 object UiEventController {
 
-    private val _events = Channel<UiEvent>()
-    val events = _events.receiveAsFlow()
+    private val _events = MutableSharedFlow<UiEvent>()
+    val events = _events.asSharedFlow()
 
     suspend fun sendEvent(uiEvent: UiEvent) {
-        _events.send(uiEvent)
+        _events.emit(uiEvent)
     }
 }
