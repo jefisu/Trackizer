@@ -14,4 +14,8 @@
     <string name="add_category">Add category</string>
     <string name="edit_category">Edit category</string>
     <string name="category_type">Category type</string>
+    <string name="delete_alert_dismiss_button">Cancel</string>
+    <string name="delete_alert_title">Delete category</string>
+    <string name="delete_alert_confirm_button">Delete</string>
+    <string name="delete_alert_description">Are you sure want to delete this category?</string>
 </resources>

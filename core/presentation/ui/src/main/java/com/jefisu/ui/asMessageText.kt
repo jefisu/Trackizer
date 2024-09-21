@@ -19,4 +19,12 @@ fun DataMessage.asMessageText(): MessageText = when (this) {
     DataMessage.CATEGORY_BUDGET_CAN_T_BE_ZERO -> MessageText.Error(
         UiText.StringResource(R.string.category_budget_can_t_be_zero),
     )
+
+    DataMessage.CATEGORY_DELETED -> MessageText.Success(
+        UiText.StringResource(R.string.category_deleted),
+    )
+
+    DataMessage.CATEGORY_NOT_DELETED -> MessageText.Error(
+        UiText.StringResource(R.string.category_not_deleted),
+    )
 }

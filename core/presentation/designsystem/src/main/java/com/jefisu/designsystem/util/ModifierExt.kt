@@ -1,8 +1,11 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.jefisu.designsystem.util
 
 import android.graphics.BlurMaskFilter
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Indication
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -84,12 +87,14 @@ fun DrawScope.drawBlur(
 fun Modifier.rippleClickable(
     enabled: Boolean = true,
     indication: Indication = rememberRipple(),
+    onLongClick: (() -> Unit)? = null,
     onClick: () -> Unit,
-) = clickable(
+) = combinedClickable(
     interactionSource = remember { MutableInteractionSource() },
     indication = indication,
     enabled = enabled,
     onClick = onClick,
+    onLongClick = onLongClick,
 )
 
 fun Modifier.imeOffset() = composed {

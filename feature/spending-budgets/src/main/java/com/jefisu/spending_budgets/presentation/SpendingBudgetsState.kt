@@ -11,4 +11,5 @@ data class SpendingBudgetsState(
     val categoryName: String = "",
     val categoryBudget: String = "",
     val categoryType: CategoryType = CategoryType.Entertainment,
+    val showDeleteAlert: Boolean = false,
 )

@@ -89,7 +89,18 @@ class SpendingBudgetsViewModel @Inject constructor(
                 }
             }
 
+            is SpendingBudgetsAction.ToogleDeleteAlert -> {
+                _state.update {
+                    it.copy(
+                        showDeleteAlert = !it.showDeleteAlert,
+                        category = action.category,
+                    )
+                }
+            }
+
             is SpendingBudgetsAction.AddCategory -> addCategory()
+
+            is SpendingBudgetsAction.DeleteCategory -> deleteCategory()
         }
     }
 
@@ -120,6 +131,14 @@ class SpendingBudgetsViewModel @Inject constructor(
                 .onError {
                     MessageController.sendMessage(it as MessageText)
                 }
+        }
+    }
+
+    private fun deleteCategory() {
+        _state.value.category?.let {
+            viewModelScope.launch {
+                categoryRepository.deleteCategory(it)
+            }
         }
     }
 

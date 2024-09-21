@@ -9,5 +9,7 @@ sealed interface SpendingBudgetsAction {
     data class CategorTypeChanged(val type: CategoryType) : SpendingBudgetsAction
     data class ToggleAddCategoryBottomSheet(val category: Category? = null) : SpendingBudgetsAction
     data object ToogleCategoryTypePicker : SpendingBudgetsAction
+    data class ToogleDeleteAlert(val category: Category? = null) : SpendingBudgetsAction
     data object AddCategory : SpendingBudgetsAction
+    data object DeleteCategory : SpendingBudgetsAction
 }

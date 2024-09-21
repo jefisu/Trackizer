@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.TrackizerTheme
+import com.jefisu.designsystem.components.TrackizerAlertBottomSheet
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
 import com.jefisu.designsystem.components.TrackizerOutlinedButton
 import com.jefisu.designsystem.components.TrackizerScaffold
@@ -78,6 +79,20 @@ internal fun SpendingBudgetScreen(
             lazyListState.firstVisibleItemIndex > 2
         }
     }
+
+    TrackizerAlertBottomSheet(
+        isVisible = state.showDeleteAlert,
+        title = stringResource(R.string.delete_alert_title),
+        description = stringResource(R.string.delete_alert_description),
+        onDismissTextButton = stringResource(R.string.delete_alert_dismiss_button),
+        onConfirmTextButton = stringResource(R.string.delete_alert_confirm_button),
+        onConfirm = {
+            onAction(SpendingBudgetsAction.DeleteCategory)
+        },
+        onDismiss = {
+            onAction(SpendingBudgetsAction.ToogleDeleteAlert())
+        },
+    )
 
     AddCategoryBottomSheet(
         state = state,
@@ -167,9 +182,16 @@ internal fun SpendingBudgetScreen(
                     category = category,
                     modifier = Modifier
                         .padding(bottom = TrackizerTheme.spacing.small)
-                        .rippleClickable {
-                            onAction(SpendingBudgetsAction.ToggleAddCategoryBottomSheet(category))
-                        },
+                        .rippleClickable(
+                            onClick = {
+                                onAction(
+                                    SpendingBudgetsAction.ToggleAddCategoryBottomSheet(category),
+                                )
+                            },
+                            onLongClick = {
+                                onAction(SpendingBudgetsAction.ToogleDeleteAlert(category))
+                            },
+                        ),
                 )
             }
         }

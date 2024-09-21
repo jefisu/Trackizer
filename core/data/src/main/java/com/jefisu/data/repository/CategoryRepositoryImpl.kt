@@ -13,6 +13,7 @@ import com.jefisu.data.util.fromCurrentUser
 import com.jefisu.domain.DispatcherProvider
 import com.jefisu.domain.model.Category
 import com.jefisu.domain.repository.CategoryRepository
+import com.jefisu.domain.util.DataMessage
 import com.jefisu.domain.util.EmptyResult
 import com.jefisu.domain.util.MessageText
 import com.jefisu.domain.util.Result
@@ -71,4 +72,16 @@ class CategoryRepositoryImpl(private val dispatcher: DispatcherProvider) : Categ
             }
         }
     }
+
+    override suspend fun deleteCategory(category: Category): Result<DataMessage, DataMessage> =
+        withContext(dispatcher.io) {
+            try {
+                collection.document(category.id).delete().await()
+                Result.Success(DataMessage.CATEGORY_DELETED)
+            } catch (e: FirebaseFirestoreException) {
+                Result.Error(
+                    DataMessage.CATEGORY_NOT_DELETED,
+                )
+            }
+        }
 }
