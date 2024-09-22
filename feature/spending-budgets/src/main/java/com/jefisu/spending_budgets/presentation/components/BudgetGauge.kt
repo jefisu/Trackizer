@@ -29,8 +29,8 @@ import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.drawBlur
+import com.jefisu.designsystem.util.formatCurrency
 import com.jefisu.spending_budgets.R
-import com.jefisu.ui.ext.formatCurrency
 
 @Composable
 internal fun BudgetGauge(
@@ -58,7 +58,10 @@ internal fun BudgetGauge(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = stringResource(R.string.of_budget, formatCurrency(budget.toDouble())),
+                text = stringResource(
+                    R.string.of_budget,
+                    formatCurrency(budget.toDouble()),
+                ),
                 style = TrackizerTheme.typography.bodySmall,
                 color = Gray30,
             )

@@ -50,6 +50,7 @@ import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.Gray70
 import com.jefisu.designsystem.Primary10
 import com.jefisu.designsystem.Purple90
+import com.jefisu.designsystem.R as UiRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.ButtonType
@@ -58,11 +59,10 @@ import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.drawBlur
-import com.jefisu.ui.ext.formatCurrency
+import com.jefisu.designsystem.util.formatCurrency
 import com.jefisu.home.R
 import com.jefisu.home.presentation.HomeState
 import java.time.LocalDate
-import com.jefisu.designsystem.R as UiRes
 
 private const val START_ANGLE = 135f
 private const val SWEEP_ANGLE = 270f
@@ -94,8 +94,10 @@ internal fun SubscriptionDashboard(
     )
 
     val activeSubs = subscriptions.count { it.reminder }
-    val highestSubs = formatCurrency(subscriptions.maxOfOrNull { it.price.toDouble() } ?: 0.0)
-    val lowestSubs = formatCurrency(subscriptions.minOfOrNull { it.price.toDouble() } ?: 0.0)
+    val highestSubs =
+        formatCurrency(subscriptions.maxOfOrNull { it.price.toDouble() } ?: 0.0)
+    val lowestSubs =
+        formatCurrency(subscriptions.minOfOrNull { it.price.toDouble() } ?: 0.0)
 
     Box(
         modifier = modifier

@@ -15,7 +15,7 @@
     <string name="no_description">No description</string>
     <string name="select_a_category">Select a category</string>
     <string name="select_a_credit_card">Select a credit card</string>
-    <string name="select">Select</string>
+    <string name="button_title">Select</string>
     <string name="reminder_for_the_upcoming_months">Reminder for the upcoming months?</string>
     <string name="delete_subscription">Delete subscription</string>
     <string name="are_you_sure_you_want_to_delete_this_subscription">Are you sure want to delete this subscription?</string>

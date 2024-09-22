@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.feature.creditCards)
     implementation(projects.feature.addSubscription)
     implementation(projects.feature.subscriptionInfo)
+    implementation(projects.feature.settings)
 
     // Modules
     implementation(projects.core.domain)

@@ -73,7 +73,8 @@ fun FlashMessageDialog(
                     onCloseClick = onDismiss,
                     modifier = Modifier
                         .align(Alignment.BottomStart)
-                        .padding(horizontal = TrackizerTheme.spacing.extraMedium),
+                        .padding(horizontal = TrackizerTheme.spacing.extraMedium)
+                        .padding(bottom = TrackizerTheme.spacing.medium),
                 )
             }
         }

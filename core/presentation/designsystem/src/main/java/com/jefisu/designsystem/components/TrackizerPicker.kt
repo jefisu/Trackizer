@@ -5,19 +5,28 @@ package com.jefisu.designsystem.components
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -36,23 +45,15 @@ import androidx.compose.ui.unit.dp
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
-import java.time.Month
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-
-@Composable
-fun <T> rememberPickerState() = remember { PickerState<T>() }
-
-class PickerState<T> {
-    var selectedItem by mutableStateOf<T?>(null)
-}
+import java.time.Month
 
 @Composable
 fun <T> TrackizerPicker(
     items: List<T>,
     modifier: Modifier = Modifier,
-    state: PickerState<T> = rememberPickerState(),
-    startIndex: Int = 0,
+    state: TrackizerPickerState = rememberTrackizerPickerState(itemsCount = items.size),
     visibleItemsCount: Int = 3,
     itemContent: @Composable (T) -> Unit,
 ) {
@@ -60,7 +61,7 @@ fun <T> TrackizerPicker(
     val listScrollCount = Int.MAX_VALUE
     val listScrollMiddle = listScrollCount / 2
     val listStartIndex =
-        listScrollMiddle - listScrollMiddle % items.size - visibleItemsMiddle + startIndex
+        listScrollMiddle - listScrollMiddle % items.size - visibleItemsMiddle + state.selectedIndex
 
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = listStartIndex)
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
@@ -77,7 +78,7 @@ fun <T> TrackizerPicker(
         snapshotFlow { listState.firstVisibleItemIndex }
             .map { it + visibleItemsMiddle }
             .distinctUntilChanged()
-            .collect { state.selectedItem = getItem(it) }
+            .collect { state.setIndex(it) }
     }
 
     Box(modifier = modifier) {
@@ -112,19 +113,70 @@ fun <T> TrackizerPicker(
     }
 }
 
+@Composable
+fun rememberTrackizerPickerState(
+    itemsCount: Int,
+    startIndex: Int = 0,
+) = rememberSaveable(
+    saver = TrackizerPickerState.Saver(),
+) { TrackizerPickerState(startIndex, itemsCount) }
+
+class TrackizerPickerState(private val startIndex: Int, private val count: Int) {
+
+    var selectedIndex by mutableIntStateOf(startIndex)
+        private set
+
+    internal fun setIndex(index: Int) {
+        selectedIndex = index % count
+    }
+
+    companion object {
+        internal fun Saver(): Saver<TrackizerPickerState, Any> = listSaver(
+            save = {
+                listOf(
+                    it.selectedIndex,
+                    it.count,
+                )
+            },
+            restore = {
+                TrackizerPickerState(
+                    startIndex = it[0] as Int,
+                    count = it[1] as Int,
+                )
+            },
+        )
+    }
+}
+
 object TrackizerPickerDefaults {
 
     @Composable
-    fun TextPickerItem(
+    fun PickerItem(
         text: String,
+        modifier: Modifier = Modifier,
         textStyle: TextStyle = TrackizerTheme.typography.headline4,
+        leadingIcon: (@Composable RowScope.() -> Unit)? = null,
     ) {
-        Text(
-            text = text,
-            maxLines = 1,
-            style = textStyle,
-            overflow = TextOverflow.Ellipsis,
-        )
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                space = TrackizerTheme.spacing.small,
+                alignment = Alignment.CenterHorizontally,
+            ),
+        ) {
+            CompositionLocalProvider(
+                LocalTextStyle provides textStyle,
+            ) {
+                leadingIcon?.invoke(this)
+            }
+            Text(
+                text = text,
+                maxLines = 1,
+                style = textStyle,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
 }
 
@@ -144,7 +196,7 @@ fun NumberPickerDemo() {
             items = months,
             visibleItemsCount = 5,
             itemContent = { text ->
-                TrackizerPickerDefaults.TextPickerItem(text)
+                TrackizerPickerDefaults.PickerItem(text)
             },
         )
     }

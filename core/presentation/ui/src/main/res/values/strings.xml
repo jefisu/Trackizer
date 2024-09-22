@@ -7,4 +7,5 @@
     <string name="category_deleted">The category has been successfully deleted.</string>
     <string name="category_not_deleted">There was an issue, and it was not possible to delete the category.</string>
     <string name="subscription_price_can_t_be_zero">The subscription price can\'t be zero</string>
+    <string name="functionality_unavailable">Functionality unavailable\n</string>
 </resources>

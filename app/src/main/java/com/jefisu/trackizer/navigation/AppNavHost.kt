@@ -27,6 +27,8 @@ import com.jefisu.designsystem.components.TrackizerBottomNavigation
 import com.jefisu.home.presentation.HomeScreen
 import com.jefisu.home.presentation.homeScreen
 import com.jefisu.home.presentation.navigateToHome
+import com.jefisu.settings.presentation.navigateToSettings
+import com.jefisu.settings.presentation.settingsScreen
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsScreen
 import com.jefisu.spending_budgets.presentation.spendingBudgetsScreen
 import com.jefisu.subscription_info.presentation.navigateToSubscriptionInfo
@@ -34,6 +36,7 @@ import com.jefisu.subscription_info.presentation.subscriptionInfoScreen
 import com.jefisu.ui.ObserveAsEvents
 import com.jefisu.ui.UiEventController
 import com.jefisu.ui.event.NavigationEvent
+import com.jefisu.welcome.navigateToWelcome
 import com.jefisu.welcome.welcomeScreen
 
 private val bottomScreens = listOf(
@@ -73,7 +76,10 @@ fun AppNavHost(
                 navController.navigate(SpendingBudgetsScreen)
             }
 
-            is NavigationEvent.NavigateToSettings -> Unit
+            is NavigationEvent.NavigateToSettings -> navController.navigateToSettings()
+
+            is NavigationEvent.NavigateToWelcome -> navController.navigateToWelcome()
+
             else -> Unit
         }
     }
@@ -98,6 +104,7 @@ fun AppNavHost(
             creditCardScreen()
             addSubscriptionScreen()
             subscriptionInfoScreen()
+            settingsScreen()
         }
     }
 }

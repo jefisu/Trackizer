@@ -23,6 +23,8 @@ internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*,
 
             implementation(libs.findLibrary("androidx-navigation-compose").get())
             implementation(libs.findLibrary("kotlinx-serialization-json").get())
+
+            implementation(libs.findLibrary("coil-compose").get())
         }
     }
 }

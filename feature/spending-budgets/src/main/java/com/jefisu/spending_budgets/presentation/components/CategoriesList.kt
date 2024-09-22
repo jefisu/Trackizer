@@ -29,10 +29,10 @@ import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.formatCurrency
 import com.jefisu.domain.model.Category
 import com.jefisu.domain.model.CategoryType
 import com.jefisu.spending_budgets.R
-import com.jefisu.ui.ext.formatCurrency
 import com.jefisu.ui.util.asColor
 import com.jefisu.ui.util.asIconResource
 import kotlin.math.absoluteValue

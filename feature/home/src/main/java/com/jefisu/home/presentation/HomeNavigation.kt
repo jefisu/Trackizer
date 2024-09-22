@@ -11,7 +11,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object HomeScreen
 
-fun NavController.navigateToHome() = navigate(HomeScreen)
+fun NavController.navigateToHome() = navigate(HomeScreen) {
+    launchSingleTop = true
+}
 
 fun NavGraphBuilder.homeScreen() {
     composable<HomeScreen> {

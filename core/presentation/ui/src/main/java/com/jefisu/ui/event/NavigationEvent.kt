@@ -5,6 +5,7 @@ import com.jefisu.ui.UiEvent
 sealed interface NavigationEvent : UiEvent {
     data object NavigateUp : NavigationEvent
 
+    data object NavigateToWelcome : NavigationEvent
     data class NavigateToAuth(val isLogin: Boolean) : NavigationEvent
     data object NavigateToHome : NavigationEvent
     data object NavigateToSpendingBudgets : NavigationEvent

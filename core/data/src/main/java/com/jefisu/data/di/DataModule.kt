@@ -1,14 +1,18 @@
 package com.jefisu.data.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.jefisu.data.StandardDispatcherProvider
 import com.jefisu.data.repository.CardRepositoryImpl
 import com.jefisu.data.repository.CategoryRepositoryImpl
+import com.jefisu.data.repository.SettingsRepositoryImpl
 import com.jefisu.data.repository.SubscriptionRepositoryImpl
 import com.jefisu.data.repository.UserRepositoryImpl
 import com.jefisu.domain.repository.CardRepository
 import com.jefisu.domain.repository.CategoryRepository
+import com.jefisu.domain.repository.SettingsRepository
 import com.jefisu.domain.repository.SubscriptionRepository
 import com.jefisu.domain.repository.UserRepository
 import dagger.Module
@@ -24,9 +28,13 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(@ApplicationContext context: Context): UserRepository =
+    fun provideDataStore(@ApplicationContext context: Context) = context.dataStore
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(dataStore: DataStore<Preferences>): UserRepository =
         UserRepositoryImpl(
-            dataStore = context.dataStore,
+            dataStore = dataStore,
         )
 
     @Provides
@@ -51,6 +59,17 @@ object DataModule {
     fun provideCardRepository(): CardRepository = CardRepositoryImpl(
         dispatcher = StandardDispatcherProvider,
     )
+
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(
+        @ApplicationContext context: Context,
+        dataStore: DataStore<Preferences>,
+    ): SettingsRepository = SettingsRepositoryImpl(
+        context = context,
+        dataStore = dataStore,
+        dispatcherProvider = StandardDispatcherProvider,
+    )
 }
 
-val Context.dataStore by preferencesDataStore("user_pref")
+val Context.dataStore by preferencesDataStore("app_pref")

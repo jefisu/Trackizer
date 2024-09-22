@@ -2,14 +2,10 @@
 
 package com.jefisu.subscription_info.presentation.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SheetState
@@ -29,15 +25,16 @@ import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.DatePickerState
 import com.jefisu.designsystem.components.LabeledCheckbox
-import com.jefisu.designsystem.components.PickerState
 import com.jefisu.designsystem.components.TrackizerBottomSheet
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.components.TrackizerDatePicker
 import com.jefisu.designsystem.components.TrackizerPicker
+import com.jefisu.designsystem.components.TrackizerPickerDefaults
+import com.jefisu.designsystem.components.TrackizerPickerState
 import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.components.hideSheet
-import com.jefisu.designsystem.components.rememberPickerState
 import com.jefisu.designsystem.components.rememberTrackizerDatePickerState
+import com.jefisu.designsystem.components.rememberTrackizerPickerState
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.domain.model.Card
@@ -56,8 +53,6 @@ fun SubscriptionInfoBottomSheet(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     state.subscription?.let { subscription ->
-        val cardPickerState = rememberPickerState<Card>()
-        val categoryPickerState = rememberPickerState<Category>()
         val datePickerState = rememberTrackizerDatePickerState(
             initialDate = subscription.paymentDate,
         )
@@ -70,8 +65,6 @@ fun SubscriptionInfoBottomSheet(
         ) {
             BottomSheetContent(
                 state = state,
-                cardPickerState = cardPickerState,
-                categoryPickerState = categoryPickerState,
                 datePickerState = datePickerState,
                 sheetState = sheetState,
                 onAction = onAction,
@@ -83,13 +76,19 @@ fun SubscriptionInfoBottomSheet(
 @Composable
 private fun BottomSheetContent(
     state: SubscriptionInfoState,
-    cardPickerState: PickerState<Card>,
-    categoryPickerState: PickerState<Category>,
     datePickerState: DatePickerState,
     sheetState: SheetState,
     onAction: (SubscriptionInfoAction) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
+    val categoryPickerState = rememberTrackizerPickerState(
+        startIndex = state.categories.indexOf(state.subscription?.category),
+        itemsCount = state.categories.size,
+    )
+    val cardPickerState = rememberTrackizerPickerState(
+        startIndex = state.creditCards.indexOf(state.subscription?.card),
+        itemsCount = state.creditCards.size,
+    )
 
     state.selectedInfoRow?.let { infoRow ->
         when (infoRow.type) {
@@ -104,10 +103,10 @@ private fun BottomSheetContent(
             }
 
             InfoRowType.Category -> {
-                CategoryPicker(
-                    categories = state.categories,
+                PickerBody(
+                    items = state.categories,
                     state = categoryPickerState,
-                    initialCategory = state.subscription?.category,
+                    title = stringResource(R.string.select_a_category),
                 )
             }
 
@@ -128,10 +127,10 @@ private fun BottomSheetContent(
             }
 
             InfoRowType.CreditCard -> {
-                CreditCardPicker(
-                    creditCards = state.creditCards,
+                PickerBody(
+                    items = state.creditCards,
                     state = cardPickerState,
-                    initialCreditCard = state.subscription?.card,
+                    title = stringResource(R.string.select_a_credit_card),
                 )
             }
 
@@ -141,7 +140,7 @@ private fun BottomSheetContent(
         TrackizerButton(
             text = when (infoRow.type) {
                 InfoRowType.Description -> stringResource(R.string.save)
-                else -> stringResource(R.string.select)
+                else -> stringResource(R.string.button_title)
             },
             type = ButtonType.Primary,
             onClick = {
@@ -155,7 +154,7 @@ private fun BottomSheetContent(
 
                     InfoRowType.Category -> onAction(
                         SubscriptionInfoAction.CategoryChanged(
-                            categoryPickerState.selectedItem!!,
+                            state.categories[categoryPickerState.selectedIndex],
                         ),
                     )
 
@@ -174,7 +173,7 @@ private fun BottomSheetContent(
 
                     InfoRowType.CreditCard -> onAction(
                         SubscriptionInfoAction.CreditCardChanged(
-                            cardPickerState.selectedItem!!,
+                            state.creditCards[cardPickerState.selectedIndex],
                         ),
                     )
 
@@ -193,94 +192,58 @@ private fun BottomSheetContent(
 }
 
 @Composable
-private fun CategoryPicker(
-    initialCategory: Category?,
-    categories: List<Category>,
-    state: PickerState<Category>,
+private fun <T> PickerBody(
+    items: List<T>,
+    state: TrackizerPickerState,
+    title: String,
 ) {
     Text(
-        text = stringResource(R.string.select_a_category),
+        text = title,
         style = TrackizerTheme.typography.headline3,
     )
     Spacer(Modifier.height(TrackizerTheme.spacing.medium))
     TrackizerPicker(
-        items = categories,
+        items = items,
         state = state,
-        startIndex = categories.indexOf(initialCategory),
-    ) { category ->
-        CategoryItem(category)
+    ) { item ->
+        when (item) {
+            is Category -> CategoryItem(item)
+            is Card -> CreditCardItem(item)
+        }
     }
 }
 
 @Composable
 private fun CategoryItem(category: Category) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Icon(
-            painter = painterResource(category.type.asIconResource()),
-            contentDescription = category.name,
-            modifier = Modifier.size(32.dp),
-        )
-        Spacer(Modifier.width(TrackizerTheme.spacing.small))
-        Text(
-            text = category.name,
-            style = TrackizerTheme.typography.headline4,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
-}
-
-@Composable
-fun CreditCardPicker(
-    initialCreditCard: Card?,
-    creditCards: List<Card>,
-    state: PickerState<Card>,
-) {
-    Text(
-        text = stringResource(R.string.select_a_credit_card),
-        style = TrackizerTheme.typography.headline3,
+    TrackizerPickerDefaults.PickerItem(
+        text = category.name,
+        leadingIcon = {
+            Icon(
+                painter = painterResource(category.type.asIconResource()),
+                contentDescription = category.name,
+                modifier = Modifier.size(32.dp),
+            )
+        },
     )
-    Spacer(Modifier.height(TrackizerTheme.spacing.medium))
-    TrackizerPicker(
-        items = creditCards,
-        state = state,
-        startIndex = creditCards.indexOf(initialCreditCard),
-    ) { card ->
-        CreditCardItem(card)
-    }
 }
 
 @Composable
 private fun CreditCardItem(card: Card) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(
-            space = TrackizerTheme.spacing.small,
-            alignment = Alignment.CenterHorizontally,
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = TrackizerTheme.spacing.small),
-    ) {
-        Text(
-            text = card.flag.name,
-            style = TrackizerTheme.typography.headline4,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Spacer(
-            Modifier
-                .size(4.dp)
-                .drawBehind {
-                    drawCircle(color = Color.White)
-                },
-        )
-        Text(
-            text = card.number.takeLast(4),
-            style = TrackizerTheme.typography.headline4,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
+    TrackizerPickerDefaults.PickerItem(
+        text = card.number.take(4),
+        leadingIcon = {
+            Text(
+                text = card.flag.name,
+                style = TrackizerTheme.typography.headline4,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(
+                Modifier
+                    .size(4.dp)
+                    .drawBehind {
+                        drawCircle(color = Color.White)
+                    },
+            )
+        },
+    )
 }

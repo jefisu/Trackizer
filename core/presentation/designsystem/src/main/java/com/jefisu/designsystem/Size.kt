@@ -18,6 +18,8 @@ data class Size(
     val textFieldHeight: Dp = 48.dp,
     val creditCardWidth: Dp = 232.dp,
     val creditCardHeight: Dp = 349.dp,
+    val switchWidth: Dp = 44.dp,
+    val switchHeight: Dp = 24.dp,
 )
 
 val TrackizerTheme.size: Size get() = Size()

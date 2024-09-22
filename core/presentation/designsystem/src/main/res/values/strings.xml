@@ -10,4 +10,7 @@
 
     <!-- Password field name -->
     <string name="password">Password</string>
+
+    <!-- Option picker -->
+    <string name="button_title">Select</string>
 </resources>

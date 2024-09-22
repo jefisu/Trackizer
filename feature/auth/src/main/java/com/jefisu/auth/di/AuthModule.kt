@@ -2,6 +2,7 @@ package com.jefisu.auth.di
 
 import com.jefisu.auth.data.AuthRepositoryImpl
 import com.jefisu.auth.domain.AuthRepository
+import com.jefisu.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,5 +15,7 @@ object AuthModule {
 
     @Provides
     @ViewModelScoped
-    fun provideAuthRepository(): AuthRepository = AuthRepositoryImpl()
+    fun provideAuthRepository(userRepository: UserRepository): AuthRepository = AuthRepositoryImpl(
+        userRepository = userRepository,
+    )
 }

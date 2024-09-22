@@ -33,10 +33,9 @@ import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.CurrencyTextField
 import com.jefisu.designsystem.components.TrackizerBottomSheet
 import com.jefisu.designsystem.components.TrackizerButton
-import com.jefisu.designsystem.components.TrackizerPicker
+import com.jefisu.designsystem.components.TrackizerOptionPicker
 import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.components.hideSheet
-import com.jefisu.designsystem.components.rememberPickerState
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
@@ -108,62 +107,35 @@ fun CategoryTypePicker(
     onAction: (SpendingBudgetsAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
-    val pickerState = rememberPickerState<CategoryType>()
-
     val categoriesType = remember { CategoryType.entries }
 
-    TrackizerBottomSheet(
-        isVisible = state.isSelectingCategoryType,
-        sheetState = sheetState,
+    TrackizerOptionPicker(
+        title = stringResource(R.string.select_a_category_type),
+        visible = state.isSelectingCategoryType,
+        items = categoriesType,
+        startIndex = categoriesType.indexOf(state.categoryType),
         onDismiss = {
             onAction(SpendingBudgetsAction.ToogleCategoryTypePicker)
         },
-        horizontalAligment = Alignment.Start,
-        modifier = modifier,
+        onSelectClick = {
+            onAction(SpendingBudgetsAction.CategorTypeChanged(it))
+        },
     ) {
-        Text(
-            text = stringResource(R.string.select_a_category_type),
-            style = TrackizerTheme.typography.headline3,
-        )
-        Spacer(Modifier.height(TrackizerTheme.spacing.medium))
-        TrackizerPicker(
-            state = pickerState,
-            items = categoriesType,
-            startIndex = categoriesType.indexOf(state.categoryType),
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    painter = painterResource(it.asIconResource()),
-                    contentDescription = it.name,
-                    tint = Color.White,
-                )
-                Spacer(Modifier.width(TrackizerTheme.spacing.small))
-                Text(
-                    text = it.name,
-                    style = TrackizerTheme.typography.headline4,
-                    color = Color.White,
-                )
-            }
+            Icon(
+                painter = painterResource(it.asIconResource()),
+                contentDescription = it.name,
+                tint = Color.White,
+            )
+            Spacer(Modifier.width(TrackizerTheme.spacing.small))
+            Text(
+                text = it.name,
+                style = TrackizerTheme.typography.headline4,
+                color = Color.White,
+            )
         }
-        Spacer(Modifier.height(TrackizerTheme.spacing.extraMedium))
-        TrackizerButton(
-            text = stringResource(R.string.select),
-            type = ButtonType.Primary,
-            onClick = {
-                onAction(SpendingBudgetsAction.CategorTypeChanged(pickerState.selectedItem!!))
-                sheetState.hideSheet(
-                    scope = scope,
-                    onDismiss = {
-                        onAction(SpendingBudgetsAction.ToogleCategoryTypePicker)
-                    },
-                )
-            },
-            modifier = Modifier.fillMaxWidth(),
-        )
     }
 
     Column(

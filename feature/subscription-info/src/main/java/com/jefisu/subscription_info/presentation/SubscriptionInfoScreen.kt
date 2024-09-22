@@ -46,6 +46,7 @@ import com.jefisu.designsystem.components.TrackizerTopBar
 import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.formatCurrency
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.subscription_info.R
 import com.jefisu.subscription_info.presentation.components.CustomDivider
@@ -55,7 +56,6 @@ import com.jefisu.subscription_info.presentation.util.InfoRow
 import com.jefisu.subscription_info.presentation.util.InfoRowType
 import com.jefisu.ui.UiEventController
 import com.jefisu.ui.event.NavigationEvent
-import com.jefisu.ui.ext.formatCurrency
 import com.jefisu.ui.ext.toDateFormat
 import com.jefisu.ui.util.SampleData
 import kotlinx.coroutines.launch
@@ -179,7 +179,7 @@ internal fun SubscriptionInfoScreen(
                 Text(
                     text = formatCurrency(
                         value = subscription.price.toDouble(),
-                        isLongValue = true,
+                        isCompactFormat = false,
                     ),
                     style = TrackizerTheme.typography.headline4,
                     color = Gray30,

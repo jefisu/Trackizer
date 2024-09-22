@@ -7,6 +7,7 @@ import com.jefisu.domain.model.Category
 import com.jefisu.domain.model.CategoryType
 import com.jefisu.domain.model.Subscription
 import com.jefisu.domain.model.SubscriptionService
+import com.jefisu.domain.model.User
 import java.time.LocalDate
 
 object SampleData {
@@ -49,4 +50,10 @@ object SampleData {
             .take(card.id.toInt())
             .map { it.service }
     }
+
+    val user = User(
+        name = "John Doe",
+        email = "john.doe@gmail.com",
+        pictureUrl = "",
+    )
 }

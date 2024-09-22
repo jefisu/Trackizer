@@ -9,14 +9,17 @@ import com.jefisu.auth.domain.AuthMessage
 import com.jefisu.auth.domain.AuthRepository
 import com.jefisu.auth.domain.validation.emailValidate
 import com.jefisu.auth.presentation.util.asMessageText
-import com.jefisu.ui.MessageController
 import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
+import com.jefisu.ui.MessageController
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.WhileSubscribed
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -26,6 +29,12 @@ class LoginViewModel @Inject constructor(
 
     var state by mutableStateOf(LoginState())
         private set
+
+    private val _user = userRepository.user.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5.seconds),
+        null,
+    ).value
 
     init {
         rememberUserEmail()
@@ -61,10 +70,9 @@ class LoginViewModel @Inject constructor(
 
     private fun rememberUserEmail() {
         viewModelScope.launch {
-            val emailSaved = userRepository.email.firstOrNull()
             state = state.copy(
-                email = emailSaved.orEmpty(),
-                rememberMeCredentials = emailSaved != null,
+                email = _user?.email.orEmpty(),
+                rememberMeCredentials = _user != null,
             )
         }
     }
@@ -75,10 +83,10 @@ class LoginViewModel @Inject constructor(
                 authRepository.signIn(email, password)
                     .onSuccess {
                         state = copy(isLoggedIn = true)
-                        if (rememberMeCredentials) {
-                            userRepository.rememberEmail(email)
-                        } else {
-                            userRepository.forgetEmail()
+                        if (_user != null) {
+                            userRepository.updateUser(
+                                _user.copy(email = if (state.rememberMeCredentials) email else ""),
+                            )
                         }
                     }
                     .onError { error ->

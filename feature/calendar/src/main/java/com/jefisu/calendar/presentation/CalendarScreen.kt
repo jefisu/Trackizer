@@ -53,16 +53,16 @@ import com.jefisu.designsystem.components.TrackizerTopBar
 import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.formatCurrency
 import com.jefisu.domain.model.Subscription
 import com.jefisu.domain.model.util.filterUpcomingBills
 import com.jefisu.ui.UiEventController
 import com.jefisu.ui.event.NavigationEvent
-import com.jefisu.ui.ext.formatCurrency
 import com.jefisu.ui.ext.formatMonthName
 import com.jefisu.ui.ext.toDateFormat
 import com.jefisu.ui.util.SampleData
-import kotlinx.coroutines.launch
 import java.time.LocalDate
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun CalendarScreen(
