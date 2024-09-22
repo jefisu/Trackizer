@@ -81,6 +81,7 @@ class CreditCardViewModel @Inject constructor(
                     cardNumber = action.card?.number.orEmpty(),
                     cvv = action.card?.cvv.orEmpty(),
                     expirationDate = date,
+                    flag = getCardTypeFromNumber(action.card?.number.orEmpty()).asCardFlag(),
                 )
             }
 
