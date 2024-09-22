@@ -7,8 +7,7 @@ fun List<Subscription>.filterUpcomingBills(): List<Subscription> {
     val today = LocalDate.now()
     return filter { sub ->
         sub.reminder ||
-            sub.paymentDate.isEqual(today) ||
-            sub.paymentDate.isAfter(today)
+            sub.paymentDate.monthValue >= today.monthValue
     }.map { sub ->
         if (sub.reminder) {
             val paymentDate = sub.paymentDate
