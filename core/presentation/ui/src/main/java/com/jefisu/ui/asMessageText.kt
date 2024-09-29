@@ -36,4 +36,24 @@ fun DataMessage.asMessageText(): MessageText = when (this) {
     DataMessage.FUNCTIONALITY_UNAVAILABLE -> MessageText.Warning(
         UiText.StringResource(R.string.functionality_unavailable),
     )
+
+    DataMessage.CARD_NOT_ADDED -> MessageText.Error(
+        UiText.StringResource(R.string.card_not_added),
+    )
+
+    DataMessage.CARD_NOT_DELETED -> MessageText.Error(
+        UiText.StringResource(R.string.card_not_deleted),
+    )
+
+    DataMessage.CATEGORY_NOT_ADDED -> MessageText.Error(
+        UiText.StringResource(R.string.category_not_added),
+    )
+
+    DataMessage.SUBSCRIPTION_NOT_ADDED -> MessageText.Error(
+        UiText.StringResource(R.string.subscription_not_added),
+    )
+
+    DataMessage.UNKNOWN_ERROR -> MessageText.Error(
+        UiText.StringResource(R.string.unknown_error),
+    )
 }

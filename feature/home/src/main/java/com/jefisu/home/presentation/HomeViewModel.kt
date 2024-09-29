@@ -17,8 +17,8 @@ internal class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val state = combine(
-        categoryRepository.categories,
-        subscriptionRepository.subscriptions,
+        categoryRepository.allData,
+        subscriptionRepository.allData,
     ) { categories, subscriptions ->
         HomeState(
             subscriptions = subscriptions,

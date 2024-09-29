@@ -54,7 +54,7 @@ fun SubscriptionInfoBottomSheet(
 
     state.subscription?.let { subscription ->
         val datePickerState = rememberTrackizerDatePickerState(
-            initialDate = subscription.paymentDate,
+            initialDate = subscription.firstPayment,
         )
 
         TrackizerBottomSheet(

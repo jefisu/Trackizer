@@ -8,4 +8,12 @@
     <string name="category_not_deleted">There was an issue, and it was not possible to delete the category.</string>
     <string name="subscription_price_can_t_be_zero">The subscription price can\'t be zero</string>
     <string name="functionality_unavailable">Functionality unavailable\n</string>
+    <string name="subscription_not_found">The subscription was not found.</string>
+    <string name="category_not_found">The category was not found.</string>
+    <string name="card_not_found">The card was not found.</string>
+    <string name="card_not_added">Card not added</string>
+    <string name="card_not_deleted">Card not deleted</string>
+    <string name="category_not_added">Category not added</string>
+    <string name="subscription_not_added">Subscription not added</string>
+    <string name="unknown_error">An unknown error occurred</string>
 </resources>

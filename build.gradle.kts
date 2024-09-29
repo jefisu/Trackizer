@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.google.gms.services) apply false
     alias(libs.plugins.secret.gradle) apply false
+    alias(libs.plugins.realm) apply false
 }
 
 allprojects {

@@ -1,34 +1,61 @@
 package com.jefisu.data.mapper
 
-import com.google.firebase.Timestamp
-import com.jefisu.data.dto.CardDto
+import com.jefisu.data.local.model.CardOffline
+import com.jefisu.data.remote.document.CardDocument
 import com.jefisu.domain.model.Card
 import com.jefisu.domain.model.CardFlag
 import com.jefisu.domain.model.CardType
 import java.time.LocalDate
-import java.time.ZoneId
-import java.util.Date
+import org.mongodb.kbson.BsonObjectId
 
-fun CardDto.toCard() = Card(
-    id = id.orEmpty(),
+fun Card.toCardOffline(): CardOffline {
+    val card = this
+    return CardOffline().apply {
+        if (card.id.isNotEmpty()) {
+            _id = BsonObjectId(card.id)
+        }
+        name = card.name
+        cardHolder = card.cardHolder
+        number = card.number
+        expirationEpochDay = card.expirationDate.toEpochDay()
+        cvv = card.cvv
+        flagName = card.flag.name
+        typeName = card.type.name
+    }
+}
+
+fun CardOffline.toCard() = Card(
+    id = _id.toHexString(),
     name = name,
     cardHolder = cardHolder,
     number = number,
-    expirationDate = LocalDate.ofInstant(expirationDate.toInstant(), ZoneId.systemDefault()),
+    expirationDate = LocalDate.ofEpochDay(expirationEpochDay),
     cvv = cvv,
-    flag = CardFlag.valueOf(flag),
-    type = CardType.valueOf(type),
+    flag = CardFlag.valueOf(flagName),
+    type = CardType.valueOf(typeName),
 )
 
-fun Card.toCardDto() = CardDto(
+fun CardOffline.toCardDocument() = CardDocument(
+    id = _id.toHexString(),
     name = name,
     cardHolder = cardHolder,
     number = number,
-    expirationDate = Timestamp(
-        Date.from(expirationDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-    ),
+    expirationEpochDay = expirationEpochDay,
     cvv = cvv,
-    flag = flag.name,
-    type = type.name,
-    id = id.ifEmpty { null },
+    flagName = flagName,
+    typeName = typeName,
 )
+
+fun CardDocument.toCardOffline(): CardOffline {
+    val card = this
+    return CardOffline().apply {
+        _id = BsonObjectId(card.id)
+        name = card.name
+        cardHolder = card.cardHolder
+        number = card.number
+        expirationEpochDay = card.expirationEpochDay
+        cvv = card.cvv
+        flagName = card.flagName
+        typeName = card.typeName
+    }
+}

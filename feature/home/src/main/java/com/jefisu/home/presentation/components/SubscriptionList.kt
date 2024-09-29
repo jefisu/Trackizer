@@ -69,8 +69,8 @@ internal fun SubscriptionList(
     val showDivider by remember {
         derivedStateOf {
             lazyListState.firstVisibleItemIndex > 0 ||
-                    lazyListState.isScrollInProgress &&
-                    lazyListState.canScrollBackward
+                lazyListState.isScrollInProgress &&
+                lazyListState.canScrollBackward
         }
     }
     val bottomPadding = 70.dp
@@ -118,7 +118,6 @@ internal fun SubscriptionList(
                             subscription = sub,
                             upcomingBill = upcomingBill,
                             modifier = Modifier.rippleClickable {
-
                             },
                         )
                     }
@@ -168,7 +167,7 @@ private fun SubscriptionItem(
             ),
     ) {
         if (upcomingBill) {
-            DateIcon(subscription.paymentDate)
+            DateIcon(subscription.firstPayment)
         } else {
             SubscriptionIcon(subscription.service)
         }

@@ -42,6 +42,7 @@ dependencies {
     implementation(projects.feature.settings)
 
     // Modules
+    implementation(projects.core.data)
     implementation(projects.core.domain)
     implementation(projects.core.presentation.ui)
 

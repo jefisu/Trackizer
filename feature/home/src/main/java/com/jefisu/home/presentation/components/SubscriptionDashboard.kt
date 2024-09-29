@@ -77,7 +77,7 @@ internal fun SubscriptionDashboard(
     val monthlyBudget = state.monthlyBudget
 
     val monthlyBillsValue = subscriptions
-        .filter { it.reminder || it.paymentDate.month == LocalDate.now().month }
+        .filter { it.reminder || it.firstPayment.month == LocalDate.now().month }
         .sumOf { it.price.toDouble() }
 
     val budgetCommittedPercentage by animateFloatAsState(

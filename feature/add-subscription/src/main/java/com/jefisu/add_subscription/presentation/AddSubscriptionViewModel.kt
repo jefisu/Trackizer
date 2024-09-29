@@ -9,7 +9,6 @@ import com.jefisu.add_subscription.domain.validation.subscriptionPriceValidate
 import com.jefisu.designsystem.components.toDecimalValue
 import com.jefisu.domain.model.Subscription
 import com.jefisu.domain.repository.SubscriptionRepository
-import com.jefisu.domain.util.MessageText
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.ui.MessageController
@@ -57,19 +56,18 @@ class AddSubscriptionViewModel @Inject constructor(
             }
 
             val subscription = Subscription(
-                id = "",
                 service = state.selectedService,
                 description = state.description,
                 price = state.price.toDecimalValue(),
-                paymentDate = LocalDate.now(),
+                firstPayment = LocalDate.now(),
                 reminder = false,
             )
-            subscriptionRepository.addSubscription(subscription)
+            subscriptionRepository.insert(subscription)
                 .onSuccess {
                     UiEventController.sendEvent(NavigationEvent.NavigateUp)
                 }
                 .onError { error ->
-                    MessageController.sendMessage(error as MessageText)
+                    MessageController.sendMessage(error.asMessageText())
                 }
         }
     }

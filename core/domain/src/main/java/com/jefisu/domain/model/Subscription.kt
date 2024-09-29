@@ -3,15 +3,15 @@ package com.jefisu.domain.model
 import java.time.LocalDate
 
 data class Subscription(
-    val id: String,
     val service: SubscriptionService,
     val description: String,
     val price: Float,
-    val paymentDate: LocalDate,
+    val firstPayment: LocalDate,
     val reminder: Boolean,
     val category: Category? = null,
     val card: Card? = null,
-)
+    override val id: String = "",
+) : BaseDomain
 
 enum class SubscriptionService(val title: String) {
     YOUTUBE_PREMIUM("YouTube Premium"),

@@ -19,7 +19,7 @@ class CalendarViewModel @Inject constructor(private val repository: Subscription
         private set
 
     init {
-        repository.subscriptions
+        repository.allData
             .onEach { state = state.copy(subscriptions = it) }
             .launchIn(viewModelScope)
     }

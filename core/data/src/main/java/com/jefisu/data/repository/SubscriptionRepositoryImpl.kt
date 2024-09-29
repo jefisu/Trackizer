@@ -1,122 +1,43 @@
 package com.jefisu.data.repository
 
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.snapshots
-import com.google.firebase.firestore.toObject
-import com.google.firebase.firestore.toObjects
-import com.google.firebase.ktx.Firebase
-import com.jefisu.data.dto.SubscriptionDto
+import com.jefisu.data.local.DataSources
+import com.jefisu.data.local.model.SubscriptionOffline
 import com.jefisu.data.mapper.toSubscription
-import com.jefisu.data.mapper.toSubscriptionDto
-import com.jefisu.data.util.fromCurrentUser
+import com.jefisu.data.mapper.toSubscriptionOffline
 import com.jefisu.domain.DispatcherProvider
 import com.jefisu.domain.model.Subscription
 import com.jefisu.domain.repository.CardRepository
 import com.jefisu.domain.repository.CategoryRepository
-import com.jefisu.domain.repository.SubscriptionRepository
-import com.jefisu.domain.util.DataMessage
-import com.jefisu.domain.util.EmptyResult
-import com.jefisu.domain.util.MessageText
-import com.jefisu.domain.util.Result
-import com.jefisu.domain.util.UiText
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class SubscriptionRepositoryImpl(
     private val dispatcher: DispatcherProvider,
+    private val dataSources: DataSources,
     private val categoryRepository: CategoryRepository,
     private val cardRepository: CardRepository,
-) : SubscriptionRepository {
+) : DataRepositoryImpl<Subscription, SubscriptionOffline>(
+    dataSource = dataSources.subscription,
+    pendingSyncDataSource = dataSources.pendingSync,
+    input = Subscription::toSubscriptionOffline,
+    output = SubscriptionOffline::toSubscription,
+) {
 
-    private val userId = Firebase.auth.currentUser?.uid
-    private val collection = Firebase.firestore.collection("subscriptions")
+    override val allData = dataSources.subscription
+        .allData
+        .map { list -> list.map { it.loadCategoryAndCard() } }
+        .flowOn(dispatcher.io)
 
-    override val subscriptions: Flow<List<Subscription>> = run {
-        val subscriptionsDtoFlow = collection
-            .fromCurrentUser()
-            .snapshots()
-            .map { query ->
-                query.toObjects<SubscriptionDto>()
-            }
-            .flowOn(dispatcher.io)
-
-        combine(
-            subscriptionsDtoFlow,
-            categoryRepository.categories,
-            cardRepository.cards,
-        ) { subscriptionsDto, categories, cards ->
-            subscriptionsDto.map {
-                val category = categories.find { category -> category.id == it.categoryId }
-                val card = cards.find { card -> card.id == it.cardId }
-                it.toSubscription().copy(
-                    category = category,
-                    card = card,
-                )
-            }
-        }
-    }
-
-    override suspend fun getSubscriptionById(id: String): Subscription? =
-        withContext(dispatcher.io) {
-            val subscriptionDto = collection
-                .document(id)
-                .get()
-                .await()
-                .toObject<SubscriptionDto>()
-
-            val cardJob =
-                async { cardRepository.getCardById(subscriptionDto?.cardId.orEmpty()) }
-            val categoryJob = async {
-                categoryRepository.getCategoryById(subscriptionDto?.categoryId.orEmpty())
-            }
-            subscriptionDto?.toSubscription()?.copy(
-                category = categoryJob.await(),
-                card = cardJob.await(),
+    private suspend fun SubscriptionOffline.loadCategoryAndCard(): Subscription {
+        return withContext(dispatcher.io) {
+            val category = async { categoryRepository.getById(categoryId ?: return@async null) }
+            val card = async { cardRepository.getById(cardId ?: return@async null) }
+            toSubscription().copy(
+                category = category.await(),
+                card = card.await(),
             )
         }
-
-    override suspend fun addSubscription(subscription: Subscription): EmptyResult =
-        withContext(dispatcher.io) {
-            try {
-                val subscriptionDto = subscription
-                    .toSubscriptionDto()
-                    .copy(userId = userId)
-
-                subscriptionDto.id?.let { id ->
-                    collection
-                        .document(id)
-                        .set(subscriptionDto)
-                        .await()
-                    return@withContext Result.Success(Unit)
-                }
-
-                collection
-                    .add(subscriptionDto)
-                    .await()
-                Result.Success(Unit)
-            } catch (e: FirebaseFirestoreException) {
-                Result.Error(
-                    MessageText.Error(
-                        UiText.DynamicString(e.message.orEmpty()),
-                    ),
-                )
-            }
-        }
-
-    override suspend fun deleteSubscription(id: String): Result<DataMessage, DataMessage> =
-        withContext(dispatcher.io) {
-            try {
-                collection.document(id).delete().await()
-                Result.Success(DataMessage.SUBSCRIPTION_DELETED)
-            } catch (e: FirebaseFirestoreException) {
-                Result.Error(DataMessage.SUBSCRIPTION_NOT_DELETED)
-            }
-        }
+    }
 }

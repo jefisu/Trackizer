@@ -62,9 +62,9 @@ gradlePlugin {
             id = "trackizer.android.firebase"
             implementationClass = "AndroidFirebaseConventionPlugin"
         }
-        register("androidRoom") {
-            id = "trackizer.android.room"
-            implementationClass = "AndroidRoomConventionPlugin"
+        register("androidRealm") {
+            id = "trackizer.android.realm"
+            implementationClass = "AndroidRealmConventionPlugin"
         }
     }
 }
