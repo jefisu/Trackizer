@@ -111,7 +111,7 @@ internal fun SubscriptionInfoScreen(
                     type = InfoRowType.Category,
                 ),
                 InfoRow(
-                    value = subscription.paymentDate.toDateFormat(),
+                    value = subscription.firstPayment.toDateFormat(),
                     label = stringResource(R.string.first_payment),
                     type = InfoRowType.FirstPayment,
                 ),

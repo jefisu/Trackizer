@@ -7,17 +7,17 @@ fun List<Subscription>.filterUpcomingBills(): List<Subscription> {
     val today = LocalDate.now()
     return filter { sub ->
         sub.reminder ||
-            sub.paymentDate.monthValue >= today.monthValue
+            sub.firstPayment.monthValue >= today.monthValue
     }.map { sub ->
         if (sub.reminder) {
-            val paymentDate = sub.paymentDate
+            val paymentDate = sub.firstPayment
             val difference = today.monthValue - paymentDate.monthValue
             val newPaymentDate = paymentDate.plusMonths(difference.toLong())
             sub.copy(
-                paymentDate = newPaymentDate,
+                firstPayment = newPaymentDate,
             )
         } else {
             sub
         }
-    }.sortedByDescending { it.paymentDate }
+    }.sortedByDescending { it.firstPayment }
 }

@@ -3,7 +3,6 @@ package com.jefisu.domain.model
 import java.time.LocalDate
 
 data class Card(
-    val id: String,
     val name: String,
     val cardHolder: String,
     val number: String,
@@ -11,7 +10,8 @@ data class Card(
     val cvv: String,
     val flag: CardFlag,
     val type: CardType,
-)
+    override val id: String,
+) : BaseDomain
 
 enum class CardFlag {
     VISA,

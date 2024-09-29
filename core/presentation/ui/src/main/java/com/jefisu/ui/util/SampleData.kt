@@ -19,7 +19,7 @@ object SampleData {
             description = "Subscription $it",
             service = SubscriptionService.entries[index],
             price = it.toFloat(),
-            paymentDate = LocalDate.of(2024, 7, 10).plusDays(it.toLong()),
+            firstPayment = LocalDate.of(2024, 7, 10).plusDays(it.toLong()),
             reminder = index == 0,
         )
     }
@@ -55,5 +55,6 @@ object SampleData {
         name = "John Doe",
         email = "john.doe@gmail.com",
         pictureUrl = "",
+        id = "1234",
     )
 }

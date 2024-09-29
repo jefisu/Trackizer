@@ -27,6 +27,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             dependencies {
                 implementation(libs.findLibrary("kotlinx-serialization-json").get())
+                implementation(libs.findLibrary("androidx-worker").get())
                 testImplementation(kotlin("test"))
             }
         }
