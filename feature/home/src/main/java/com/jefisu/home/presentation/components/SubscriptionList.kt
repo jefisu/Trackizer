@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,12 +69,11 @@ internal fun SubscriptionList(
     val showDivider by remember {
         derivedStateOf {
             lazyListState.firstVisibleItemIndex > 0 ||
-                lazyListState.isScrollInProgress &&
-                lazyListState.canScrollBackward
+                    lazyListState.isScrollInProgress &&
+                    lazyListState.canScrollBackward
         }
     }
     val bottomPadding = 70.dp
-    val scope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize()) {
         AnimatedVisibility(
@@ -118,11 +118,7 @@ internal fun SubscriptionList(
                             subscription = sub,
                             upcomingBill = upcomingBill,
                             modifier = Modifier.rippleClickable {
-                                scope.launch {
-                                    UiEventController.sendEvent(
-                                        NavigationEvent.NavigateToSubscriptionInfo(sub.id),
-                                    )
-                                }
+
                             },
                         )
                     }
@@ -145,16 +141,25 @@ private fun SubscriptionItem(
     modifier: Modifier = Modifier,
     upcomingBill: Boolean = false,
 ) {
+    val scope = rememberCoroutineScope()
     Row(
         horizontalArrangement = Arrangement.spacedBy(TrackizerTheme.spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
+            .clip(Shapes().large)
             .border(
                 width = 1.dp,
                 color = Gray70,
                 shape = Shapes().large,
             )
+            .rippleClickable {
+                scope.launch {
+                    UiEventController.sendEvent(
+                        NavigationEvent.NavigateToSubscriptionInfo(subscription.id),
+                    )
+                }
+            }
             .padding(
                 top = 12.dp,
                 bottom = 12.dp,
