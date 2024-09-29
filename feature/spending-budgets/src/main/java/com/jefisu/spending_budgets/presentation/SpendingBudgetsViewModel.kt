@@ -6,7 +6,6 @@ import com.jefisu.designsystem.components.toDecimalValue
 import com.jefisu.domain.model.Category
 import com.jefisu.domain.repository.CategoryRepository
 import com.jefisu.domain.repository.SubscriptionRepository
-import com.jefisu.domain.util.MessageText
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.spending_budgets.domain.validation.categoryBudgetValidate
@@ -33,8 +32,8 @@ class SpendingBudgetsViewModel @Inject constructor(
     private val _state = MutableStateFlow(SpendingBudgetsState())
     val state = combine(
         _state,
-        categoryRepository.categories,
-        subscriptionRepository.subscriptions,
+        categoryRepository.allData,
+        subscriptionRepository.allData,
     ) { state, categories, subscriptions ->
         val categoriesWithUsedBudget = categories.map { category ->
             val usedBudget = subscriptions
@@ -111,18 +110,20 @@ class SpendingBudgetsViewModel @Inject constructor(
                 cancel(error.toString())
             }
 
-            val category = Category(
-                id = state.value.category?.id.orEmpty(),
-                name = _state.value.categoryName,
-                budget = _state.value.categoryBudget.toDecimalValue(),
-                type = state.value.categoryType,
-            )
-            categoryRepository.addCategory(category)
+            val category = with(state.value) {
+                Category(
+                    name = categoryName,
+                    budget = categoryBudget.toDecimalValue(),
+                    type = categoryType,
+                    id = category?.id.orEmpty(),
+                )
+            }
+            categoryRepository.insert(category)
                 .onSuccess {
                     UiEventController.sendEvent(SpendingBudgetsEvent.HideAddCategoryBottomSheet)
                 }
                 .onError {
-                    MessageController.sendMessage(it as MessageText)
+                    MessageController.sendMessage(it.asMessageText())
                 }
         }
     }
@@ -130,7 +131,7 @@ class SpendingBudgetsViewModel @Inject constructor(
     private fun deleteCategory() {
         _state.value.category?.let {
             viewModelScope.launch {
-                categoryRepository.deleteCategory(it)
+                categoryRepository.delete(it)
             }
         }
     }

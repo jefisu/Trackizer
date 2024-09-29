@@ -83,11 +83,6 @@ class LoginViewModel @Inject constructor(
                 authRepository.signIn(email, password)
                     .onSuccess {
                         state = copy(isLoggedIn = true)
-                        if (_user != null) {
-                            userRepository.updateUser(
-                                _user.copy(email = if (state.rememberMeCredentials) email else ""),
-                            )
-                        }
                     }
                     .onError { error ->
                         MessageController.sendMessage(error.asMessageText())

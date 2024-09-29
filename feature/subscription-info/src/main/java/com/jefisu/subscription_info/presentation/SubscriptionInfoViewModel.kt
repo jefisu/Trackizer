@@ -10,7 +10,6 @@ import com.jefisu.domain.model.Subscription
 import com.jefisu.domain.repository.CardRepository
 import com.jefisu.domain.repository.CategoryRepository
 import com.jefisu.domain.repository.SubscriptionRepository
-import com.jefisu.domain.util.MessageText
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.subscription_info.presentation.util.InfoRowType
@@ -39,10 +38,10 @@ class SubscriptionInfoViewModel @Inject constructor(
         getSubscription()
         viewModelScope.launch {
             launch {
-                categoryRepository.categories.collect { state = state.copy(categories = it) }
+                categoryRepository.allData.collect { state = state.copy(categories = it) }
             }
             launch {
-                cardRepository.cards.collect { state = state.copy(creditCards = it) }
+                cardRepository.allData.collect { state = state.copy(creditCards = it) }
             }
         }
     }
@@ -93,7 +92,7 @@ class SubscriptionInfoViewModel @Inject constructor(
             is SubscriptionInfoAction.FirstPaymentChanged -> {
                 state = state.copy(
                     subscription = state.subscription?.copy(
-                        paymentDate = action.date,
+                        firstPayment = action.date,
                     ),
                 )
             }
@@ -119,7 +118,7 @@ class SubscriptionInfoViewModel @Inject constructor(
     private fun getSubscription() {
         savedStateHandle.get<String>("id")?.let { id ->
             viewModelScope.launch {
-                subscriptionRepository.getSubscriptionById(id)?.let { subscription ->
+                subscriptionRepository.getById(id)?.let { subscription ->
                     _subscription = subscription
                     state = state.copy(subscription = subscription)
                 }
@@ -130,22 +129,21 @@ class SubscriptionInfoViewModel @Inject constructor(
     private fun saveSubscription() {
         viewModelScope.launch {
             state.subscription?.let { subscription ->
-                subscriptionRepository.addSubscription(subscription)
+                subscriptionRepository.insert(subscription)
                     .onSuccess {
                         UiEventController.sendEvent(NavigationEvent.NavigateUp)
                     }
-                    .onError { MessageController.sendMessage(it as MessageText) }
+                    .onError { MessageController.sendMessage(it.asMessageText()) }
             }
         }
     }
 
     private fun deleteSubscription() {
         viewModelScope.launch {
-            _subscription?.id?.let { id ->
-                subscriptionRepository.deleteSubscription(id)
+            _subscription?.let { subscription ->
+                subscriptionRepository.delete(subscription)
                     .onSuccess {
                         UiEventController.sendEvent(NavigationEvent.NavigateUp)
-                        MessageController.sendMessage(it.asMessageText())
                     }
                     .onError { MessageController.sendMessage(it.asMessageText()) }
             }
