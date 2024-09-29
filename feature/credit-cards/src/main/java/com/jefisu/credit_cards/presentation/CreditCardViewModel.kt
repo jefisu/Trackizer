@@ -14,11 +14,11 @@ import com.jefisu.domain.model.Card
 import com.jefisu.domain.model.CardType
 import com.jefisu.domain.repository.CardRepository
 import com.jefisu.domain.repository.SubscriptionRepository
-import com.jefisu.domain.util.MessageText
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.ui.MessageController
 import com.jefisu.ui.UiEventController
+import com.jefisu.ui.asMessageText
 import com.jefisu.ui.ext.formatExpirationDate
 import com.steliospapamichail.creditcardmasker.utils.getCardTypeFromNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,8 +41,8 @@ class CreditCardViewModel @Inject constructor(
     private val _state = MutableStateFlow(CreditCardState())
     val state = combine(
         _state,
-        subscriptionRepository.subscriptions,
-        cardRepository.cards,
+        subscriptionRepository.allData,
+        cardRepository.allData,
     ) { state, subscriptions, cards ->
         val cardsMap = cards
             .filter { it.type == CardType.CREDIT }
@@ -146,13 +146,13 @@ class CreditCardViewModel @Inject constructor(
                     flag = getCardTypeFromNumber(cardNumber).asCardFlag(),
                     type = CardType.CREDIT,
                 )
-                cardRepository.saveCard(card)
+                cardRepository.insert(card)
                     .onSuccess {
                         _state.update { it.copy(editCard = null) }
                         UiEventController.sendEvent(CreditCardUiEvent.HideBottomSheet)
                     }
                     .onError { message ->
-                        MessageController.sendMessage(message as MessageText.Error)
+                        MessageController.sendMessage(message.asMessageText())
                     }
             }
         }

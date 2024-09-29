@@ -3,14 +3,14 @@ package com.jefisu.domain.model
 import java.time.LocalDate
 
 data class Subscription(
-    val id: String,
     val service: SubscriptionService,
     val description: String,
     val price: Float,
-    val paymentDate: LocalDate,
+    val firstPayment: LocalDate,
     val reminder: Boolean,
     val category: Category? = null,
     val card: Card? = null,
+    val id: String = "",
 )
 
 enum class SubscriptionService(val title: String) {

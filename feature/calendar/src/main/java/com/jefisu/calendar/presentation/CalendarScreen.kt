@@ -73,7 +73,7 @@ internal fun CalendarScreen(
     val upcomingBills = remember(state) {
         state.subscriptions
             .filterUpcomingBills()
-            .filter { it.paymentDate.dayOfMonth == state.selectedDay.dayOfMonth }
+            .filter { it.firstPayment.dayOfMonth == state.selectedDay.dayOfMonth }
     }
     val total = upcomingBills.sumOf { it.price.toDouble() }
 
@@ -250,7 +250,7 @@ fun ScheduledSubscriptionsPerDay(subscriptions: List<Subscription>) {
     val showDivider by remember {
         derivedStateOf {
             lazyGridState.firstVisibleItemIndex > 0 ||
-                lazyGridState.firstVisibleItemScrollOffset > 0
+                    lazyGridState.firstVisibleItemScrollOffset > 0
         }
     }
 
@@ -278,7 +278,7 @@ fun ScheduledSubscriptionsPerDay(subscriptions: List<Subscription>) {
                     onClick = {
                         scope.launch {
                             UiEventController.sendEvent(
-                                NavigationEvent.NavigateToSubscriptionInfo(subscription.id),
+                                NavigationEvent.NavigateToSubscriptionInfo(subscription.id.toString()),
                             )
                         }
                     },
@@ -296,7 +296,7 @@ private fun CalendarScreenPreview() {
             CalendarScreen(
                 state = CalendarState(
                     subscriptions = SampleData.subscriptions.map {
-                        it.copy(paymentDate = LocalDate.now())
+                        it.copy(firstPayment = LocalDate.now())
                     },
                 ),
                 onAction = {},

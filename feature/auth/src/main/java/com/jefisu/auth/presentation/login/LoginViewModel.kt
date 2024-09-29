@@ -14,12 +14,12 @@ import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.ui.MessageController
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -82,12 +82,12 @@ class LoginViewModel @Inject constructor(
             validateAction(email, password) {
                 authRepository.signIn(email, password)
                     .onSuccess {
-                        state = copy(isLoggedIn = true)
                         if (_user != null) {
                             userRepository.updateUser(
                                 _user.copy(email = if (state.rememberMeCredentials) email else ""),
                             )
                         }
+                        state = copy(isLoggedIn = true)
                     }
                     .onError { error ->
                         MessageController.sendMessage(error.asMessageText())
