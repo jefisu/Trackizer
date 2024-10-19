@@ -13,5 +13,7 @@ data class SubscriptionInfoState(
     val creditCards: List<Card> = emptyList(),
     val description: String = "",
     val reminder: Boolean = false,
-    val showDeleteSubscriptionAlert: Boolean = false,
+    val showDeleteAlert: Boolean = false,
+    val showUnsavedChangesAlert: Boolean = false,
+    val hasUnsavedChanges: Boolean = false,
 )

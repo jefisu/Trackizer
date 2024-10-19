@@ -69,16 +69,33 @@ internal fun SubscriptionInfoScreen(
     val horizontalSpacingInfoRow = 20.dp
 
     TrackizerAlertBottomSheet(
-        isVisible = state.showDeleteSubscriptionAlert,
+        isVisible = state.showDeleteAlert,
         title = stringResource(R.string.delete_subscription),
         description = stringResource(R.string.are_you_sure_you_want_to_delete_this_subscription),
         onDismissTextButton = stringResource(R.string.cancel),
         onConfirmTextButton = stringResource(R.string.delete),
         onDismiss = {
-            onAction(SubscriptionInfoAction.ToggleDeleteSubscriptionAlert)
+            onAction(SubscriptionInfoAction.ToogleDeleteAlert)
         },
         onConfirm = {
             onAction(SubscriptionInfoAction.DeleteSubscription)
+        },
+    )
+
+    TrackizerAlertBottomSheet(
+        isVisible = state.showUnsavedChangesAlert,
+        title = stringResource(R.string.confirm_changes),
+        description = stringResource(R.string.do_you_want_to_exit_without_save_changes),
+        onDismissTextButton = stringResource(R.string.discard),
+        onConfirmTextButton = stringResource(R.string.save),
+        onDismiss = {
+            onAction(SubscriptionInfoAction.ToogleUnsavedChangesAlert)
+            scope.launch {
+                UiEventController.sendEvent(NavigationEvent.NavigateUp)
+            }
+        },
+        onConfirm = {
+            onAction(SubscriptionInfoAction.SaveSubscription)
         },
     )
 
@@ -142,6 +159,10 @@ internal fun SubscriptionInfoScreen(
                     navigationIcon = {
                         TrackizerTopBarDefaults.backNavigationIcon(
                             onClick = {
+                                if (state.hasUnsavedChanges) {
+                                    onAction(SubscriptionInfoAction.ToogleUnsavedChangesAlert)
+                                    return@backNavigationIcon
+                                }
                                 scope.launch {
                                     UiEventController.sendEvent(NavigationEvent.NavigateUp)
                                 }
@@ -152,7 +173,7 @@ internal fun SubscriptionInfoScreen(
                     actions = {
                         IconButton(
                             onClick = {
-                                onAction(SubscriptionInfoAction.ToggleDeleteSubscriptionAlert)
+                                onAction(SubscriptionInfoAction.ToogleDeleteAlert)
                             },
                         ) {
                             Icon(

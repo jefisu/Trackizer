@@ -17,8 +17,15 @@
     <string name="select_a_credit_card">Select a credit card</string>
     <string name="button_title">Select</string>
     <string name="reminder_for_the_upcoming_months">Reminder for the upcoming months?</string>
+
+    <!--  Alert bottom sheet - Deleting -->
     <string name="delete_subscription">Delete subscription</string>
     <string name="are_you_sure_you_want_to_delete_this_subscription">Are you sure want to delete this subscription?</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+
+    <!--  Alert bottom sheet - Confirm changes -->
+    <string name="confirm_changes">Confirm changes</string>
+    <string name="do_you_want_to_exit_without_save_changes">Do you want to exit without save changes?</string>
+    <string name="discard">Discard</string>
 </resources>

@@ -2,6 +2,7 @@ package com.jefisu.subscription_info.presentation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.IntOffset
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -33,9 +34,14 @@ fun NavGraphBuilder.subscriptionInfoScreen() {
         },
     ) {
         val viewModel = hiltViewModel<SubscriptionInfoViewModel>()
+        val state = viewModel.state
+
+        LaunchedEffect(state.subscription) {
+            viewModel.checkDataChanges()
+        }
 
         SubscriptionInfoScreen(
-            state = viewModel.state,
+            state = state,
             onAction = viewModel::onAction,
         )
     }

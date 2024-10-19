@@ -109,8 +109,12 @@ class SubscriptionInfoViewModel @Inject constructor(
                 state = state.copy(reminder = action.reminder)
             }
 
-            is SubscriptionInfoAction.ToggleDeleteSubscriptionAlert -> {
-                state = state.copy(showDeleteSubscriptionAlert = !state.showDeleteSubscriptionAlert)
+            is SubscriptionInfoAction.ToogleDeleteAlert -> {
+                state = state.copy(showDeleteAlert = !state.showDeleteAlert)
+            }
+
+            is SubscriptionInfoAction.ToogleUnsavedChangesAlert -> {
+                state = state.copy(showUnsavedChangesAlert = !state.showUnsavedChangesAlert)
             }
         }
     }
@@ -147,6 +151,23 @@ class SubscriptionInfoViewModel @Inject constructor(
                     }
                     .onError { MessageController.sendMessage(it.asMessageText()) }
             }
+        }
+    }
+
+    fun checkDataChanges() {
+        _subscription?.let {
+            val hasUnsavedChanges = mapOf(
+                it.service to state.subscription?.service,
+                it.description to state.subscription?.description,
+                it.price to state.subscription?.price,
+                it.firstPayment to state.subscription?.firstPayment,
+                it.reminder to state.subscription?.reminder,
+                it.category?.id to state.subscription?.category?.id,
+                it.card?.id to state.subscription?.card?.id,
+            ).any { (old, current) ->
+                old != current
+            }
+            state = state.copy(hasUnsavedChanges = hasUnsavedChanges)
         }
     }
 }
