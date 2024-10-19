@@ -15,4 +15,5 @@ data class CreditCardState(
     val expirationDate: String = "",
     val cvv: String = "",
     val flag: CardFlag = CardFlag.UNKNOWN,
+    val showDeleteAlert: Boolean = false,
 )

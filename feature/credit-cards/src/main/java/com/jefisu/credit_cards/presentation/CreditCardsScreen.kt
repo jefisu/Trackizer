@@ -41,6 +41,7 @@ import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.CubeOutRotationEndlessTransition
 import com.jefisu.designsystem.components.SubscriptionIcon
+import com.jefisu.designsystem.components.TrackizerAlertBottomSheet
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
 import com.jefisu.designsystem.components.TrackizerIcon
 import com.jefisu.designsystem.components.TrackizerOutlinedButton
@@ -64,6 +65,20 @@ internal fun CreditCardsScreen(
     val scope = rememberCoroutineScope()
     val isEmptyCards = state.creditCards.keys.isEmpty()
     val isEmptySubscriptions = with(state) { creditCards[selectedCard]?.isEmpty() == true }
+
+    TrackizerAlertBottomSheet(
+        isVisible = state.showDeleteAlert,
+        title = stringResource(R.string.delete_credit_card),
+        description = stringResource(R.string.are_you_sure_you_want_to_delete_this_credit_card),
+        onDismissTextButton = stringResource(R.string.cancel),
+        onConfirmTextButton = stringResource(R.string.delete),
+        onDismiss = {
+            onAction(CreditCardAction.ToogleDeleteAlert())
+        },
+        onConfirm = {
+            onAction(CreditCardAction.DeleteCard)
+        },
+    )
 
     AddCreditCardBottomSheet(
         state = state,
@@ -120,6 +135,9 @@ internal fun CreditCardsScreen(
                             card = it,
                             onClick = {
                                 onAction(CreditCardAction.ToogleAddCreditCardBottomSheet(it))
+                            },
+                            onLongClick = {
+                                onAction(CreditCardAction.ToogleDeleteAlert(it))
                             },
                         )
                     },

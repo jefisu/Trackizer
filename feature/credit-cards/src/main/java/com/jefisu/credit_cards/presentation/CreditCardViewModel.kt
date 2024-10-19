@@ -110,6 +110,14 @@ class CreditCardViewModel @Inject constructor(
             }
 
             is CreditCardAction.SaveCard -> saveCard()
+            is CreditCardAction.ToogleDeleteAlert -> _state.update {
+                it.copy(
+                    showDeleteAlert = !it.showDeleteAlert,
+                    editCard = action.card,
+                )
+            }
+
+            is CreditCardAction.DeleteCard -> deleteCard()
         }
     }
 
@@ -154,6 +162,16 @@ class CreditCardViewModel @Inject constructor(
                     .onError { message ->
                         MessageController.sendMessage(message.asMessageText())
                     }
+            }
+        }
+    }
+
+    private fun deleteCard() {
+        viewModelScope.launch {
+            _state.value.editCard?.let { card ->
+                cardRepository.delete(card).onError { message ->
+                    MessageController.sendMessage(message.asMessageText())
+                }
             }
         }
     }

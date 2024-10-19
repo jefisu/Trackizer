@@ -50,6 +50,7 @@ fun CreditCard(
     card: Card,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onLongClick: () -> Unit = {},
 ) {
     val cornerDp = 16.dp
 
@@ -74,9 +75,10 @@ fun CreditCard(
                 drawCardBackground(cornerDp.toPx())
             }
             .clip(RoundedCornerShape(cornerDp))
-            .rippleClickable {
-                onClick()
-            }
+            .rippleClickable(
+                onClick = onClick,
+                onLongClick = onLongClick,
+            )
             .padding(TrackizerTheme.spacing.large),
     ) {
         Image(

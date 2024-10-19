@@ -22,4 +22,10 @@
     <string name="invalid_expiration_date">Invalid expiration date</string>
     <string name="invalid_cvv">Invalid CVV</string>
     <string name="invalid_card_number">Invalid card number</string>
+
+    <!-- Delete Alert -->
+    <string name="delete_credit_card">Delete credit card</string>
+    <string name="are_you_sure_you_want_to_delete_this_credit_card">Are you sure want to delete this credit card?</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
 </resources>
