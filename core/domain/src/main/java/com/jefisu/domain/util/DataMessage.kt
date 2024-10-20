@@ -13,5 +13,6 @@ enum class DataMessage : Message {
     CARD_NOT_DELETED,
     CATEGORY_NOT_ADDED,
     SUBSCRIPTION_NOT_ADDED,
+    DATA_NOT_AVAILABLE,
     UNKNOWN_ERROR,
 }

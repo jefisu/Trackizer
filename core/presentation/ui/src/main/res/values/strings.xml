@@ -16,4 +16,5 @@
     <string name="category_not_added">Category not added</string>
     <string name="subscription_not_added">Subscription not added</string>
     <string name="unknown_error">An unknown error occurred</string>
+    <string name="data_not_available">There are no %s available to select. Please add one and try again.</string>
 </resources>
