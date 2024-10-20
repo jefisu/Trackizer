@@ -10,7 +10,9 @@ import java.util.Locale
 internal class CurrencyVisualTransformation(private val locale: Locale = Locale.getDefault()) :
     VisualTransformation {
 
-    private val symbols = DecimalFormatSymbols(locale)
+    private val symbols = DecimalFormatSymbols(locale).apply {
+        currencySymbol = currencySymbol.removePrefix(locale.country)
+    }
 
     override fun filter(text: AnnotatedString): TransformedText {
         val numberOfDecimals = 2

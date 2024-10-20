@@ -50,6 +50,7 @@ import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.CurrencyVisualTransformation
+import com.jefisu.designsystem.util.LocalAppConfig
 import com.jefisu.designsystem.util.rippleClickable
 
 @Composable
@@ -62,6 +63,7 @@ fun CurrencyTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
 ) {
+    val appConfig = LocalAppConfig.current
     val focusManager = LocalFocusManager.current
     val isVisibleKeyboard = WindowInsets.isImeVisible
     val iconTint = Gray60
@@ -101,7 +103,9 @@ fun CurrencyTextField(
             },
             modifier = Modifier.weight(1f),
             singleLine = true,
-            visualTransformation = CurrencyVisualTransformation(),
+            visualTransformation = CurrencyVisualTransformation(
+                appConfig.settings.currency.toLocale()
+            ),
             cursorBrush = SolidColor(Color.White),
             textStyle = TrackizerTheme.typography.headline5.copy(
                 textAlign = TextAlign.Center,
