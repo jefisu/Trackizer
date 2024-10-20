@@ -12,15 +12,19 @@ import kotlinx.coroutines.flow.map
 class UserRepositoryImpl(private val auth: FirebaseAuth = Firebase.auth) : UserRepository {
 
     override val user: Flow<User?> = auth.userFlow().map { firebaseUser ->
-        if (firebaseUser == null) return@map null
-
-        val alternativeName = "User ${firebaseUser.uid.filter { it.isDigit() }.take(8)}"
-        User(
-            id = firebaseUser.uid,
-            name = firebaseUser.displayName ?: alternativeName,
-            email = firebaseUser.email ?: "No email",
-            pictureUrl = firebaseUser.photoUrl?.toString(),
-        )
+        firebaseUser?.let { user ->
+            val id = user.uid
+            val name = user.displayName.let {
+                val alternativeName = "User ${id.filter { it.isDigit() }.take(8)}"
+                if (it.isNullOrEmpty()) alternativeName else it
+            }
+            User(
+                id = id,
+                name = name,
+                email = user.email ?: "No email",
+                pictureUrl = user.photoUrl?.toString(),
+            )
+        } ?: return@map null
     }
 
     override fun isAuthenticated(): Boolean = Firebase.auth.currentUser != null
