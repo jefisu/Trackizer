@@ -117,8 +117,6 @@ internal fun SubscriptionList(
                         SubscriptionItem(
                             subscription = sub,
                             upcomingBill = upcomingBill,
-                            modifier = Modifier.rippleClickable {
-                            },
                         )
                     }
                     item {

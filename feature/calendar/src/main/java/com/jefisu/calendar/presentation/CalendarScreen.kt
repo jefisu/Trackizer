@@ -70,10 +70,11 @@ internal fun CalendarScreen(
     onAction: (CalendarAction) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    val upcomingBills = remember(state) {
-        state.subscriptions
-            .filterUpcomingBills()
-            .filter { it.firstPayment.dayOfMonth == state.selectedDay.dayOfMonth }
+    val upcomingBills = remember(state.subscriptions, state.selectedDay) {
+        state.subscriptions.filterUpcomingBills(
+            currentDate = state.selectedDay,
+            isPerDay = true,
+        )
     }
     val total = upcomingBills.sumOf { it.price.toDouble() }
 

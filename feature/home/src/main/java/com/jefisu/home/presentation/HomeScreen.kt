@@ -75,7 +75,7 @@ internal fun HomeScreen(state: HomeState) {
                     }
 
                     SubscriptionTab.UPCOMING_BILLS -> {
-                        val subscriptionActive = remember {
+                        val subscriptionActive = remember(state.subscriptions) {
                             state.subscriptions.filterUpcomingBills()
                         }
                         SubscriptionList(
