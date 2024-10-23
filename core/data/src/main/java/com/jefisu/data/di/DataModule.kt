@@ -93,7 +93,9 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(): UserRepository = UserRepositoryImpl()
+    fun provideUserRepository(realm: Realm): UserRepository = UserRepositoryImpl(
+        realm = realm,
+    )
 
     @Provides
     @Singleton

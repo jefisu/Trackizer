@@ -6,10 +6,14 @@ import com.google.firebase.ktx.Firebase
 import com.jefisu.data.util.userFlow
 import com.jefisu.domain.model.User
 import com.jefisu.domain.repository.UserRepository
+import io.realm.kotlin.Realm
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class UserRepositoryImpl(private val auth: FirebaseAuth = Firebase.auth) : UserRepository {
+class UserRepositoryImpl(
+    private val auth: FirebaseAuth = Firebase.auth,
+    private val realm: Realm,
+) : UserRepository {
 
     override val user: Flow<User?> = auth.userFlow().map { firebaseUser ->
         firebaseUser?.let { user ->
@@ -31,5 +35,6 @@ class UserRepositoryImpl(private val auth: FirebaseAuth = Firebase.auth) : UserR
 
     override suspend fun signOut() {
         auth.signOut()
+        realm.write { deleteAll() }
     }
 }
