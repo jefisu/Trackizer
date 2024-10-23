@@ -3,13 +3,10 @@ package com.jefisu.calendar.presentation
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object CalendarScreen
+import com.jefisu.ui.navigation.Destination
 
 fun NavGraphBuilder.calendarScreen() {
-    composable<CalendarScreen> {
+    composable<Destination.CalendarScreen> {
         val viewModel = hiltViewModel<CalendarViewModel>()
 
         CalendarScreen(

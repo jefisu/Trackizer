@@ -39,6 +39,7 @@ import com.jefisu.designsystem.components.hideSheet
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.asIconResource
 import com.jefisu.domain.model.CategoryType
 import com.jefisu.spending_budgets.R
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsAction
@@ -46,7 +47,6 @@ import com.jefisu.spending_budgets.presentation.SpendingBudgetsEvent
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsState
 import com.jefisu.ui.ObserveAsEvents
 import com.jefisu.ui.UiEventController
-import com.jefisu.ui.util.asIconResource
 
 @Composable
 fun AddCategoryBottomSheet(

@@ -19,7 +19,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,16 +47,12 @@ import com.jefisu.designsystem.util.getEndlessItem
 import com.jefisu.designsystem.util.imeOffset
 import com.jefisu.designsystem.util.rememberEndlessPagerState
 import com.jefisu.domain.model.SubscriptionService
-import com.jefisu.ui.UiEventController
-import com.jefisu.ui.event.NavigationEvent
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun AddSubscriptionScreen(
     state: AddSubscriptionState,
     onAction: (AddSubscriptionAction) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val services = SubscriptionService.entries
     val pagerState = rememberEndlessPagerState(startPage = Int.MAX_VALUE / 2)
     val focusManager = LocalFocusManager.current
@@ -76,7 +71,7 @@ internal fun AddSubscriptionScreen(
                 navigationIcon = {
                     TrackizerTopBarDefaults.backNavigationIcon(
                         onClick = {
-                            scope.launch { UiEventController.sendEvent(NavigationEvent.NavigateUp) }
+                            onAction(AddSubscriptionAction.NavigateUp)
                         },
                     )
                 },

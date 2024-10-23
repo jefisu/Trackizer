@@ -13,7 +13,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.compose.rememberNavController
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.FlashMessageDialog
 import com.jefisu.designsystem.util.AppConfig
@@ -21,10 +20,9 @@ import com.jefisu.designsystem.util.LocalAppConfig
 import com.jefisu.domain.repository.DataSyncRepository
 import com.jefisu.domain.repository.SettingsRepository
 import com.jefisu.domain.repository.UserRepository
-import com.jefisu.home.presentation.HomeScreen
 import com.jefisu.trackizer.navigation.AppNavHost
 import com.jefisu.ui.MessageController
-import com.jefisu.welcome.WelcomeScreen
+import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
@@ -42,6 +40,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var dataSyncRepository: DataSyncRepository
 
+    @Inject
+    lateinit var navigator: Navigator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -51,7 +52,6 @@ class MainActivity : ComponentActivity() {
         setupDefaultSettings()
         setObserveDataSync()
         setContent {
-            val navController = rememberNavController()
             val message by MessageController.message.collectAsStateWithLifecycle()
             TrackizerTheme {
                 CompositionLocalProvider(
@@ -62,10 +62,7 @@ class MainActivity : ComponentActivity() {
                         onDismiss = MessageController::closeMessage,
                     )
 
-                    AppNavHost(
-                        navController = navController,
-                        startDestination = startDestination(),
-                    )
+                    AppNavHost(navigator = navigator)
                 }
             }
         }
@@ -75,9 +72,6 @@ class MainActivity : ComponentActivity() {
         val view = window.decorView
         WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
     }
-
-    private fun startDestination(): Any =
-        if (userRepository.isAuthenticated()) HomeScreen else WelcomeScreen
 
     @SuppressLint("SourceLockedOrientationActivity")
     private fun setPortraitOrientationOnly() {

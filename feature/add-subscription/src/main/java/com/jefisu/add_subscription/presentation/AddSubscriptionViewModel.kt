@@ -12,9 +12,8 @@ import com.jefisu.domain.repository.SubscriptionRepository
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.ui.MessageController
-import com.jefisu.ui.UiEventController
 import com.jefisu.ui.asMessageText
-import com.jefisu.ui.event.NavigationEvent
+import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import javax.inject.Inject
@@ -24,6 +23,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class AddSubscriptionViewModel @Inject constructor(
     private val subscriptionRepository: SubscriptionRepository,
+    private val navigator: Navigator,
 ) : ViewModel() {
 
     var state by mutableStateOf(AddSubscriptionState())
@@ -44,6 +44,8 @@ class AddSubscriptionViewModel @Inject constructor(
             }
 
             AddSubscriptionAction.AddSubscription -> addSubscription()
+
+            AddSubscriptionAction.NavigateUp -> navigateBack()
         }
     }
 
@@ -64,11 +66,15 @@ class AddSubscriptionViewModel @Inject constructor(
             )
             subscriptionRepository.insert(subscription)
                 .onSuccess {
-                    UiEventController.sendEvent(NavigationEvent.NavigateUp)
+                    navigator.navigateUp()
                 }
                 .onError { error ->
                     MessageController.sendMessage(error.asMessageText())
                 }
         }
+    }
+
+    private fun navigateBack() {
+        viewModelScope.launch { navigator.navigateUp() }
     }
 }

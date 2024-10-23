@@ -1,130 +1,75 @@
 package com.jefisu.trackizer.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.util.fastAny
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.navigation
 import com.jefisu.add_subscription.presentation.addSubscriptionScreen
-import com.jefisu.add_subscription.presentation.navigateAddSubscription
 import com.jefisu.auth.presentation.authScreen
-import com.jefisu.auth.presentation.navigateToAuth
-import com.jefisu.calendar.presentation.CalendarScreen
 import com.jefisu.calendar.presentation.calendarScreen
-import com.jefisu.credit_cards.presentation.CreditCardScreen
 import com.jefisu.credit_cards.presentation.creditCardScreen
-import com.jefisu.designsystem.components.BottomNavItem
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
-import com.jefisu.home.presentation.HomeScreen
 import com.jefisu.home.presentation.homeScreen
-import com.jefisu.home.presentation.navigateToHome
-import com.jefisu.settings.presentation.navigateToSettings
 import com.jefisu.settings.presentation.settingsScreen
-import com.jefisu.spending_budgets.presentation.SpendingBudgetsScreen
 import com.jefisu.spending_budgets.presentation.spendingBudgetsScreen
-import com.jefisu.subscription_info.presentation.navigateToSubscriptionInfo
 import com.jefisu.subscription_info.presentation.subscriptionInfoScreen
-import com.jefisu.ui.ObserveAsEvents
-import com.jefisu.ui.UiEventController
-import com.jefisu.ui.event.NavigationEvent
-import com.jefisu.welcome.navigateToWelcome
+import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.navigation.NavigationRoot
+import com.jefisu.ui.navigation.Navigator
+import com.jefisu.ui.navigation.allDestinations
 import com.jefisu.welcome.welcomeScreen
-
-private val bottomScreens = listOf(
-    HomeScreen,
-    SpendingBudgetsScreen,
-    CalendarScreen,
-    CreditCardScreen,
-)
+import kotlinx.coroutines.launch
 
 @Composable
-fun AppNavHost(
-    navController: NavHostController,
-    startDestination: Any,
-) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var selectedNavIndex by rememberSaveable { mutableIntStateOf(0) }
+fun AppNavHost(navigator: Navigator) {
+    val scope = rememberCoroutineScope()
+    val currentDestination by navigator.currentDestination.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        snapshotFlow { navBackStackEntry }.collect { entry ->
-            selectedNavIndex = bottomScreens
-                .indexOfFirst { entry?.destination?.hasRoute(it::class) == true }
-                .coerceAtLeast(0)
-        }
-    }
-
-    ObserveAsEvents(UiEventController.events) { event ->
-        when (event) {
-            is NavigationEvent.NavigateUp -> navController.navigateUp()
-            is NavigationEvent.NavigateToAuth -> navController.navigateToAuth(event.isLogin)
-
-            is NavigationEvent.NavigateToSubscriptionInfo -> {
-                navController.navigateToSubscriptionInfo(event.id)
-            }
-
-            is NavigationEvent.NavigateToHome -> navController.navigateToHome()
-            is NavigationEvent.NavigateToSpendingBudgets -> {
-                navController.navigate(SpendingBudgetsScreen)
-            }
-
-            is NavigationEvent.NavigateToSettings -> navController.navigateToSettings()
-
-            is NavigationEvent.NavigateToWelcome -> navController.navigateToWelcome()
-
-            else -> Unit
-        }
-    }
+    val destinationsBottomNav = listOf(
+        Destination.HomeScreen,
+        Destination.SpendingBudgetsScreen,
+        Destination.CalendarScreen,
+        Destination.CreditCardScreen,
+    )
 
     TrackizerBottomNavigation(
-        isVisibleBottmNav = navBackStackEntry.showBottomNavigation(),
-        selectedNavItem = BottomNavItem.entries[selectedNavIndex],
-        onFabClick = {
-            navController.navigateAddSubscription()
+        visible = destinationsBottomNav.fastAny { it == currentDestination },
+        selectedDestination = currentDestination,
+        onNavigateClick = {
+            scope.launch {
+                navigator.navigate(it) {
+                    popUpTo(destinationsBottomNav.first()) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
         },
-        onNavClick = navController::navigateBottomNav,
     ) {
-        NavHost(
-            navController = navController,
-            startDestination = startDestination,
+        NavigationRoot(
+            navigator = navigator,
+            destinations = allDestinations,
         ) {
-            welcomeScreen()
-            authScreen()
-            homeScreen()
-            spendingBudgetsScreen()
-            calendarScreen()
-            creditCardScreen()
-            addSubscriptionScreen()
-            subscriptionInfoScreen()
-            settingsScreen()
+            navigation<Destination.AuthGraph>(
+                startDestination = Destination.WelcomeScreen,
+            ) {
+                welcomeScreen()
+                authScreen()
+            }
+            navigation<Destination.AuthenticatedGraph>(
+                startDestination = Destination.HomeScreen,
+            ) {
+                homeScreen()
+                spendingBudgetsScreen()
+                calendarScreen()
+                creditCardScreen()
+                addSubscriptionScreen()
+                subscriptionInfoScreen()
+                settingsScreen()
+            }
         }
     }
-}
-
-fun NavController.navigateBottomNav(navItem: BottomNavItem) {
-    val screen: Any = when (navItem) {
-        BottomNavItem.HOME -> HomeScreen
-        BottomNavItem.BUDGETS -> SpendingBudgetsScreen
-        BottomNavItem.CALENDAR -> CalendarScreen
-        BottomNavItem.CREDIT_CARDS -> CreditCardScreen
-    }
-    navigate(screen) {
-        popUpTo(graph.findStartDestination().id) {
-            saveState = true
-        }
-        launchSingleTop = true
-        restoreState = true
-    }
-}
-
-fun NavBackStackEntry?.showBottomNavigation(): Boolean = bottomScreens.any {
-    this?.destination?.hasRoute(it::class) == true
 }

@@ -1,7 +1,6 @@
 package com.jefisu.designsystem.components
 
 import android.annotation.SuppressLint
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
@@ -23,7 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
 import com.jefisu.designsystem.AccentPrimary100
 import com.jefisu.designsystem.FabIconColor
 import com.jefisu.designsystem.Gray30
@@ -48,21 +47,28 @@ import com.jefisu.designsystem.Gray80
 import com.jefisu.designsystem.R
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
+import com.jefisu.designsystem.util.asDestinationRes
 import com.jefisu.designsystem.util.dropShadow
 import com.jefisu.designsystem.util.rippleClickable
+import com.jefisu.ui.navigation.Destination
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TrackizerBottomNavigation(
     modifier: Modifier = Modifier,
-    isVisibleBottmNav: Boolean = true,
-    selectedNavItem: BottomNavItem = BottomNavItem.HOME,
-    onFabClick: () -> Unit = {},
-    onNavClick: (BottomNavItem) -> Unit = {},
+    visible: Boolean = true,
+    selectedDestination: Destination = Destination.HomeScreen,
+    onNavigateClick: (Destination) -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     val bottomNavigation = @Composable {
-        val bottomNavItems = remember { BottomNavItem.entries }
+        val bottomDestinations = listOf(
+            Destination.HomeScreen,
+            Destination.SpendingBudgetsScreen,
+            Destination.AddSubscriptionScreen(id = null),
+            Destination.CalendarScreen,
+            Destination.CreditCardScreen,
+        )
 
         val safeDrawingInsets = WindowInsets.safeDrawing.asPaddingValues()
         val bottomPadding = if (safeDrawingInsets.calculateBottomPadding() == 0.dp) {
@@ -94,21 +100,21 @@ fun TrackizerBottomNavigation(
                         contentScale = ContentScale.FillWidth,
                     ),
             ) {
-                val middle = bottomNavItems.size / 2
-                bottomNavItems.forEachIndexed { index, navItem ->
-                    if (index == middle) {
+                bottomDestinations.fastForEach { destination ->
+                    if (destination is Destination.AddSubscriptionScreen) {
                         FabIcon(
-                            painter = painterResource(R.drawable.ic_rounded_add),
-                            onClick = onFabClick,
+                            painter = painterResource(destination.asDestinationRes()),
+                            onClick = { onNavigateClick(destination) },
                             modifier = Modifier.offset(y = -TrackizerTheme.spacing.medium),
                         )
+                    } else {
+                        BottomNavItem(
+                            icon = painterResource(destination.asDestinationRes()),
+                            isSelected = selectedDestination == destination,
+                            onClick = { onNavigateClick(destination) },
+                            modifier = Modifier.weight(1f),
+                        )
                     }
-                    BottomNavItem(
-                        icon = painterResource(navItem.resId),
-                        isSelected = selectedNavItem == navItem,
-                        onClick = { onNavClick(navItem) },
-                        modifier = Modifier.weight(1f),
-                    )
                 }
             }
         }
@@ -118,7 +124,7 @@ fun TrackizerBottomNavigation(
         containerColor = Color.Transparent,
         bottomBar = {
             AnimatedVisibility(
-                visible = isVisibleBottmNav,
+                visible = visible,
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
@@ -127,13 +133,6 @@ fun TrackizerBottomNavigation(
         },
         content = { content() },
     )
-}
-
-enum class BottomNavItem(@DrawableRes val resId: Int) {
-    HOME(R.drawable.ic_home),
-    BUDGETS(R.drawable.ic_budgets),
-    CALENDAR(R.drawable.ic_calendar),
-    CREDIT_CARDS(R.drawable.ic_credit_cards),
 }
 
 @Composable

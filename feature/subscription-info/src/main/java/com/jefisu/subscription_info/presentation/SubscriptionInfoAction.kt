@@ -23,4 +23,6 @@ sealed interface SubscriptionInfoAction {
 
     data object ToogleDeleteAlert : SubscriptionInfoAction
     data object ToogleUnsavedChangesAlert : SubscriptionInfoAction
+
+    data object NavigateBack : SubscriptionInfoAction
 }

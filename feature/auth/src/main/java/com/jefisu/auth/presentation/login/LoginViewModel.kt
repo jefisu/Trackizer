@@ -13,6 +13,8 @@ import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.ui.MessageController
+import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
@@ -25,6 +27,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository,
+    private val navigator: Navigator,
 ) : ViewModel() {
 
     var state by mutableStateOf(LoginState())
@@ -82,7 +85,11 @@ class LoginViewModel @Inject constructor(
             validateAction(email, password) {
                 authRepository.signIn(email, password)
                     .onSuccess {
-                        state = copy(isLoggedIn = true)
+                        navigator.navigate(Destination.AuthenticatedGraph) {
+                            popUpTo(Destination.AuthGraph) {
+                                inclusive = true
+                            }
+                        }
                     }
                     .onError { error ->
                         MessageController.sendMessage(error.asMessageText())

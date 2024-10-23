@@ -16,7 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -39,11 +38,8 @@ import com.jefisu.settings.presentation.components.SettingOptionItem
 import com.jefisu.settings.presentation.components.SettingOptions
 import com.jefisu.settings.presentation.components.UserProfile
 import com.jefisu.settings.presentation.util.SettingsConstants
-import com.jefisu.ui.UiEventController
-import com.jefisu.ui.event.NavigationEvent
 import com.jefisu.ui.util.SampleData
 import java.util.Locale
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun SettingsScreen(
@@ -51,7 +47,6 @@ internal fun SettingsScreen(
     onAction: (SettingsAction) -> Unit,
     settings: Settings = LocalAppConfig.current.settings,
 ) {
-    val scope = rememberCoroutineScope()
     val navigationBarPadding = WindowInsets.safeDrawing.asPaddingValues().calculateBottomPadding()
 
     TrackizerOptionPicker(
@@ -91,9 +86,7 @@ internal fun SettingsScreen(
                     navigationIcon = {
                         TrackizerTopBarDefaults.backNavigationIcon(
                             onClick = {
-                                scope.launch {
-                                    UiEventController.sendEvent(NavigationEvent.NavigateUp)
-                                }
+                                onAction(SettingsAction.NavigateBack)
                             },
                         )
                     },

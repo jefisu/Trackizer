@@ -6,6 +6,5 @@ internal data class RegisterState(
     val email: String = "",
     val password: String = "",
     val isLoading: Boolean = false,
-    val isLoggedIn: Boolean = false,
     val passwordStrength: PasswordStrength? = null,
 )

@@ -1,6 +1,7 @@
 package com.jefisu.credit_cards.presentation
 
 import com.jefisu.domain.model.Card
+import com.jefisu.ui.navigation.Destination
 
 sealed interface CreditCardAction {
     data class SelectCreditCard(val card: Card) : CreditCardAction
@@ -13,4 +14,6 @@ sealed interface CreditCardAction {
     data object SaveCard : CreditCardAction
     data object DeleteCard : CreditCardAction
     data class ToogleDeleteAlert(val card: Card? = null) : CreditCardAction
+
+    data class Navigate(val destination: Destination) : CreditCardAction
 }

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,15 +25,14 @@ import com.jefisu.home.presentation.components.HorizontalTabs
 import com.jefisu.home.presentation.components.SubscriptionDashboard
 import com.jefisu.home.presentation.components.SubscriptionList
 import com.jefisu.home.presentation.components.SubscriptionTab
-import com.jefisu.ui.UiEventController
-import com.jefisu.ui.event.NavigationEvent
+import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.util.SampleData
-import kotlinx.coroutines.launch
 
 @Composable
-internal fun HomeScreen(state: HomeState) {
-    val scope = rememberCoroutineScope()
-
+internal fun HomeScreen(
+    state: HomeState,
+    onAction: (HomeAction) -> Unit,
+) {
     TrackizerScaffold(
         topBar = {
             TrackizerTopBar(
@@ -42,9 +40,7 @@ internal fun HomeScreen(state: HomeState) {
                 actions = {
                     TrackizerTopBarDefaults.settingsActionIcon(
                         onClick = {
-                            scope.launch {
-                                UiEventController.sendEvent(NavigationEvent.NavigateToSettings)
-                            }
+                            onAction(HomeAction.Navigate(Destination.SettingsScreen))
                         },
                     )
                 },
@@ -55,9 +51,7 @@ internal fun HomeScreen(state: HomeState) {
             SubscriptionDashboard(
                 state = state,
                 onSeeBudgetClick = {
-                    scope.launch {
-                        UiEventController.sendEvent(NavigationEvent.NavigateToSpendingBudgets)
-                    }
+                    onAction(HomeAction.Navigate(Destination.SpendingBudgetsScreen))
                 },
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -71,6 +65,11 @@ internal fun HomeScreen(state: HomeState) {
                             messageEmptyList = stringResource(
                                 R.string.you_don_t_have_any_subscriptions,
                             ),
+                            onItemClick = {
+                                onAction(
+                                    HomeAction.Navigate(Destination.SubscriptionInfoScreen(it.id)),
+                                )
+                            },
                         )
                     }
 
@@ -84,6 +83,11 @@ internal fun HomeScreen(state: HomeState) {
                             messageEmptyList = stringResource(
                                 R.string.you_don_t_have_any_upcoming_bills,
                             ),
+                            onItemClick = {
+                                onAction(
+                                    HomeAction.Navigate(Destination.SubscriptionInfoScreen(it.id)),
+                                )
+                            },
                         )
                     }
                 }
@@ -102,6 +106,7 @@ private fun HomeScreenPreview() {
                     monthlyBudget = SampleData.MONTHLY_BUDGET,
                     subscriptions = SampleData.subscriptions,
                 ),
+                onAction = { },
             )
         }
     }

@@ -1,4 +1,4 @@
-package com.jefisu.ui.util
+package com.jefisu.designsystem.util
 
 import androidx.compose.ui.graphics.Color
 import com.jefisu.designsystem.AccentPrimary50

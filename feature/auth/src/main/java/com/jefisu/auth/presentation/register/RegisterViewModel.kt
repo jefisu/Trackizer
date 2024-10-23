@@ -13,13 +13,17 @@ import com.jefisu.auth.presentation.util.asMessageText
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.ui.MessageController
+import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-internal class RegisterViewModel @Inject constructor(private val authRepository: AuthRepository) :
-    ViewModel() {
+internal class RegisterViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val navigator: Navigator,
+) : ViewModel() {
 
     var state by mutableStateOf(RegisterState())
         private set
@@ -57,7 +61,13 @@ internal class RegisterViewModel @Inject constructor(private val authRepository:
 
             state = copy(isLoading = true)
             authRepository.signUp(email, password)
-                .onSuccess { state = copy(isLoggedIn = true) }
+                .onSuccess {
+                    navigator.navigate(Destination.AuthenticatedGraph) {
+                        popUpTo(Destination.AuthGraph) {
+                            inclusive = true
+                        }
+                    }
+                }
                 .onError { MessageController.sendMessage(it.asMessageText()) }
             state = copy(isLoading = false)
         }

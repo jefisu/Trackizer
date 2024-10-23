@@ -16,18 +16,18 @@ import com.jefisu.domain.util.onSuccess
 import com.jefisu.subscription_info.presentation.util.InfoRow
 import com.jefisu.subscription_info.presentation.util.InfoRowType
 import com.jefisu.ui.MessageController
-import com.jefisu.ui.UiEventController
 import com.jefisu.ui.asMessageText
-import com.jefisu.ui.event.NavigationEvent
+import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class SubscriptionInfoViewModel @Inject constructor(
     private val subscriptionRepository: SubscriptionRepository,
     private val categoryRepository: CategoryRepository,
     private val cardRepository: CardRepository,
+    private val navigator: Navigator,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -107,6 +107,10 @@ class SubscriptionInfoViewModel @Inject constructor(
             is SubscriptionInfoAction.ToogleUnsavedChangesAlert -> {
                 state = state.copy(showUnsavedChangesAlert = !state.showUnsavedChangesAlert)
             }
+
+            SubscriptionInfoAction.NavigateBack -> {
+                viewModelScope.launch { navigator.navigateUp() }
+            }
         }
     }
 
@@ -150,7 +154,7 @@ class SubscriptionInfoViewModel @Inject constructor(
             state.subscription?.let { subscription ->
                 subscriptionRepository.insert(subscription)
                     .onSuccess {
-                        UiEventController.sendEvent(NavigationEvent.NavigateUp)
+                        navigator.navigateUp()
                     }
                     .onError { MessageController.sendMessage(it.asMessageText()) }
             }
@@ -162,7 +166,7 @@ class SubscriptionInfoViewModel @Inject constructor(
             _subscription?.let { subscription ->
                 subscriptionRepository.delete(subscription)
                     .onSuccess {
-                        UiEventController.sendEvent(NavigationEvent.NavigateUp)
+                        navigator.navigateUp()
                     }
                     .onError { MessageController.sendMessage(it.asMessageText()) }
             }

@@ -2,6 +2,7 @@ package com.jefisu.spending_budgets.presentation
 
 import com.jefisu.domain.model.Category
 import com.jefisu.domain.model.CategoryType
+import com.jefisu.ui.navigation.Destination
 
 sealed interface SpendingBudgetsAction {
     data class CategoryNameChanged(val name: String) : SpendingBudgetsAction
@@ -12,4 +13,5 @@ sealed interface SpendingBudgetsAction {
     data class ToogleDeleteAlert(val category: Category? = null) : SpendingBudgetsAction
     data object AddCategory : SpendingBudgetsAction
     data object DeleteCategory : SpendingBudgetsAction
+    data class Navigate(val destination: Destination) : SpendingBudgetsAction
 }

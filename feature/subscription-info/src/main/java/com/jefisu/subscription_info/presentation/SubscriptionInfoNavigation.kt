@@ -5,21 +5,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.IntOffset
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class SubscriptionInfoRoute(val id: String)
-
-fun NavController.navigateToSubscriptionInfo(id: String) {
-    navigate(SubscriptionInfoRoute(id))
-}
+import com.jefisu.ui.navigation.Destination
 
 fun NavGraphBuilder.subscriptionInfoScreen() {
     val animationSpec = tween<IntOffset>(durationMillis = 700)
-    composable<SubscriptionInfoRoute>(
+    composable<Destination.SubscriptionInfoScreen>(
         enterTransition = {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Up,

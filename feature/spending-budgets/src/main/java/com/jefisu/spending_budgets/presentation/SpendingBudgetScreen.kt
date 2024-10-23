@@ -41,17 +41,15 @@ import com.jefisu.designsystem.components.TrackizerTopBar
 import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.asColor
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.spending_budgets.R
 import com.jefisu.spending_budgets.presentation.components.AddCategoryBottomSheet
 import com.jefisu.spending_budgets.presentation.components.BudgetGauge
 import com.jefisu.spending_budgets.presentation.components.CategoryItem
 import com.jefisu.spending_budgets.presentation.components.PieData
-import com.jefisu.ui.UiEventController
-import com.jefisu.ui.event.NavigationEvent
+import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.util.SampleData
-import com.jefisu.ui.util.asColor
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun SpendingBudgetScreen(
@@ -107,9 +105,7 @@ internal fun SpendingBudgetScreen(
                 actions = {
                     TrackizerTopBarDefaults.settingsActionIcon(
                         onClick = {
-                            scope.launch {
-                                UiEventController.sendEvent(NavigationEvent.NavigateToSettings)
-                            }
+                            onAction(SpendingBudgetsAction.Navigate(Destination.SettingsScreen))
                         },
                     )
                     AnimatedVisibility(visible = showActionIcon) {

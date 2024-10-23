@@ -13,6 +13,7 @@ import com.jefisu.spending_budgets.domain.validation.categoryNameValidate
 import com.jefisu.ui.MessageController
 import com.jefisu.ui.UiEventController
 import com.jefisu.ui.asMessageText
+import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.cancel
@@ -27,6 +28,7 @@ import kotlinx.coroutines.launch
 class SpendingBudgetsViewModel @Inject constructor(
     private val subscriptionRepository: SubscriptionRepository,
     private val categoryRepository: CategoryRepository,
+    private val navigator: Navigator,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SpendingBudgetsState())
@@ -93,6 +95,10 @@ class SpendingBudgetsViewModel @Inject constructor(
             is SpendingBudgetsAction.AddCategory -> addCategory()
 
             is SpendingBudgetsAction.DeleteCategory -> deleteCategory()
+
+            is SpendingBudgetsAction.Navigate -> {
+                viewModelScope.launch { navigator.navigate(action.destination) }
+            }
         }
     }
 

@@ -37,13 +37,13 @@ import com.jefisu.designsystem.components.rememberTrackizerDatePickerState
 import com.jefisu.designsystem.components.rememberTrackizerPickerState
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.asIconResource
 import com.jefisu.domain.model.Card
 import com.jefisu.domain.model.Category
 import com.jefisu.subscription_info.R
 import com.jefisu.subscription_info.presentation.SubscriptionInfoAction
 import com.jefisu.subscription_info.presentation.SubscriptionInfoState
 import com.jefisu.subscription_info.presentation.util.InfoRowType
-import com.jefisu.ui.util.asIconResource
 
 @Composable
 fun SubscriptionInfoBottomSheet(

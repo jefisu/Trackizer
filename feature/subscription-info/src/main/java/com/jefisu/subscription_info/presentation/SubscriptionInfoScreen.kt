@@ -36,7 +36,6 @@ import com.jefisu.designsystem.Gray100
 import com.jefisu.designsystem.Gray30
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.Gray70
-import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.SubscriptionIcon
@@ -54,11 +53,9 @@ import com.jefisu.subscription_info.presentation.components.InfoRowItem
 import com.jefisu.subscription_info.presentation.components.SubscriptionInfoBottomSheet
 import com.jefisu.subscription_info.presentation.util.InfoRow
 import com.jefisu.subscription_info.presentation.util.InfoRowType
-import com.jefisu.ui.UiEventController
-import com.jefisu.ui.event.NavigationEvent
 import com.jefisu.ui.ext.toDateFormat
 import com.jefisu.ui.util.SampleData
-import kotlinx.coroutines.launch
+import com.jefisu.designsystem.R as DesignSystemRes
 
 @Composable
 internal fun SubscriptionInfoScreen(
@@ -90,9 +87,7 @@ internal fun SubscriptionInfoScreen(
         onConfirmTextButton = stringResource(R.string.save),
         onDismiss = {
             onAction(SubscriptionInfoAction.ToogleUnsavedChangesAlert)
-            scope.launch {
-                UiEventController.sendEvent(NavigationEvent.NavigateUp)
-            }
+            onAction(SubscriptionInfoAction.NavigateBack)
         },
         onConfirm = {
             onAction(SubscriptionInfoAction.SaveSubscription)
@@ -163,9 +158,7 @@ internal fun SubscriptionInfoScreen(
                                     onAction(SubscriptionInfoAction.ToogleUnsavedChangesAlert)
                                     return@backNavigationIcon
                                 }
-                                scope.launch {
-                                    UiEventController.sendEvent(NavigationEvent.NavigateUp)
-                                }
+                                onAction(SubscriptionInfoAction.NavigateBack)
                             },
                             modifier = Modifier.rotate(270f),
                         )

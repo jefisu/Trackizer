@@ -6,14 +6,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jefisu.domain.repository.SubscriptionRepository
+import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class CalendarViewModel @Inject constructor(private val repository: SubscriptionRepository) :
-    ViewModel() {
+internal class CalendarViewModel @Inject constructor(
+    private val repository: SubscriptionRepository,
+    private val navigator: Navigator,
+) : ViewModel() {
 
     var state by mutableStateOf(CalendarState())
         private set
@@ -43,6 +47,10 @@ class CalendarViewModel @Inject constructor(private val repository: Subscription
                 state = state.copy(
                     showMonthPicker = !state.showMonthPicker,
                 )
+            }
+
+            is CalendarAction.Navigate -> {
+                viewModelScope.launch { navigator.navigate(action.destination) }
             }
         }
     }

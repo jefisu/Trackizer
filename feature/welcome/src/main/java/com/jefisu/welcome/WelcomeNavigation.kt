@@ -1,22 +1,21 @@
 package com.jefisu.welcome
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object WelcomeScreen
-
-fun NavController.navigateToWelcome() = navigate(WelcomeScreen) {
-    popUpTo(this@navigateToWelcome.graph.findStartDestination().id) {
-        inclusive = true
-    }
-}
+import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.navigation.LocalNavigator
+import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.welcomeScreen() {
-    composable<WelcomeScreen> {
-        WelcomeScreen()
+    composable<Destination.WelcomeScreen> {
+        val scope = rememberCoroutineScope()
+        val navigator = LocalNavigator.current
+
+        WelcomeScreen(
+            onNavigate = {
+                scope.launch { navigator.navigate(it) }
+            },
+        )
     }
 }

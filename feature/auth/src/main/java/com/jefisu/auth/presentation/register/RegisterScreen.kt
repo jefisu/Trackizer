@@ -33,10 +33,7 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 
 @Composable
-fun RegisterScreenRoot(
-    navigateToHome: () -> Unit,
-    navigateToLogin: () -> Unit,
-) {
+fun RegisterScreenRoot(navigateToLogin: () -> Unit) {
     val viewModel = hiltViewModel<RegisterViewModel>()
     val state = viewModel.state
 

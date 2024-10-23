@@ -27,16 +27,26 @@ import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.ui.MessageController
+import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.navigation.LocalNavigator
 import kotlinx.coroutines.launch
 
 @Composable
-fun CustomAuthProviderRoot(
-    navigateToRegister: () -> Unit,
-    navigateToHome: () -> Unit,
-) {
+fun CustomAuthProviderRoot(navigateToRegister: () -> Unit) {
+    val navigator = LocalNavigator.current
+    val scope = rememberCoroutineScope()
+
     CustomAuthProviderScreen(
         navigateToRegister = navigateToRegister,
-        navigateToHome = navigateToHome,
+        navigateToHome = {
+            scope.launch {
+                navigator.navigate(Destination.AuthenticatedGraph) {
+                    popUpTo(Destination.AuthGraph) {
+                        inclusive = true
+                    }
+                }
+            }
+        },
     )
 }
 

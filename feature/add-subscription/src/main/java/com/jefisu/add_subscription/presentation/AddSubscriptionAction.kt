@@ -7,4 +7,6 @@ sealed interface AddSubscriptionAction {
     data class DescriptionChanged(val description: String) : AddSubscriptionAction
     data class SubscriptionServiceChanged(val service: SubscriptionService) : AddSubscriptionAction
     data object AddSubscription : AddSubscriptionAction
+
+    data object NavigateUp : AddSubscriptionAction
 }

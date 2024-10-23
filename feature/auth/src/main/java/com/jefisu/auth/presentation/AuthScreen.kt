@@ -2,7 +2,6 @@ package com.jefisu.auth.presentation
 
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.jefisu.auth.presentation.components.EndlessHorizontalPager
@@ -12,21 +11,13 @@ import com.jefisu.auth.presentation.register.RegisterScreenRoot
 import com.jefisu.auth.presentation.util.AuthPage
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.TrackizerLogoBox
-import com.jefisu.ui.UiEventController
-import com.jefisu.ui.event.NavigationEvent
-import kotlinx.coroutines.launch
+import com.jefisu.ui.navigation.Destination
 
 @Composable
-fun AuthScreen(navArgs: AuthRoute) {
+fun AuthScreen(navArgs: Destination.AuthScreen) {
     val startPage = when {
-        navArgs.isLogin -> AuthPage.LoginWithEmail
+        navArgs.isLogging -> AuthPage.LoginWithEmail
         else -> AuthPage.CustomAuthProviders
-    }
-    val scope = rememberCoroutineScope()
-    val navigateToHome: () -> Unit = {
-        scope.launch {
-            UiEventController.sendEvent(NavigationEvent.NavigateToHome)
-        }
     }
 
     TrackizerLogoBox {
@@ -39,20 +30,17 @@ fun AuthScreen(navArgs: AuthRoute) {
                 AuthPage.CustomAuthProviders -> {
                     CustomAuthProviderRoot(
                         navigateToRegister = onNextPageClick,
-                        navigateToHome = navigateToHome,
                     )
                 }
 
                 AuthPage.RegisterWithEmail -> {
                     RegisterScreenRoot(
-                        navigateToHome = navigateToHome,
                         navigateToLogin = onNextPageClick,
                     )
                 }
 
                 AuthPage.LoginWithEmail -> {
                     LoginScreenRoot(
-                        navigateToHome = navigateToHome,
                         navigateToRegister = onNextPageClick,
                     )
                 }
@@ -66,7 +54,7 @@ fun AuthScreen(navArgs: AuthRoute) {
 private fun AuthScreenPreview() {
     TrackizerTheme {
         AuthScreen(
-            navArgs = AuthRoute(),
+            navArgs = Destination.AuthScreen(isLogging = false),
         )
     }
 }

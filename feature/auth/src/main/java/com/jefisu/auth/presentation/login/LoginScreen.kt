@@ -37,15 +37,10 @@ import com.jefisu.designsystem.typography
 
 @Composable
 fun LoginScreenRoot(
-    navigateToHome: () -> Unit,
     navigateToRegister: () -> Unit,
 ) {
     val viewModel = hiltViewModel<LoginViewModel>()
     val state = viewModel.state
-
-    LaunchedEffect(state.isLoggedIn) {
-        if (state.isLoggedIn) navigateToHome()
-    }
 
     LoginScreen(
         state = state,

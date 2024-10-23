@@ -33,7 +33,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,10 +52,7 @@ import com.jefisu.designsystem.util.formatCurrency
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.domain.model.Subscription
 import com.jefisu.home.R
-import com.jefisu.ui.UiEventController
-import com.jefisu.ui.event.NavigationEvent
 import com.jefisu.ui.util.SampleData
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun SubscriptionList(
@@ -64,6 +60,7 @@ internal fun SubscriptionList(
     messageEmptyList: String,
     modifier: Modifier = Modifier,
     upcomingBill: Boolean = false,
+    onItemClick: (Subscription) -> Unit = {},
 ) {
     val lazyListState = rememberLazyListState()
     val showDivider by remember {
@@ -117,6 +114,7 @@ internal fun SubscriptionList(
                         SubscriptionItem(
                             subscription = sub,
                             upcomingBill = upcomingBill,
+                            onClick = { onItemClick(sub) },
                         )
                     }
                     item {
@@ -135,10 +133,10 @@ internal fun SubscriptionList(
 @Composable
 private fun SubscriptionItem(
     subscription: Subscription,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     upcomingBill: Boolean = false,
 ) {
-    val scope = rememberCoroutineScope()
     Row(
         horizontalArrangement = Arrangement.spacedBy(TrackizerTheme.spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
@@ -151,11 +149,7 @@ private fun SubscriptionItem(
                 shape = Shapes().large,
             )
             .rippleClickable {
-                scope.launch {
-                    UiEventController.sendEvent(
-                        NavigationEvent.NavigateToSubscriptionInfo(subscription.id),
-                    )
-                }
+                onClick()
             }
             .padding(
                 top = 12.dp,

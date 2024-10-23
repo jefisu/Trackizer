@@ -21,7 +21,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,7 +35,6 @@ import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.presentation.components.AddCreditCardBottomSheet
 import com.jefisu.credit_cards.presentation.components.CreditCard
 import com.jefisu.designsystem.Gray70
-import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.CubeOutRotationEndlessTransition
@@ -52,17 +50,15 @@ import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.domain.model.SubscriptionService
-import com.jefisu.ui.UiEventController
-import com.jefisu.ui.event.NavigationEvent
+import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.util.SampleData
-import kotlinx.coroutines.launch
+import com.jefisu.designsystem.R as DesignSystemRes
 
 @Composable
 internal fun CreditCardsScreen(
     state: CreditCardState,
     onAction: (CreditCardAction) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val isEmptyCards = state.creditCards.keys.isEmpty()
     val isEmptySubscriptions = with(state) { creditCards[selectedCard]?.isEmpty() == true }
 
@@ -92,9 +88,7 @@ internal fun CreditCardsScreen(
                 actions = {
                     TrackizerTopBarDefaults.settingsActionIcon(
                         onClick = {
-                            scope.launch {
-                                UiEventController.sendEvent(NavigationEvent.NavigateToSettings)
-                            }
+                            onAction(CreditCardAction.Navigate(Destination.SettingsScreen))
                         },
                     )
                 },

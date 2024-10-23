@@ -6,9 +6,9 @@ import com.jefisu.domain.repository.SettingsRepository
 import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.DataMessage
 import com.jefisu.ui.MessageController
-import com.jefisu.ui.UiEventController
 import com.jefisu.ui.asMessageText
-import com.jefisu.ui.event.NavigationEvent
+import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val userRepository: UserRepository,
+    private val navigator: Navigator,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SettingsState())
@@ -57,6 +58,14 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.ToogleLanguagePicker -> toggleLanguagePicker()
             is SettingsAction.CurrencyChanged -> updateCurrency(action.currencyCode)
             SettingsAction.ToogleCurrencyPicker -> toggleCurrencyPicker()
+
+            is SettingsAction.Navigate -> {
+                viewModelScope.launch { navigator.navigate(action.destination) }
+            }
+
+            SettingsAction.NavigateBack -> {
+                viewModelScope.launch { navigator.navigateUp() }
+            }
         }
     }
 
@@ -97,7 +106,11 @@ class SettingsViewModel @Inject constructor(
     private fun signOut() {
         viewModelScope.launch {
             userRepository.signOut()
-            UiEventController.sendEvent(NavigationEvent.NavigateToWelcome)
+            navigator.navigate(Destination.AuthGraph) {
+                popUpTo(Destination.AuthenticatedGraph) {
+                    inclusive = true
+                }
+            }
         }
     }
 }
