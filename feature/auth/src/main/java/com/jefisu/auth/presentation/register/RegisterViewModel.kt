@@ -10,9 +10,9 @@ import com.jefisu.auth.domain.validation.emailValidate
 import com.jefisu.auth.domain.validation.passwordValidate
 import com.jefisu.auth.presentation.register.util.getPasswordStrength
 import com.jefisu.auth.presentation.util.asMessageText
-import com.jefisu.ui.MessageController
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
+import com.jefisu.ui.MessageController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -50,8 +50,8 @@ internal class RegisterViewModel @Inject constructor(private val authRepository:
             }
 
             val passwordResult = passwordValidate.validate(password)
-            passwordResult.error?.let {
-                MessageController.sendMessage(it.first().asMessageText())
+            if (passwordResult.error?.isNotEmpty() == true) {
+                MessageController.sendMessage(passwordResult.error!!.first().asMessageText())
                 return@launch
             }
 
