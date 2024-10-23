@@ -59,6 +59,7 @@ internal class RegisterViewModel @Inject constructor(private val authRepository:
             authRepository.signUp(email, password)
                 .onSuccess { state = copy(isLoggedIn = true) }
                 .onError { MessageController.sendMessage(it.asMessageText()) }
+            state = copy(isLoading = false)
         }
     }
 }
