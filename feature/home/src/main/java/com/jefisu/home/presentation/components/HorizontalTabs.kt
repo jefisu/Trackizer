@@ -16,8 +16,9 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -52,7 +53,7 @@ internal fun HorizontalTabs(
     val tabs = SubscriptionTab.entries
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState { tabs.size }
-    val selectedTabAnim = remember { Animatable(0f) }
+    val selectedTabAnim = rememberSeletableTab()
 
     Column(
         verticalArrangement = Arrangement.spacedBy(TrackizerTheme.spacing.medium),
@@ -172,6 +173,16 @@ private fun Modifier.selectedTab(
         size = size,
         cornerRadius = cornerRadius,
     )
+}
+
+@Composable
+fun rememberSeletableTab() = rememberSaveable(
+    saver = Saver(
+        save = { it.value },
+        restore = { Animatable(it) },
+    ),
+) {
+    Animatable(0f)
 }
 
 internal enum class SubscriptionTab(@StringRes val titleId: Int) {
