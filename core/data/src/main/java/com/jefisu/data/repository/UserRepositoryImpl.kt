@@ -1,19 +1,20 @@
 package com.jefisu.data.repository
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.jefisu.data.util.userFlow
 import com.jefisu.domain.model.User
 import com.jefisu.domain.repository.UserRepository
 import io.realm.kotlin.Realm
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class UserRepositoryImpl(
-    private val auth: FirebaseAuth = Firebase.auth,
-    private val realm: Realm,
-) : UserRepository {
+@Singleton
+class UserRepositoryImpl @Inject constructor(private val realm: Realm) : UserRepository {
+
+    private val auth = Firebase.auth
 
     override val user: Flow<User?> = auth.userFlow().map { firebaseUser ->
         firebaseUser?.let { user ->

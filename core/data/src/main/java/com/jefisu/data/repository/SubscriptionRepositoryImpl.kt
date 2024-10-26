@@ -8,12 +8,15 @@ import com.jefisu.domain.DispatcherProvider
 import com.jefisu.domain.model.Subscription
 import com.jefisu.domain.repository.CardRepository
 import com.jefisu.domain.repository.CategoryRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-class SubscriptionRepositoryImpl(
+@Singleton
+class SubscriptionRepositoryImpl @Inject constructor(
     private val dispatcher: DispatcherProvider,
     private val dataSources: DataSources,
     private val categoryRepository: CategoryRepository,

@@ -43,6 +43,7 @@ dependencies {
 
     // Modules
     implementation(projects.core.data)
+    implementation(projects.core.di)
     implementation(projects.core.domain)
     implementation(projects.core.presentation.ui)
 

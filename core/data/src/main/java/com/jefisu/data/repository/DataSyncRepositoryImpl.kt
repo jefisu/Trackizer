@@ -10,6 +10,8 @@ import com.jefisu.data.worker.WorkerStarter
 import com.jefisu.domain.DispatcherProvider
 import com.jefisu.domain.repository.DataSyncRepository
 import com.jefisu.domain.repository.SettingsRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.merge
@@ -18,7 +20,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class DataSyncRepositoryImpl(
+@Singleton
+class DataSyncRepositoryImpl @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val workerStarter: WorkerStarter,
     private val offlineDataSources: DataSources,

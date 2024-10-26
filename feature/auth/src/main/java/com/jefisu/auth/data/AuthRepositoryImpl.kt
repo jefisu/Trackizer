@@ -12,11 +12,14 @@ import com.jefisu.auth.domain.AuthRepository
 import com.jefisu.auth.domain.EmptyAuthResult
 import com.jefisu.auth.domain.OneMessageAuthResult
 import com.jefisu.domain.util.Result
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class AuthRepositoryImpl : AuthRepository {
+@ViewModelScoped
+class AuthRepositoryImpl @Inject constructor() : AuthRepository {
 
     private val auth = Firebase.auth
 

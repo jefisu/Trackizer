@@ -2,17 +2,15 @@ package com.jefisu.auth.di
 
 import com.jefisu.auth.data.AuthRepositoryImpl
 import com.jefisu.auth.domain.AuthRepository
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object AuthModule {
+abstract class AuthModule {
 
-    @Provides
-    @ViewModelScoped
-    fun provideAuthRepository(): AuthRepository = AuthRepositoryImpl()
+    @Binds
+    abstract fun provideAuthRepository(repository: AuthRepositoryImpl): AuthRepository
 }

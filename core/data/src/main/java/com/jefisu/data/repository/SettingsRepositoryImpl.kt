@@ -1,7 +1,7 @@
 package com.jefisu.data.repository
 
+import android.app.Application
 import android.app.LocaleManager
-import android.content.Context
 import android.os.Build
 import android.os.LocaleList
 import androidx.appcompat.app.AppCompatDelegate
@@ -15,6 +15,8 @@ import com.jefisu.domain.model.Settings
 import com.jefisu.domain.model.getCurrency
 import com.jefisu.domain.repository.SettingsRepository
 import java.util.Locale
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,8 +27,9 @@ import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class SettingsRepositoryImpl(
-    private val context: Context,
+@Singleton
+class SettingsRepositoryImpl @Inject constructor(
+    private val app: Application,
     private val dataStore: DataStore<Preferences>,
     private val dispatcherProvider: DispatcherProvider,
 ) : SettingsRepository {
@@ -71,7 +74,7 @@ class SettingsRepositoryImpl(
             settings.value.copy(languageTag = languageTag),
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val localeManager = context.getSystemService(LocaleManager::class.java)
+            val localeManager = app.getSystemService(LocaleManager::class.java)
             localeManager.applicationLocales = LocaleList.forLanguageTags(languageTag)
         } else {
             val appLocale = LocaleListCompat.forLanguageTags(languageTag)
