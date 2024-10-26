@@ -1,5 +1,6 @@
 package com.jefisu.auth.presentation.custom_auth_provider.components
 
+import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +29,9 @@ import com.jefisu.designsystem.Gray80
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.TrackizerButton
+import com.jefisu.domain.util.Result
+import com.jefisu.domain.util.onError
+import com.jefisu.domain.util.onSuccess
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -39,42 +43,7 @@ internal fun GoogleButton(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var isLoading by rememberSaveable { mutableStateOf(false) }
-    val credentialManager = remember { CredentialManager.create(context) }
-
-    val onClickSignIn: () -> Unit = {
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(
-                GetGoogleIdOption.Builder()
-                    .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
-                    .setFilterByAuthorizedAccounts(false)
-                    .setAutoSelectEnabled(true)
-                    .build(),
-            )
-            .build()
-
-        scope.launch {
-            isLoading = true
-            try {
-                val result = credentialManager.getCredential(context, request)
-                val credential = result.credential
-                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-
-                GoogleAuthProvider
-                    .getCredential(googleIdTokenCredential.idToken, null)
-                    .also {
-                        Firebase.auth.signInWithCredential(it).await()
-                    }
-
-                onSuccessAuth()
-            } catch (e: FirebaseAuthUserCollisionException) {
-                onFailureAuth(AuthMessage.Error.USER_ALREADY_EXISTS)
-            } catch (e: Exception) {
-                onFailureAuth(AuthMessage.Error.GOOGLE_FAILED_TO_LOGIN)
-            } finally {
-                isLoading = false
-            }
-        }
-    }
+    val googleAuth by remember { lazy { GoogleAuthUi(context as Activity) } }
 
     TrackizerButton(
         text = stringResource(id = R.string.sign_up_with, "Google"),
@@ -83,7 +52,16 @@ internal fun GoogleButton(
             content = Gray80,
         ),
         leadingIconRes = R.drawable.ic_google,
-        onClick = onClickSignIn,
+        onClick = {
+            scope.launch {
+                isLoading = true
+                googleAuth
+                    .signIn()
+                    .onSuccess { onSuccessAuth() }
+                    .onError { onFailureAuth(it) }
+                isLoading = false
+            }
+        },
         isLoading = isLoading,
         modifier = Modifier.fillMaxWidth(),
     )
@@ -97,5 +75,37 @@ private fun GoogleButtonPreview() {
             onSuccessAuth = {},
             onFailureAuth = {},
         )
+    }
+}
+
+private class GoogleAuthUi(private val activity: Activity) {
+    private val credentialManager = CredentialManager.create(activity)
+
+    suspend fun signIn(): Result<Unit, AuthMessage> {
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(
+                GetGoogleIdOption.Builder()
+                    .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
+                    .setFilterByAuthorizedAccounts(false)
+                    .setAutoSelectEnabled(true)
+                    .build(),
+            )
+            .build()
+
+        runCatching {
+            val result = credentialManager.getCredential(activity, request)
+            val credential = result.credential
+            val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+            val provider = GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
+
+            Firebase.auth.signInWithCredential(provider).await()
+        }.onFailure {
+            if (it is FirebaseAuthUserCollisionException) {
+                return Result.Error(AuthMessage.Error.USER_ALREADY_EXISTS)
+            }
+            return Result.Error(AuthMessage.Error.GOOGLE_FAILED_TO_LOGIN)
+        }
+
+        return Result.Success(Unit)
     }
 }
