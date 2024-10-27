@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jefisu.domain.repository.CategoryRepository
 import com.jefisu.domain.repository.SubscriptionRepository
+import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -36,7 +37,15 @@ internal class HomeViewModel @Inject constructor(
     fun onAction(action: HomeAction) {
         when (action) {
             is HomeAction.Navigate -> {
-                viewModelScope.launch { navigator.navigate(action.destination) }
+                viewModelScope.launch {
+                    navigator.navigate(action.destination) {
+                        popUpTo(Destination.HomeScreen) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
             }
         }
     }
