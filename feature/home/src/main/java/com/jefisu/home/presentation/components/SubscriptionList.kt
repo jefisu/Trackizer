@@ -195,7 +195,7 @@ private fun SubscriptionListPreview(
     TrackizerTheme {
         SubscriptionList(
             subscriptions = subscriptions,
-            messageEmptyList = stringResource(R.string.you_don_t_have_any_subscriptions),
+            messageEmptyList = stringResource(R.string.you_don_t_have_any),
         )
     }
 }

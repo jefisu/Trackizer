@@ -8,7 +8,7 @@ val categoryBudgetValidate = Validation<Float, DataMessage> { value ->
     if (value == 0f) {
         return@Validation ValidationResult(
             successfully = false,
-            error = DataMessage.CATEGORY_BUDGET_CAN_T_BE_ZERO,
+            error = DataMessage.CATEGORY_BUDGET_REQUIRED,
         )
     }
 

@@ -12,8 +12,8 @@ import com.jefisu.domain.repository.SubscriptionRepository
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.ui.MessageController
-import com.jefisu.ui.asMessageText
 import com.jefisu.ui.navigation.Navigator
+import com.jefisu.ui.util.asMessageText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import javax.inject.Inject

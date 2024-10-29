@@ -12,8 +12,8 @@ import com.jefisu.spending_budgets.domain.validation.categoryBudgetValidate
 import com.jefisu.spending_budgets.domain.validation.categoryNameValidate
 import com.jefisu.ui.MessageController
 import com.jefisu.ui.UiEventController
-import com.jefisu.ui.asMessageText
 import com.jefisu.ui.navigation.Navigator
+import com.jefisu.ui.util.asMessageText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.cancel

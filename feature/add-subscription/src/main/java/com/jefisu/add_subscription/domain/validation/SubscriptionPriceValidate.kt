@@ -8,7 +8,7 @@ val subscriptionPriceValidate = Validation<Float, DataMessage> { value ->
     if (value == 0f) {
         return@Validation ValidationResult(
             successfully = false,
-            error = DataMessage.SUBSCRIPTION_PRICE_CAN_T_BE_ZERO,
+            error = DataMessage.SUBSCRIPTION_PRICE_REQUIRED,
         )
     }
 

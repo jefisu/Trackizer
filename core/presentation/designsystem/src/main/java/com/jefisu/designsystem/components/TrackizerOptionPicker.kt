@@ -13,10 +13,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.jefisu.designsystem.R
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.ui.R as UiRes
 
 @Composable
 fun <T> TrackizerOptionPicker(
@@ -55,7 +55,7 @@ fun <T> TrackizerOptionPicker(
         )
         Spacer(Modifier.height(TrackizerTheme.spacing.extraSmall))
         TrackizerButton(
-            text = stringResource(R.string.button_title),
+            text = stringResource(UiRes.string.select),
             type = ButtonType.Primary,
             onClick = {
                 onSelectClick(items[pickerState.selectedIndex])

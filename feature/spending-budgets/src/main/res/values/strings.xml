@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_screen"><![CDATA[Spending & Budgets]]></string>
 
-    // Category
+    <!--  Budget Gauge  -->
     <string name="of_budget">of %s budget</string>
+    <string name="your_budgets_are_on_track">Your budgets are on track %s</string>
+
+    <!-- Category Item  -->
     <string name="left_to_spend">%s left to spend</string>
     <string name="exceeded_budget">%s exceeded budget</string>
     <string name="of">of %s</string>
+
+    <!--  Add Category Button  -->
     <string name="add_new_category">Add new category</string>
-    <string name="your_budgets_are_on_track">Your budgets are on track %s</string>
-    <string name="spending_budgets_title"><![CDATA[Spending & Budgets]]></string>
-    <string name="select_a_category_type">Select a category type</string>
-    <string name="button_title">Select</string>
+
+    <!--  Add/Edit Category Bottom Sheet  -->
     <string name="add_category">Add category</string>
     <string name="edit_category">Edit category</string>
     <string name="category_type">Category type</string>
-    <string name="delete_alert_dismiss_button">Cancel</string>
-    <string name="delete_alert_title">Delete category</string>
-    <string name="delete_alert_confirm_button">Delete</string>
-    <string name="delete_alert_description">Are you sure want to delete this category?</string>
+
+    <!--  Select Category Type Bottom Sheet  -->
+    <string name="select_a_category_type">Select a category type</string>
 </resources>

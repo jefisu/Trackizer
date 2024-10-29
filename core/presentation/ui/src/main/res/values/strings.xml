@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="subscription_deleted">The subscription has been successfully deleted.</string>
-    <string name="subscription_not_deleted">There was an issue, and it was not possible to delete the subscription.</string>
-    <string name="category_can_t_be_blank">The category name can\'t be blank</string>
-    <string name="category_budget_can_t_be_zero">The category budget can\'t be zero</string>
-    <string name="category_deleted">The category has been successfully deleted.</string>
-    <string name="category_not_deleted">There was an issue, and it was not possible to delete the category.</string>
-    <string name="subscription_price_can_t_be_zero">The subscription price can\'t be zero</string>
-    <string name="functionality_unavailable">Functionality unavailable\n</string>
-    <string name="subscription_not_found">The subscription was not found.</string>
-    <string name="category_not_found">The category was not found.</string>
-    <string name="card_not_found">The card was not found.</string>
-    <string name="card_not_added">Card not added</string>
-    <string name="card_not_deleted">Card not deleted</string>
-    <string name="category_not_added">Category not added</string>
-    <string name="subscription_not_added">Subscription not added</string>
-    <string name="unknown_error">An unknown error occurred</string>
+    <!-- Messages -->
+    <string name="item_deleted">The %s has been successfully deleted.</string>
+    <string name="item_not_deleted">There was an issue, and it was not possible to delete the %s.</string>
+    <string name="item_can_t_be_blank">The %s can\'t be blank.</string>
+    <string name="data_can_t_be_zero">The %s can\'t be zero.</string>
+    <string name="functionality_unavailable">Functionality unavailable.</string>
+    <string name="item_not_found">The %s was not found.</string>
+    <string name="item_not_added">The %s was not added.</string>
+    <string name="unknown_error">An unknown error occurred.</string>
     <string name="data_not_available">There are no %s available to select. Please add one and try again.</string>
+
+    <!-- Arguments -->
+    <string name="subscription">Subscription</string>
+    <string name="subscriptions">Subscriptions</string>
+    <string name="subscription_price">Subscription price</string>
+    <string name="category">Category</string>
+    <string name="category_budget">Category budget</string>
+    <string name="card">Card</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="credit_cards">Credit Cards</string>
+    <string name="category_name">Category Name</string>
+    <string name="budget">Budget</string>
+    <string name="price">Price</string>
+    <string name="select">Select</string>
+    <string name="description">Description</string>
+    <string name="save">Save</string>
+
+    <!-- Delete Alert  -->
+    <string name="delete_alert_title">Delete %s</string>
+    <string name="delete_alert_description">Are you sure want to delete this %s?</string>
+    <string name="button_alert_cancel">Cancel</string>
+    <string name="button_alert_delete">Delete</string>
 </resources>

@@ -8,7 +8,7 @@ val categoryNameValidate = Validation<String, DataMessage> { value ->
     if (value.isBlank()) {
         return@Validation ValidationResult(
             successfully = false,
-            error = DataMessage.CATEGORY_NAME_CAN_T_BE_BLANK,
+            error = DataMessage.CATEGORY_NAME_REQUIRED,
         )
     }
 

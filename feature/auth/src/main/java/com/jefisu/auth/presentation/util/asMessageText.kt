@@ -4,6 +4,7 @@ import com.jefisu.auth.R
 import com.jefisu.auth.domain.AuthMessage
 import com.jefisu.auth.domain.validation.EmailValidateError
 import com.jefisu.auth.domain.validation.PassswordValidateError
+import com.jefisu.domain.util.Argument
 import com.jefisu.domain.util.MessageText
 import com.jefisu.domain.util.UiText
 
@@ -20,12 +21,12 @@ fun AuthMessage.asMessageText(): MessageText = when (this) {
 
             AuthMessage.Error.GOOGLE_FAILED_TO_LOGIN -> UiText.StringResource(
                 R.string.failed_to_login_with_account_error,
-                arrayOf("Google"),
+                arrayOf(Argument("Google")),
             )
 
             AuthMessage.Error.FACEBOOK_FAILED_TO_LOGIN -> UiText.StringResource(
                 R.string.failed_to_login_with_account_error,
-                arrayOf("Facebook"),
+                arrayOf(Argument("Facebook")),
             )
 
             AuthMessage.Error.SERVER_ERROR -> UiText.StringResource(R.string.server_error)

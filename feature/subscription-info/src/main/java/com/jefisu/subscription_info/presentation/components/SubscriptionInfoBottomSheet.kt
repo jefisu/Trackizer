@@ -44,6 +44,7 @@ import com.jefisu.subscription_info.R
 import com.jefisu.subscription_info.presentation.SubscriptionInfoAction
 import com.jefisu.subscription_info.presentation.SubscriptionInfoState
 import com.jefisu.subscription_info.presentation.util.InfoRowType
+import com.jefisu.ui.R as UiRes
 
 @Composable
 fun SubscriptionInfoBottomSheet(
@@ -98,7 +99,7 @@ private fun BottomSheetContent(
                     onTextChange = {
                         onAction(SubscriptionInfoAction.DescriptionChanged(it))
                     },
-                    fieldName = stringResource(R.string.description),
+                    fieldName = stringResource(UiRes.string.description),
                 )
             }
 
@@ -106,7 +107,10 @@ private fun BottomSheetContent(
                 PickerBody(
                     items = state.categories,
                     state = categoryPickerState,
-                    title = stringResource(R.string.select_a_category),
+                    title = stringResource(
+                        id = R.string.select_a,
+                        stringResource(UiRes.string.category).lowercase(),
+                    ),
                 )
             }
 
@@ -130,7 +134,10 @@ private fun BottomSheetContent(
                 PickerBody(
                     items = state.creditCards,
                     state = cardPickerState,
-                    title = stringResource(R.string.select_a_credit_card),
+                    title = stringResource(
+                        id = R.string.select_a,
+                        stringResource(UiRes.string.credit_card).lowercase(),
+                    ),
                 )
             }
 
@@ -139,8 +146,8 @@ private fun BottomSheetContent(
         Spacer(Modifier.height(TrackizerTheme.spacing.extraMedium))
         TrackizerButton(
             text = when (infoRow.type) {
-                InfoRowType.Description -> stringResource(R.string.save)
-                else -> stringResource(R.string.button_title)
+                InfoRowType.Description -> stringResource(UiRes.string.save)
+                else -> stringResource(UiRes.string.select)
             },
             type = ButtonType.Primary,
             onClick = {

@@ -17,6 +17,6 @@
     <string name="sign_out">Sign out</string>
 
     <!--  Picker options title   -->
-    <string name="select_a_language">Select a language</string>
-    <string name="select_a_currency">Select a currency</string>
+    <string name="select_a">Select a %s</string>
+    <string name="currency">currency</string>
 </resources>

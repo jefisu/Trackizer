@@ -35,6 +35,7 @@ import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.presentation.components.AddCreditCardBottomSheet
 import com.jefisu.credit_cards.presentation.components.CreditCard
 import com.jefisu.designsystem.Gray70
+import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.CubeOutRotationEndlessTransition
@@ -50,9 +51,9 @@ import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.domain.model.SubscriptionService
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.util.SampleData
-import com.jefisu.designsystem.R as DesignSystemRes
 
 @Composable
 internal fun CreditCardsScreen(
@@ -64,10 +65,16 @@ internal fun CreditCardsScreen(
 
     TrackizerAlertBottomSheet(
         isVisible = state.showDeleteAlert,
-        title = stringResource(R.string.delete_credit_card),
-        description = stringResource(R.string.are_you_sure_you_want_to_delete_this_credit_card),
-        onDismissTextButton = stringResource(R.string.cancel),
-        onConfirmTextButton = stringResource(R.string.delete),
+        title = stringResource(
+            id = UiRes.string.delete_alert_title,
+            stringResource(UiRes.string.credit_card).lowercase(),
+        ),
+        description = stringResource(
+            id = UiRes.string.delete_alert_description,
+            stringResource(UiRes.string.credit_card).lowercase(),
+        ),
+        onDismissTextButton = stringResource(UiRes.string.button_alert_cancel),
+        onConfirmTextButton = stringResource(com.jefisu.ui.R.string.button_alert_delete),
         onDismiss = {
             onAction(CreditCardAction.ToogleDeleteAlert())
         },
@@ -84,7 +91,7 @@ internal fun CreditCardsScreen(
     TrackizerScaffold(
         topBar = {
             TrackizerTopBar(
-                title = stringResource(R.string.credit_cards_title),
+                title = stringResource(UiRes.string.credit_cards),
                 actions = {
                     TrackizerTopBarDefaults.settingsActionIcon(
                         onClick = {
@@ -112,7 +119,10 @@ internal fun CreditCardsScreen(
     ) { innerPadding ->
         if (isEmptyCards) {
             EmptyData(
-                text = stringResource(R.string.you_haven_t_added_any_credit_cards_yet),
+                text = stringResource(
+                    id = R.string.you_haven_t_added_any_data_yet,
+                    stringResource(UiRes.string.credit_cards).lowercase(),
+                ),
             )
         } else {
             Column(
@@ -139,13 +149,16 @@ internal fun CreditCardsScreen(
                 )
                 if (isEmptySubscriptions) {
                     EmptyData(
-                        text = stringResource(R.string.you_haven_t_added_any_subscriptions_yet),
+                        text = stringResource(
+                            id = R.string.you_haven_t_added_any_data_yet,
+                            stringResource(UiRes.string.subscriptions).lowercase(),
+                        ),
                         showImage = false,
                     )
                 } else {
                     Spacer(Modifier.height(TrackizerTheme.spacing.extraLarge))
                     Text(
-                        text = stringResource(R.string.subscriptions),
+                        text = stringResource(UiRes.string.subscriptions),
                         style = TrackizerTheme.typography.headline3,
                     )
                     Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))

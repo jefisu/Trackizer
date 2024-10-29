@@ -47,6 +47,7 @@ import com.jefisu.designsystem.util.getEndlessItem
 import com.jefisu.designsystem.util.imeOffset
 import com.jefisu.designsystem.util.rememberEndlessPagerState
 import com.jefisu.domain.model.SubscriptionService
+import com.jefisu.ui.R as UiRes
 
 @Composable
 internal fun AddSubscriptionScreen(
@@ -124,7 +125,7 @@ internal fun AddSubscriptionScreen(
                 TrackizerTextField(
                     text = state.description,
                     onTextChange = { onAction(AddSubscriptionAction.DescriptionChanged(it)) },
-                    fieldName = stringResource(R.string.description),
+                    fieldName = stringResource(UiRes.string.description),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next,

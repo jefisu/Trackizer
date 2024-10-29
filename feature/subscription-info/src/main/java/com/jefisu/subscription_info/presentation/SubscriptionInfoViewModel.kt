@@ -10,17 +10,18 @@ import com.jefisu.domain.model.Subscription
 import com.jefisu.domain.repository.CardRepository
 import com.jefisu.domain.repository.CategoryRepository
 import com.jefisu.domain.repository.SubscriptionRepository
+import com.jefisu.domain.util.Argument
 import com.jefisu.domain.util.DataMessage
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.subscription_info.presentation.util.InfoRow
 import com.jefisu.subscription_info.presentation.util.InfoRowType
 import com.jefisu.ui.MessageController
-import com.jefisu.ui.asMessageText
 import com.jefisu.ui.navigation.Navigator
+import com.jefisu.ui.util.asMessageText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SubscriptionInfoViewModel @Inject constructor(
@@ -124,8 +125,8 @@ class SubscriptionInfoViewModel @Inject constructor(
             state.creditCards.isEmpty()
         ) {
             state = state.copy(selectedInfoRow = null)
-            DataMessage.DATA_NOT_AVAILABLE
-                .asMessageText(info.type.titleId)
+            DataMessage.NO_DATA_AVAILABLE
+                .asMessageText(Argument(info.type.titleId))
                 .also(MessageController::sendMessage)
             return
         }

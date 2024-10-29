@@ -50,13 +50,13 @@ import com.jefisu.spending_budgets.presentation.components.CategoryItem
 import com.jefisu.spending_budgets.presentation.components.PieData
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.util.SampleData
+import com.jefisu.ui.R as UiRes
 
 @Composable
 internal fun SpendingBudgetScreen(
     state: SpendingBudgetsState,
     onAction: (SpendingBudgetsAction) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val budget = remember(state.categories) {
         state.categories
@@ -80,10 +80,16 @@ internal fun SpendingBudgetScreen(
 
     TrackizerAlertBottomSheet(
         isVisible = state.showDeleteAlert,
-        title = stringResource(R.string.delete_alert_title),
-        description = stringResource(R.string.delete_alert_description),
-        onDismissTextButton = stringResource(R.string.delete_alert_dismiss_button),
-        onConfirmTextButton = stringResource(R.string.delete_alert_confirm_button),
+        title = stringResource(
+            id = UiRes.string.delete_alert_title,
+            stringResource(UiRes.string.category).lowercase()
+        ),
+        description = stringResource(
+            id = UiRes.string.delete_alert_description,
+            stringResource(UiRes.string.category).lowercase()
+        ),
+        onDismissTextButton = stringResource(UiRes.string.button_alert_cancel),
+        onConfirmTextButton = stringResource(UiRes.string.button_alert_delete),
         onConfirm = {
             onAction(SpendingBudgetsAction.DeleteCategory)
         },
@@ -100,7 +106,7 @@ internal fun SpendingBudgetScreen(
     TrackizerScaffold(
         topBar = {
             TrackizerTopBar(
-                title = stringResource(R.string.spending_budgets_title),
+                title = stringResource(R.string.title_screen),
                 scrollBehavior = scrollBehavior,
                 actions = {
                     TrackizerTopBarDefaults.settingsActionIcon(

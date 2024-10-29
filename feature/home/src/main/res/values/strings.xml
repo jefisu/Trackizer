@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  Subscription Dashboard  -->
     <string name="this_month_bills">This month bills</string>
     <string name="see_your_budget">See your budget</string>
     <string name="active_subs">Active subs</string>
     <string name="highest_subs">Highest subs</string>
     <string name="lowest_subs">Lowest subs</string>
+
+    <!--  Subscription Tabs  -->
     <string name="your_subscriptions_tab">Your subscriptions</string>
     <string name="upcoming_bills_tab">Upcoming bills</string>
-    <string name="you_don_t_have_any_subscriptions">You don\'t have any subscriptions</string>
-    <string name="you_don_t_have_any_upcoming_bills">You don\'t have any upcoming bills</string>
+
+    <!--  Subscription List  -->
+    <string name="you_don_t_have_any">You don\'t have any %s</string>
 </resources>

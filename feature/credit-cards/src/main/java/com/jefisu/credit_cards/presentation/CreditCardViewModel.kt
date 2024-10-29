@@ -18,20 +18,20 @@ import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.ui.MessageController
 import com.jefisu.ui.UiEventController
-import com.jefisu.ui.asMessageText
 import com.jefisu.ui.ext.formatExpirationDate
 import com.jefisu.ui.navigation.Navigator
+import com.jefisu.ui.util.asMessageText
 import com.steliospapamichail.creditcardmasker.utils.getCardTypeFromNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import javax.inject.Inject
 
 @HiltViewModel
 class CreditCardViewModel @Inject constructor(

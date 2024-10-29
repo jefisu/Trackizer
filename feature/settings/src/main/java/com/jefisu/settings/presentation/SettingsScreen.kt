@@ -50,7 +50,10 @@ internal fun SettingsScreen(
     val navigationBarPadding = WindowInsets.safeDrawing.asPaddingValues().calculateBottomPadding()
 
     TrackizerOptionPicker(
-        title = stringResource(R.string.select_a_currency),
+        title = stringResource(
+            id = R.string.select_a,
+            stringResource(R.string.currency),
+        ),
         visible = state.isCurrencyPickerVisible,
         items = SettingsConstants.currencys,
         onDismiss = { onAction(SettingsAction.ToogleCurrencyPicker) },
@@ -63,7 +66,10 @@ internal fun SettingsScreen(
     }
 
     TrackizerOptionPicker(
-        title = stringResource(R.string.select_a_language),
+        title = stringResource(
+            id = R.string.select_a,
+            stringResource(R.string.language)
+        ),
         visible = state.isLanguagePickerVisible,
         items = SettingsConstants.localesAvailable,
         onDismiss = { onAction(SettingsAction.ToogleLanguagePicker) },

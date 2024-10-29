@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="credit_cards_title">Credit Cards</string>
-    <string name="subscriptions">Subscriptions</string>
     <string name="add_new_card">Add new card</string>
-    <string name="you_haven_t_added_any_credit_cards_yet">You haven\'t added any credit cards yet</string>
-    <string name="you_haven_t_added_any_subscriptions_yet">You haven\'t added any subscriptions yet</string>
+    <string name="you_haven_t_added_any_data_yet">You haven\'t added any %s yet</string>
 
     <!-- AddCreditCardBottomSheet -->
     <string name="edit_card">Edit card</string>
@@ -16,16 +13,7 @@
     <string name="cvv">CVV</string>
     <string name="save_changes">Save changes</string>
 
-    <!-- Card Validation Message Error -->
-    <string name="empty_card_name">Card name is required</string>
-    <string name="empty_card_holder">Card holder name is required</string>
-    <string name="invalid_expiration_date">Invalid expiration date</string>
-    <string name="invalid_cvv">Invalid CVV</string>
-    <string name="invalid_card_number">Invalid card number</string>
-
-    <!-- Delete Alert -->
-    <string name="delete_credit_card">Delete credit card</string>
-    <string name="are_you_sure_you_want_to_delete_this_credit_card">Are you sure want to delete this credit card?</string>
-    <string name="cancel">Cancel</string>
-    <string name="delete">Delete</string>
+    <!-- Validation Message Error -->
+    <string name="empty_data">%s is required.</string>
+    <string name="invalid_data">%s is invalid.</string>
 </resources>

@@ -34,6 +34,7 @@ import com.jefisu.designsystem.typography
 import com.jefisu.subscription_info.R
 import com.jefisu.subscription_info.presentation.util.InfoRow
 import com.jefisu.subscription_info.presentation.util.InfoRowType
+import com.jefisu.ui.R as UiRes
 
 @Composable
 fun InfoRowItem(
@@ -88,7 +89,10 @@ private fun InfoRowItemPreview() {
         InfoRowItem(
             info = InfoRow(
                 value = "This is a sample description",
-                label = stringResource(R.string.no_description),
+                label = stringResource(
+                    id = R.string.no_data,
+                    stringResource(UiRes.string.description).lowercase()
+                ),
                 type = InfoRowType.Description,
             ),
             modifier = Modifier

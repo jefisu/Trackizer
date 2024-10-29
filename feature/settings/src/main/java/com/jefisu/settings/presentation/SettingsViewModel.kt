@@ -6,9 +6,9 @@ import com.jefisu.domain.repository.SettingsRepository
 import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.DataMessage
 import com.jefisu.ui.MessageController
-import com.jefisu.ui.asMessageText
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.navigation.Navigator
+import com.jefisu.ui.util.asMessageText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject

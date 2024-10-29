@@ -21,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +35,7 @@ import com.jefisu.designsystem.Gray100
 import com.jefisu.designsystem.Gray30
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.Gray70
+import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.SubscriptionIcon
@@ -53,24 +53,29 @@ import com.jefisu.subscription_info.presentation.components.InfoRowItem
 import com.jefisu.subscription_info.presentation.components.SubscriptionInfoBottomSheet
 import com.jefisu.subscription_info.presentation.util.InfoRow
 import com.jefisu.subscription_info.presentation.util.InfoRowType
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.ext.toDateFormat
 import com.jefisu.ui.util.SampleData
-import com.jefisu.designsystem.R as DesignSystemRes
 
 @Composable
 internal fun SubscriptionInfoScreen(
     state: SubscriptionInfoState,
     onAction: (SubscriptionInfoAction) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val horizontalSpacingInfoRow = 20.dp
 
     TrackizerAlertBottomSheet(
         isVisible = state.showDeleteAlert,
-        title = stringResource(R.string.delete_subscription),
-        description = stringResource(R.string.are_you_sure_you_want_to_delete_this_subscription),
-        onDismissTextButton = stringResource(R.string.cancel),
-        onConfirmTextButton = stringResource(R.string.delete),
+        title = stringResource(
+            id = com.jefisu.ui.R.string.delete_alert_title,
+            stringResource(UiRes.string.subscription).lowercase(),
+        ),
+        description = stringResource(
+            id = UiRes.string.delete_alert_description,
+            stringResource(UiRes.string.subscription).lowercase(),
+        ),
+        onDismissTextButton = stringResource(UiRes.string.button_alert_cancel),
+        onConfirmTextButton = stringResource(UiRes.string.button_alert_delete),
         onDismiss = {
             onAction(SubscriptionInfoAction.ToogleDeleteAlert)
         },
@@ -84,7 +89,7 @@ internal fun SubscriptionInfoScreen(
         title = stringResource(R.string.confirm_changes),
         description = stringResource(R.string.do_you_want_to_exit_without_save_changes),
         onDismissTextButton = stringResource(R.string.discard),
-        onConfirmTextButton = stringResource(R.string.save),
+        onConfirmTextButton = stringResource(UiRes.string.save),
         onDismiss = {
             onAction(SubscriptionInfoAction.ToogleUnsavedChangesAlert)
             onAction(SubscriptionInfoAction.NavigateBack)
@@ -114,12 +119,18 @@ internal fun SubscriptionInfoScreen(
                 ),
                 InfoRow(
                     value = subscription.description,
-                    label = stringResource(R.string.no_description),
+                    label = stringResource(
+                        id = R.string.no_data,
+                        stringResource(UiRes.string.description).lowercase(),
+                    ),
                     type = InfoRowType.Description,
                 ),
                 InfoRow(
                     value = subscription.category?.name.orEmpty(),
-                    label = stringResource(R.string.no_category),
+                    label = stringResource(
+                        id = R.string.no_data,
+                        stringResource(UiRes.string.category).lowercase(),
+                    ),
                     type = InfoRowType.Category,
                 ),
                 InfoRow(
@@ -136,7 +147,10 @@ internal fun SubscriptionInfoScreen(
                 ),
                 InfoRow(
                     value = subscription.card?.number?.takeLast(4).orEmpty(),
-                    label = stringResource(R.string.no_credit_card),
+                    label = stringResource(
+                        id = R.string.no_data,
+                        stringResource(UiRes.string.credit_card).lowercase(),
+                    ),
                     type = InfoRowType.CreditCard,
                 ),
             )
@@ -240,7 +254,7 @@ internal fun SubscriptionInfoScreen(
                     }
                     Spacer(Modifier.height(TrackizerTheme.spacing.large))
                     TrackizerButton(
-                        text = stringResource(R.string.save),
+                        text = stringResource(UiRes.string.save),
                         type = ButtonType.Secondary,
                         onClick = {
                             onAction(SubscriptionInfoAction.SaveSubscription)

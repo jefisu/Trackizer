@@ -25,6 +25,7 @@ import com.jefisu.home.presentation.components.HorizontalTabs
 import com.jefisu.home.presentation.components.SubscriptionDashboard
 import com.jefisu.home.presentation.components.SubscriptionList
 import com.jefisu.home.presentation.components.SubscriptionTab
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.util.SampleData
 
@@ -63,7 +64,8 @@ internal fun HomeScreen(
                         SubscriptionList(
                             subscriptions = state.subscriptions,
                             messageEmptyList = stringResource(
-                                R.string.you_don_t_have_any_subscriptions,
+                                id = R.string.you_don_t_have_any,
+                                stringResource(UiRes.string.subscriptions).lowercase(),
                             ),
                             onItemClick = {
                                 onAction(
@@ -81,7 +83,8 @@ internal fun HomeScreen(
                             subscriptions = subscriptionActive,
                             upcomingBill = true,
                             messageEmptyList = stringResource(
-                                R.string.you_don_t_have_any_upcoming_bills,
+                                R.string.you_don_t_have_any,
+                                stringResource(R.string.upcoming_bills_tab).lowercase(),
                             ),
                             onItemClick = {
                                 onAction(
