@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="monthly_price">Preço mensal</string>
+    <string name="add_this_platform">Adicionar esta plataforma</string>
+    <string name="new_title">Novo</string>
+    <string name="add_new_subscription">Adicionar nova assinatura</string>
+</resources>

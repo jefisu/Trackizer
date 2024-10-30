@@ -8,4 +8,6 @@ data class Settings(
     val isCloudSyncEnabled: Boolean = true,
     val languageTag: String = "en-US",
     val currency: Currency = Locale.US.getCurrency(),
-)
+) {
+    fun toLanguageLocale() = Locale(languageTag)
+}

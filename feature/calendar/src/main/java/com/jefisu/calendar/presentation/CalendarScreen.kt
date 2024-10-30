@@ -52,6 +52,7 @@ import com.jefisu.designsystem.components.TrackizerTopBar
 import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.LocalAppConfig
 import com.jefisu.designsystem.util.formatCurrency
 import com.jefisu.domain.model.Subscription
 import com.jefisu.domain.model.util.filterUpcomingBills
@@ -73,6 +74,7 @@ internal fun CalendarScreen(
         )
     }
     val total = upcomingBills.sumOf { it.price.toDouble() }
+    val appConfig = LocalAppConfig.current
 
     TrackizerScaffold(
         topBar = {
@@ -99,7 +101,9 @@ internal fun CalendarScreen(
             )
             Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
             CalendarRow(
-                leftValue = state.selectedMonth.formatMonthName(),
+                leftValue = state.selectedMonth.formatMonthName(
+                    appConfig.settings.toLanguageLocale(),
+                ),
                 rightValue = formatCurrency(total),
                 style = TrackizerTheme.typography.headline4,
                 isAnimatedCurrency = true,

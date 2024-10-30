@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General  -->
+    <string name="login">Login</string>
+    <string name="password">Senha</string>
+
+    <!-- Sign In Screen  -->
+    <string name="sign_in">Entrar</string>
+    <string name="if_you_don_t_have_an_account_yet">Ainda não tem uma conta?</string>
+    <string name="sign_up">Cadastrar</string>
+    <string name="remember_me">Lembre-me</string>
+    <string name="forgot_password">Esqueceu a senha?</string>
+
+    <!-- Custom Auth Provider Screen -->
+    <string name="sign_up_with">Entrar com %s</string>
+    <string name="or">Ou</string>
+    <string name="sign_up_with_email">Cadastrar com E-mail</string>
+    <string name="by_registering_you_agree">Ao se registrar, você concorda com nossos Termos de Uso. Saiba como coletamos, usamos e compartilhamos seus dados.</string>
+
+    <!-- Sign Up Screen -->
+    <string name="e_mail_address">E-mail</string>
+    <string name="use_8_or_more_characters"><![CDATA[Use 8 ou mais caracteres com mesclando letras, números e caracteres especiais.]]></string>
+    <string name="get_started_it_s_free">Comece agora, é gratuito!</string>
+    <string name="do_you_have_already_an_account">Já tem uma conta?</string>
+
+    <!-- Forgot Password -->
+    <string name="send">Enviar</string>
+    <string name="forgot_your_password">Esqueceu sua senha?</string>
+    <string name="reset_instructions_will_be_send_to_your_email">Instruções de redefinição serão enviadas para seu e-mail</string>
+    <string name="sent_password_reset_email">Instruções para redefinir sua senha foram enviadas para o endereço de e-mail especificado. Por favor, verifique sua caixa de entrada.</string>
+
+    <!-- Validation -->
+    <string name="email_cant_be_blank_error">O e-mail não pode estar em branco.</string>
+    <string name="password_error">A senha deve conter pelo menos 8 caracteres com uma letra, um número e um caractere especial.</string>
+    <string name="invalid_email_format_error">Desculpe, o e-mail inserido é inválido. Por favor, certifique-se de que segue o formato nome@exemplo.com.</string>
+    <string name="invalid_email_or_password_error">E-mail ou senha inválidos.</string>
+
+    <!-- Error -->
+    <string name="user_already_exists_error">Desculpe, este e-mail já está em uso. Por favor, escolha um e-mail diferente.</string>
+    <string name="user_not_found_error">Desculpe, não conseguimos encontrar o usuário especificado. Por favor, verifique o endereço de e-mail e tente novamente.</string>
+    <string name="failed_to_login_with_account_error">Houve um problema ao entrar com %s. Por favor, tente novamente mais tarde ou use um método de login diferente.</string>
+    <string name="server_error">Ocorreu um erro no servidor. Por favor, tente novamente mais tarde.</string>
+    <string name="internet_unavailable_error">A solicitação falhou devido a um problema de rede. Por favor, verifique sua conexão com a internet e tente novamente.</string>
+</resources>

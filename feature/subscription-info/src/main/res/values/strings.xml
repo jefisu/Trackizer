@@ -8,7 +8,7 @@
     <string name="reminder">Reminder</string>
     <string name="forever">Forever</string>
     <string name="never">Never</string>
-    <string name="no_data">No %s</string>
+    <string name="no_data">Not defined</string>
     <string name="select_a">Select a %s</string>
     <string name="reminder_for_the_upcoming_months">Reminder for the upcoming months?</string>
 

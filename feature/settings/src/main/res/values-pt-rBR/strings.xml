@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_title">Configurações</string>
+    <string name="edit_profile">Editar perfil</string>
+
+    <!-- Settings Options   -->
+    <string name="general">Geral</string>
+    <string name="my_subscriptions">Minhas assinaturas</string>
+    <string name="appearance">Aparência</string>
+
+    <!-- Settings Options Items -->
+    <string name="cloud_sync">Sincronização em nuvem</string>
+    <string name="default_currency">Moeda padrão</string>
+    <string name="language">Idioma</string>
+
+    <!-- Button text   -->
+    <string name="sign_out">Sair</string>
+
+    <!--  Picker options title   -->
+    <string name="select_a">Selecione um %s</string>
+    <string name="currency">moeda</string>
+</resources>

@@ -12,6 +12,7 @@
     <string name="data_not_available">There are no %s available to select. Please add one and try again.</string>
 
     <!-- Arguments -->
+    <string name="user">User</string>
     <string name="subscription">Subscription</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="subscription_price">Subscription price</string>
@@ -20,7 +21,7 @@
     <string name="card">Card</string>
     <string name="credit_card">Credit Card</string>
     <string name="credit_cards">Credit Cards</string>
-    <string name="category_name">Category Name</string>
+    <string name="category_name">Category name</string>
     <string name="budget">Budget</string>
     <string name="price">Price</string>
     <string name="select">Select</string>

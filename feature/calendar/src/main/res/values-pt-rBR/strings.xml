@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subscriptions_for_today">Assinaturas para hoje</string>
+    <string name="calendar_title">Calendário</string>
+    <string name="subs_schedule">Assinaturas\nAgendadas</string>
+    <string name="in_upcoming_bills">vencendo hoje</string>
+    <string name="apply">Aplicar</string>
+    <string name="select_a_month">Selecionar mês</string>
+</resources>

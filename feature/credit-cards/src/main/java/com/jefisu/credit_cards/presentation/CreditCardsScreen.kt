@@ -151,7 +151,7 @@ internal fun CreditCardsScreen(
                     EmptyData(
                         text = stringResource(
                             id = R.string.you_haven_t_added_any_data_yet,
-                            stringResource(UiRes.string.subscriptions).lowercase(),
+                            stringResource(UiRes.string.subscription).lowercase(),
                         ),
                         showImage = false,
                     )

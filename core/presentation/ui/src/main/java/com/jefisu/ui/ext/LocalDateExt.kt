@@ -3,9 +3,11 @@ package com.jefisu.ui.ext
 import android.annotation.SuppressLint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 
-fun LocalDate.formatMonthName(): String = this.month.name
-    .lowercase()
+fun LocalDate.formatMonthName(locale: Locale = Locale.getDefault()): String = this.month
+    .getDisplayName(TextStyle.FULL, locale)
     .replaceFirstChar { it.titlecase() }
 
 fun LocalDate.toDateFormat(pattern: String = "MM.dd.yyyy"): String {

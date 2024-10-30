@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Flash message titles -->
+    <string name="success_flash_message">Muito bem!</string>
+    <string name="error_flash_message">Ops!</string>
+    <string name="warning_flash_message">Aviso! </string>
+    <string name="help_flash_message">Olá!</string>
+
+    <!-- Password field name -->
+    <string name="password">Senha</string>
+</resources>
