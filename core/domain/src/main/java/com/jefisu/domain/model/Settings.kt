@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Settings(
     val isCloudSyncEnabled: Boolean = true,
-    val languageTag: String = "en-US",
-    val currency: Currency = Locale.US.getCurrency(),
+    val languageTag: String = Locale.getDefault().toLanguageTag(),
+    val currency: Currency = Locale.forLanguageTag(languageTag).getCurrency(),
 ) {
     fun toLanguageLocale() = Locale(languageTag)
 }

@@ -12,12 +12,14 @@ data class Currency(val code: String, val symbol: String, val country: String, v
     fun toLocale() = Locale("", country)
 }
 
-fun Locale.getCurrency(): Currency {
-    val androidCurrency = AndroidCurrency.getInstance(this)
+fun Locale.getCurrency(locale: Locale = Locale.US): Currency {
+    val androidCurrency = runCatching { AndroidCurrency.getInstance(this) }
+        .getOrNull()
+        ?: AndroidCurrency.getInstance(locale)
     return Currency(
         code = androidCurrency.currencyCode,
         symbol = androidCurrency.symbol.removePrefix(country),
-        country = country,
+        country = country.ifEmpty { locale.country },
         name = androidCurrency.displayName,
     )
 }
