@@ -17,19 +17,13 @@ class UserRepositoryImpl @Inject constructor(private val realm: Realm) : UserRep
     private val auth = Firebase.auth
 
     override val user: Flow<User?> = auth.userFlow().map { firebaseUser ->
-        firebaseUser?.let { user ->
-            val id = user.uid
-            val name = user.displayName.let {
-                val alternativeName = "User ${id.filter { it.isDigit() }.take(8)}"
-                if (it.isNullOrEmpty()) alternativeName else it
-            }
-            User(
-                id = id,
-                name = name,
-                email = user.email ?: "No email",
-                pictureUrl = user.photoUrl?.toString(),
-            )
-        } ?: return@map null
+        if (firebaseUser == null) return@map null
+        User(
+            id = firebaseUser.uid,
+            name = firebaseUser.displayName ?: "No name",
+            email = firebaseUser.email ?: "No email",
+            pictureUrl = firebaseUser.photoUrl?.toString(),
+        )
     }
 
     override fun isAuthenticated(): Boolean = Firebase.auth.currentUser != null

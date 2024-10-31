@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jefisu.designsystem.AccentPrimary100
@@ -145,7 +146,9 @@ internal fun SubscriptionDashboard(
                 type = ButtonType.Secondary,
                 onClick = onSeeBudgetClick,
                 contentPadding = PaddingValues(8.dp),
-                modifier = Modifier.height(TrackizerTheme.size.buttonHeightSmall),
+                modifier = Modifier
+                    .height(TrackizerTheme.size.buttonHeightSmall)
+                    .width(130.dp),
             )
         }
 
@@ -369,6 +372,8 @@ private fun SubscriptionInfoItem(
             text = title,
             style = TrackizerTheme.typography.headline1,
             color = Gray40,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
         Spacer(modifier = Modifier.height(2.dp))
         AnimatedText(

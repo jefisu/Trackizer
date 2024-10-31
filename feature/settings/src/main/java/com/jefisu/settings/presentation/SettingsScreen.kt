@@ -16,8 +16,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,6 +40,7 @@ import com.jefisu.settings.presentation.components.SettingOptionItem
 import com.jefisu.settings.presentation.components.SettingOptions
 import com.jefisu.settings.presentation.components.UserProfile
 import com.jefisu.settings.presentation.util.SettingsConstants
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.util.SampleData
 import java.util.Locale
 
@@ -48,6 +51,13 @@ internal fun SettingsScreen(
     settings: Settings = LocalAppConfig.current.settings,
 ) {
     val navigationBarPadding = WindowInsets.safeDrawing.asPaddingValues().calculateBottomPadding()
+    val context = LocalContext.current
+    val userMapped = remember(state.user, settings) {
+        val resource = context.getString(UiRes.string.user)
+        state.user?.copy(
+            name = "$resource ${state.user.id.filter { it.isDigit() }.take(8)}",
+        )
+    }
 
     TrackizerOptionPicker(
         title = stringResource(
@@ -68,7 +78,7 @@ internal fun SettingsScreen(
     TrackizerOptionPicker(
         title = stringResource(
             id = R.string.select_a,
-            stringResource(R.string.language)
+            stringResource(R.string.language),
         ),
         visible = state.isLanguagePickerVisible,
         items = SettingsConstants.localesAvailable,
@@ -84,7 +94,7 @@ internal fun SettingsScreen(
         )
     }
 
-    state.user?.let { user ->
+    userMapped?.let { user ->
         TrackizerScaffold(
             topBar = {
                 TrackizerTopBar(
