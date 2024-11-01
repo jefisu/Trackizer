@@ -8,7 +8,7 @@ import com.jefisu.calendar.presentation.CalendarAction
 import com.jefisu.calendar.presentation.CalendarState
 import com.jefisu.designsystem.components.TrackizerOptionPicker
 import com.jefisu.designsystem.components.TrackizerPickerDefaults
-import com.jefisu.designsystem.util.LocalAppConfig
+import com.jefisu.designsystem.util.LocalSettings
 import com.jefisu.ui.ext.formatMonthName
 import java.time.LocalDate
 import java.time.Month
@@ -19,7 +19,7 @@ internal fun MonthPickerBottomSheet(
     onAction: (CalendarAction) -> Unit,
 ) {
     val months = remember { Month.entries }
-    val appConfig = LocalAppConfig.current
+    val settings = LocalSettings.current
 
     TrackizerOptionPicker(
         title = stringResource(R.string.select_a_month),
@@ -31,7 +31,7 @@ internal fun MonthPickerBottomSheet(
     ) { month ->
         val date = LocalDate.now().withMonth(month.value)
         TrackizerPickerDefaults.PickerItem(
-            text = date.formatMonthName(appConfig.settings.toLanguageLocale()),
+            text = date.formatMonthName(settings.toLanguageLocale()),
         )
     }
 }

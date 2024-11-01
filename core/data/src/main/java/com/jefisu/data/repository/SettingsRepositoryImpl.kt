@@ -21,7 +21,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.encodeToString
@@ -38,21 +39,20 @@ class SettingsRepositoryImpl @Inject constructor(
     private val _settingsKey = stringPreferencesKey("settings")
 
     override val settings: StateFlow<Settings> = dataStore.data
+        .onStart { setupDefaultSettings() }
         .transform {
             val settings = Json.decodeFromString<Settings>(it[_settingsKey] ?: return@transform)
             emit(settings)
         }
         .stateIn(
             _scope,
-            SharingStarted.Eagerly,
+            SharingStarted.Lazily,
             Settings(),
         )
 
-    override suspend fun setDefaultSettings() {
-        if (dataStore.data.first()[_settingsKey] == null) {
-            dataStore.edit {
-                it[_settingsKey] = Json.encodeToString(settings.value)
-            }
+    override suspend fun setupDefaultSettings() {
+        if (dataStore.data.firstOrNull()?.get(_settingsKey) == null) {
+            updateSettings(settings.value)
         }
     }
 

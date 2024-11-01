@@ -31,10 +31,12 @@ class SettingsViewModel @Inject constructor(
     private val _state = MutableStateFlow(SettingsState())
     val state = combine(
         _state,
+        settingsRepository.settings,
         userRepository.user,
-    ) { state, user ->
+    ) { state, settings, user ->
         state.copy(
             user = user,
+            settings = settings,
         )
     }.stateIn(
         viewModelScope,

@@ -6,39 +6,22 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.FlashMessageDialog
-import com.jefisu.designsystem.util.AppConfig
-import com.jefisu.designsystem.util.LocalAppConfig
-import com.jefisu.domain.repository.DataSyncRepository
-import com.jefisu.domain.repository.SettingsRepository
-import com.jefisu.domain.repository.UserRepository
+import com.jefisu.designsystem.util.LocalSettings
 import com.jefisu.trackizer.navigation.AppNavHost
-import com.jefisu.ui.MessageController
 import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var userRepository: UserRepository
-
-    @Inject
-    lateinit var settingsRepository: SettingsRepository
-
-    @Inject
-    lateinit var dataSyncRepository: DataSyncRepository
 
     @Inject
     lateinit var navigator: Navigator
@@ -49,19 +32,18 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setSystemBarColor()
         setPortraitOrientationOnly()
-        setupDefaultSettings()
-        setObserveDataSync()
         setContent {
-            val message by MessageController.message.collectAsStateWithLifecycle()
+            val viewModel = hiltViewModel<MainViewModel>()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
             TrackizerTheme {
                 CompositionLocalProvider(
-                    LocalAppConfig provides appConfig(),
+                    LocalSettings provides state.settings,
                 ) {
                     FlashMessageDialog(
-                        message = message,
-                        onDismiss = MessageController::closeMessage,
+                        message = state.message,
+                        onDismiss = viewModel::closeMessage,
                     )
-
                     AppNavHost(navigator = navigator)
                 }
             }
@@ -76,33 +58,5 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
     private fun setPortraitOrientationOnly() {
         this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    }
-
-    private fun setupDefaultSettings() {
-        lifecycleScope.launch {
-            settingsRepository.setDefaultSettings()
-        }
-    }
-
-    @Composable
-    private fun appConfig(): AppConfig {
-        val appConfig by combine(
-            settingsRepository.settings,
-            userRepository.user,
-        ) { settings, user ->
-            AppConfig(
-                settings = settings,
-                user = user,
-            )
-        }.collectAsStateWithLifecycle(
-            initialValue = AppConfig(),
-        )
-        return appConfig
-    }
-
-    private fun setObserveDataSync() {
-        lifecycleScope.launch {
-            dataSyncRepository.observeDataStoreChanges()
-        }
     }
 }

@@ -10,7 +10,7 @@ fun formatCurrency(
     value: Double,
     isCompactFormat: Boolean = true,
 ): String {
-    val settings = LocalAppConfig.current.settings
+    val settings = LocalSettings.current
     return remember(value, settings.currency) {
         val locale = settings.currency.toLocale()
         val numberFormat = NumberFormat.getCurrencyInstance(locale)

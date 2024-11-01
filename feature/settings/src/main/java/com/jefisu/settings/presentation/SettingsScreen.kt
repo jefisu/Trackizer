@@ -33,8 +33,6 @@ import com.jefisu.designsystem.components.TrackizerSwitch
 import com.jefisu.designsystem.components.TrackizerTopBar
 import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
-import com.jefisu.designsystem.util.LocalAppConfig
-import com.jefisu.domain.model.Settings
 import com.jefisu.settings.R
 import com.jefisu.settings.presentation.components.SettingOptionItem
 import com.jefisu.settings.presentation.components.SettingOptions
@@ -48,10 +46,10 @@ import java.util.Locale
 internal fun SettingsScreen(
     state: SettingsState,
     onAction: (SettingsAction) -> Unit,
-    settings: Settings = LocalAppConfig.current.settings,
 ) {
     val navigationBarPadding = WindowInsets.safeDrawing.asPaddingValues().calculateBottomPadding()
     val context = LocalContext.current
+    val settings = state.settings
     val userMapped = remember(state.user, settings) {
         val resource = context.getString(UiRes.string.user)
         state.user?.copy(
