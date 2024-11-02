@@ -5,7 +5,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.util.fastFirstOrNull
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -18,6 +20,7 @@ val LocalNavigator = compositionLocalOf<Navigator> { error("No navigator provide
 fun NavigationRoot(
     navigator: Navigator,
     destinations: List<Destination>,
+    animation: NavigationAnimation = remember { NavigationAnimation() },
     builder: NavGraphBuilder.() -> Unit,
 ) {
     val navController = rememberNavController()
@@ -35,8 +38,7 @@ fun NavigationRoot(
 
     LaunchedEffect(navBackStackEntry) {
         val destination = destinations.fastFirstOrNull {
-            val destinationName = it::class.simpleName.orEmpty()
-            navBackStackEntry?.destination?.route?.contains(destinationName) ?: false
+            navBackStackEntry?.isCurrentDestination(it) == true
         }
         destination?.also(navigator::updateCurrentDestination)
     }
@@ -48,6 +50,23 @@ fun NavigationRoot(
             navController = navController,
             startDestination = navigator.startDestination,
             builder = builder,
+            enterTransition = {
+                animation.enterTransition(this)
+            },
+            exitTransition = {
+                animation.exitTransition(this)
+            },
+            popEnterTransition = {
+                animation.enterTransition(this, isPopAnimation = true)
+            },
+            popExitTransition = {
+                animation.exitTransition(this, isPopAnimation = true)
+            },
         )
     }
+}
+
+fun NavBackStackEntry.isCurrentDestination(destination: Destination): Boolean {
+    val destinationName = destination::class.simpleName.orEmpty()
+    return this.destination.route?.contains(destinationName) == true
 }

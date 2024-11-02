@@ -107,10 +107,12 @@ class SettingsViewModel @Inject constructor(
 
     private fun signOut() {
         viewModelScope.launch {
-            userRepository.signOut()
-            navigator.navigate(Destination.AuthGraph) {
-                popUpTo(Destination.AuthenticatedGraph) {
-                    inclusive = true
+            launch { userRepository.signOut() }
+            launch {
+                navigator.navigate(Destination.AuthGraph) {
+                    popUpTo(Destination.AuthenticatedGraph) {
+                        inclusive = true
+                    }
                 }
             }
         }
