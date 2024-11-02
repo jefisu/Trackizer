@@ -28,6 +28,11 @@
     <string name="description">Descrição</string>
     <string name="save">Salvar</string>
 
+    <!--  Category Type  -->
+    <string name="transport">Transporte</string>
+    <string name="entertainment">Lazer</string>
+    <string name="security">Segurança</string>
+
     <!-- Delete Alert  -->
     <string name="delete_alert_title">Excluir %s</string>
     <string name="delete_alert_description">Tem certeza que deseja excluir este %s?</string>

@@ -26,6 +26,7 @@ import com.jefisu.designsystem.Gray30
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.Primary10
 import com.jefisu.designsystem.TrackizerTheme
+import com.jefisu.designsystem.components.AutoResizedText
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.drawBlur
@@ -57,13 +58,14 @@ internal fun BudgetGauge(
                 style = TrackizerTheme.typography.headline5,
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
+            AutoResizedText(
                 text = stringResource(
                     R.string.of_budget,
                     formatCurrency(budget.toDouble()),
                 ),
-                style = TrackizerTheme.typography.bodySmall,
-                color = Gray30,
+                style = TrackizerTheme.typography.bodySmall.copy(
+                    color = Gray30,
+                ),
             )
         }
     }

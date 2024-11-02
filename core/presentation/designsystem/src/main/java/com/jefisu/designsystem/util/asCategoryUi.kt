@@ -18,3 +18,9 @@ fun CategoryType.asColor(): Color = when (this) {
     CategoryType.Entertainment -> AccentPrimary50
     CategoryType.Security -> Primary10
 }
+
+fun CategoryType.asNameResource(): Int = when (this) {
+    CategoryType.Transport -> R.string.transport
+    CategoryType.Entertainment -> R.string.entertainment
+    CategoryType.Security -> R.string.security
+}

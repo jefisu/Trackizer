@@ -40,6 +40,7 @@ import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.asIconResource
+import com.jefisu.designsystem.util.asNameResource
 import com.jefisu.domain.model.CategoryType
 import com.jefisu.spending_budgets.R
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsAction
@@ -87,7 +88,7 @@ fun AddCategoryBottomSheet(
         CurrencyTextField(
             text = state.categoryBudget,
             onTextChange = { onAction(SpendingBudgetsAction.CategoryBudgetChanged(it)) },
-            label = "Budget",
+            label = stringResource(UiRes.string.budget),
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(Modifier.height(TrackizerTheme.spacing.large))
@@ -132,7 +133,7 @@ fun CategoryTypePicker(
             )
             Spacer(Modifier.width(TrackizerTheme.spacing.small))
             Text(
-                text = it.name,
+                text = stringResource(it.asNameResource()),
                 style = TrackizerTheme.typography.headline4,
                 color = Color.White,
             )
@@ -164,7 +165,7 @@ fun CategoryTypePicker(
             ),
         ) {
             Text(
-                text = state.categoryType.name,
+                text = stringResource(state.categoryType.asNameResource()),
                 style = TrackizerTheme.typography.headline4,
                 color = Color.White,
                 modifier = Modifier.weight(1f),
