@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.util.fastFirstOrNull
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -67,6 +68,5 @@ fun NavigationRoot(
 }
 
 fun NavBackStackEntry.isCurrentDestination(destination: Destination): Boolean {
-    val destinationName = destination::class.simpleName.orEmpty()
-    return this.destination.route?.contains(destinationName) == true
+    return this.destination.hasRoute(destination::class)
 }
