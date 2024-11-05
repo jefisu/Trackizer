@@ -1,4 +1,5 @@
 import com.jefisu.trackizer.build_logic.convention.implementation
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.trackizer.android.application)
@@ -27,8 +28,18 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.create(this.name) {
+                keyAlias = getSigningConfigProperty("keyAlias")
+                keyPassword = getSigningConfigProperty("keyPassword")
+                storeFile = file(getSigningConfigProperty("storeFile"))
+                storePassword = getSigningConfigProperty("storePassword")
+                enableV1Signing = true
+                enableV2Signing = true
+                enableV3Signing = true
+                enableV4Signing = true
+            }
         }
     }
 }
@@ -60,4 +71,12 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.navigation.compose)
+}
+
+fun getSigningConfigProperty(propertyName: String): String {
+    val propertiesFile = rootProject.file("local.properties")
+    val properties = Properties().apply {
+        load(propertiesFile.inputStream())
+    }
+    return properties.getProperty(propertyName)
 }
