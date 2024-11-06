@@ -8,6 +8,7 @@ import coil.ImageLoaderFactory
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -22,7 +23,7 @@ class TrackizerApp :
 
     override fun onCreate() {
         super.onCreate()
-        FirebaseApp.initializeApp(this)
+        initFirebase()
     }
 
     override fun newImageLoader(): ImageLoader = ImageLoader.Builder(this)
@@ -39,9 +40,19 @@ class TrackizerApp :
         }
         .build()
 
-
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
             .build()
+
+    private fun initFirebase() {
+        val options = FirebaseOptions.Builder()
+            .setProjectId(BuildConfig.firebaseProjectId)
+            .setApplicationId(BuildConfig.firebaseAppId)
+            .setApiKey(BuildConfig.firebaseApiKey)
+            .setStorageBucket(BuildConfig.firebaseStorageBucket)
+            .build()
+
+        FirebaseApp.initializeApp(this, options)
+    }
 }

@@ -20,7 +20,6 @@ ksp = "2.0.0-1.0.23"
 ktlint = "12.1.1"
 coreSplashscreen = "1.0.1"
 desugar_jdk_libs = "2.0.4"
-googleGmsServices = "4.4.2"
 firebaseBom = "33.1.2"
 credentials = "1.2.2"
 googleid = "1.1.1"
@@ -32,6 +31,7 @@ creditcardhelper = "v1.0.0"
 coil = "2.7.0"
 workerManager = "2.9.1"
 realm = "2.0.0"
+playServicesLocation = "21.3.0"
 
 [libraries]
 # Compose
@@ -79,6 +79,7 @@ googleid = { module = "com.google.android.libraries.identity.googleid:googleid",
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebookLogin" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 
 # Third-party library
 creditcardhelper = { module = "com.github.SteliosPapamichail:CreditCardHelper", version.ref = "creditcardhelper" }
@@ -105,7 +106,6 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
-google-gms-services = { id = "com.google.gms.google-services", version.ref = "googleGmsServices" }
 secret-gradle = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretGradle" }
 realm = { id = "io.realm.kotlin", version.ref = "realm" }
 
@@ -128,7 +128,8 @@ auth = [
     "googleid",
     "facebook-login",
     "androidx-credentials",
-    "androidx-datastore-preferences"
+    "androidx-datastore-preferences",
+    "play-services-location"
 ]
 hilt = [
     "hilt-android",

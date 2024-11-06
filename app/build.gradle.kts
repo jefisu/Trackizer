@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.trackizer.android.application.compose)
     alias(libs.plugins.trackizer.android.hilt)
     alias(libs.plugins.trackizer.android.firebase)
+    alias(libs.plugins.secret.gradle)
 }
 
 android {
@@ -20,6 +21,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
