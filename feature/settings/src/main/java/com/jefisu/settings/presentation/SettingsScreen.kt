@@ -52,9 +52,14 @@ internal fun SettingsScreen(
     val settings = state.settings
     val userMapped = remember(state.user, settings) {
         val resource = context.getString(UiRes.string.user)
-        state.user?.copy(
-            name = "$resource ${state.user.id.filter { it.isDigit() }.take(8)}",
-        )
+        state.user?.let {
+            if (it.name.isBlank()) {
+                return@let it.copy(
+                    name = "$resource ${it.id.filter { it.isDigit() }.take(8)}",
+                )
+            }
+            it
+        }
     }
 
     TrackizerOptionPicker(
