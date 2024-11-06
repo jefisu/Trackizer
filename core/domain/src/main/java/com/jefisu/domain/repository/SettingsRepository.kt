@@ -1,5 +1,6 @@
 package com.jefisu.domain.repository
 
+import com.jefisu.domain.model.Currency
 import com.jefisu.domain.model.Settings
 import kotlinx.coroutines.flow.StateFlow
 
@@ -8,5 +9,5 @@ interface SettingsRepository {
     suspend fun setupDefaultSettings()
     suspend fun updateCloudSyncStatus()
     suspend fun updateLanguage(languageTag: String)
-    suspend fun updateCurrency(countryCode: String)
+    suspend fun updateCurrency(currency: Currency)
 }

@@ -2,6 +2,7 @@ package com.jefisu.settings.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jefisu.domain.model.Currency
 import com.jefisu.domain.repository.SettingsRepository
 import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.DataMessage
@@ -58,7 +59,8 @@ class SettingsViewModel @Inject constructor(
             is SettingsAction.SignOut -> signOut()
             is SettingsAction.LanguageChanged -> updateLanguage(action.locale)
             SettingsAction.ToogleLanguagePicker -> toggleLanguagePicker()
-            is SettingsAction.CurrencyChanged -> updateCurrency(action.currencyCode)
+            is SettingsAction.CurrencyChanged -> updateCurrency(action.currency)
+
             SettingsAction.ToogleCurrencyPicker -> toggleCurrencyPicker()
 
             is SettingsAction.Navigate -> {
@@ -99,9 +101,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun updateCurrency(countryCode: String) {
+    private fun updateCurrency(currency: Currency) {
         viewModelScope.launch {
-            settingsRepository.updateCurrency(countryCode)
+            settingsRepository.updateCurrency(currency)
         }
     }
 

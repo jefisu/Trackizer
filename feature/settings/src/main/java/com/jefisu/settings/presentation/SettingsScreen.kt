@@ -70,7 +70,7 @@ internal fun SettingsScreen(
         visible = state.isCurrencyPickerVisible,
         items = SettingsConstants.currencys,
         onDismiss = { onAction(SettingsAction.ToogleCurrencyPicker) },
-        onSelectClick = { onAction(SettingsAction.CurrencyChanged(it.country)) },
+        onSelectClick = { onAction(SettingsAction.CurrencyChanged(it)) },
         startIndex = SettingsConstants.currencys.indexOf(settings.currency),
     ) { currency ->
         TrackizerPickerDefaults.PickerItem(

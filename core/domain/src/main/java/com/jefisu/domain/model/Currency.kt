@@ -5,11 +5,17 @@ import java.util.Locale
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Currency(val code: String, val symbol: String, val country: String, val name: String) {
+data class Currency(
+    val code: String,
+    val symbol: String,
+    val country: String,
+    val name: String,
+    private val languageTag: String,
+) {
     fun displayCodeWithSymbol() = "$code ($symbol)"
     fun displayNameWithSymbol() = "$name ($symbol)"
 
-    fun toLocale() = Locale("", country)
+    fun toLocale() = Locale(languageTag, country)
 }
 
 fun Locale.getCurrency(locale: Locale = Locale.US): Currency {
@@ -21,5 +27,6 @@ fun Locale.getCurrency(locale: Locale = Locale.US): Currency {
         symbol = androidCurrency.symbol.removePrefix(country),
         country = country.ifEmpty { locale.country },
         name = androidCurrency.displayName,
+        languageTag = language.ifEmpty { locale.language },
     )
 }

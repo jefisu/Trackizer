@@ -11,10 +11,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.jefisu.domain.DispatcherProvider
+import com.jefisu.domain.model.Currency
 import com.jefisu.domain.model.Settings
-import com.jefisu.domain.model.getCurrency
 import com.jefisu.domain.repository.SettingsRepository
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -62,10 +61,9 @@ class SettingsRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun updateCurrency(countryCode: String) {
-        val locale = Locale("", countryCode)
+    override suspend fun updateCurrency(currency: Currency) {
         updateSettings(
-            settings.value.copy(currency = locale.getCurrency()),
+            settings.value.copy(currency = currency),
         )
     }
 
