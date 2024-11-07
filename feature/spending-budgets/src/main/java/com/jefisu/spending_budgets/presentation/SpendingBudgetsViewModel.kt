@@ -148,7 +148,6 @@ class SpendingBudgetsViewModel @Inject constructor(
         .let { parts ->
             val decimalPart = parts[1].run {
                 val zero = '0'
-                if (any { it == zero }) return@run ""
                 if (length == 1) return@run plus(zero)
                 this
             }
