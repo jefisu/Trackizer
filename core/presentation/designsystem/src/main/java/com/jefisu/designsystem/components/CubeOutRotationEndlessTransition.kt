@@ -22,8 +22,8 @@ import kotlin.math.absoluteValue
 @Composable
 fun <T> CubeOutRotationEndlessTransition(
     modifier: Modifier = Modifier,
+    onItemVisibleChanged: ((T) -> Unit)? = null,
     items: List<T>,
-    onItemVisibleChanged: (T) -> Unit,
     content: @Composable (T) -> Unit,
 ) {
     val pagerState = rememberEndlessPagerState()
@@ -33,12 +33,12 @@ fun <T> CubeOutRotationEndlessTransition(
 
     LaunchedEffect(Unit) {
         snapshotFlow { pagerState.currentPage }.collect { index ->
-            onItemVisibleChanged(items.getEndlessItem(index))
+            onItemVisibleChanged?.invoke(items.getEndlessItem(index))
         }
         snapshotFlow { items.firstOrNull() }.collect { item ->
             val selectedItem = items.getEndlessItem(pagerState.currentPage)
             if (item != selectedItem) {
-                onItemVisibleChanged(selectedItem)
+                onItemVisibleChanged?.invoke(selectedItem)
             }
         }
     }
@@ -48,13 +48,14 @@ fun <T> CubeOutRotationEndlessTransition(
         state = pagerState,
         userScrollEnabled = enabledScroll,
     ) { pageIndex ->
+        val item = items.getEndlessItem(pageIndex)
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .cubeOutScalingTransition(pageIndex, pagerState)
                 .fillMaxWidth(),
         ) {
-            content(items.getEndlessItem(pageIndex))
+            content(item)
         }
     }
 }

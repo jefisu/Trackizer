@@ -2,7 +2,7 @@
 
 package com.jefisu.credit_cards.presentation
 
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,11 +20,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -36,7 +34,6 @@ import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.presentation.components.AddCreditCardBottomSheet
 import com.jefisu.credit_cards.presentation.components.CreditCard
 import com.jefisu.designsystem.Gray70
-import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.CubeOutRotationEndlessTransition
@@ -52,18 +49,16 @@ import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.domain.model.SubscriptionService
-import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.util.SampleData
+import com.jefisu.designsystem.R as DesignSystemRes
+import com.jefisu.ui.R as UiRes
 
 @Composable
 internal fun CreditCardsScreen(
     state: CreditCardState,
     onAction: (CreditCardAction) -> Unit,
 ) {
-    val isEmptyCards = state.creditCards.keys.isEmpty()
-    val isEmptySubscriptions = with(state) { creditCards[selectedCard]?.isEmpty() == true }
-
     TrackizerAlertBottomSheet(
         isVisible = state.showDeleteAlert,
         title = stringResource(
@@ -118,57 +113,58 @@ internal fun CreditCardsScreen(
             }
         },
     ) { innerPadding ->
-        if (isEmptyCards) {
-            EmptyData(
-                text = stringResource(
-                    id = R.string.you_haven_t_added_any_data_yet,
-                    stringResource(UiRes.string.credit_cards).lowercase(),
-                ),
-            )
-        } else {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-            ) {
-                CubeOutRotationEndlessTransition(
-                    items = state.creditCards.keys.toList(),
-                    onItemVisibleChanged = { onAction(CreditCardAction.SelectCreditCard(it)) },
-                    content = {
-                        CreditCard(
-                            card = it,
-                            onClick = {
-                                onAction(CreditCardAction.ToogleAddCreditCardBottomSheet(it))
-                            },
-                            onLongClick = {
-                                onAction(CreditCardAction.ToogleDeleteAlert(it))
-                            },
-                        )
-                    },
-                    modifier = Modifier.padding(top = TrackizerTheme.spacing.extraLarge),
+        Crossfade(
+            targetState = state.creditCards,
+        ) { creditCardsMap ->
+            if (creditCardsMap.isEmpty()) {
+                EmptyData(
+                    text = stringResource(
+                        id = R.string.you_haven_t_added_any_data_yet,
+                        stringResource(UiRes.string.credit_cards).lowercase(),
+                    ),
                 )
-                if (isEmptySubscriptions) {
-                    EmptyData(
-                        text = stringResource(
-                            id = R.string.you_haven_t_added_any_data_yet,
-                            stringResource(UiRes.string.subscription).lowercase(),
-                        ),
-                        showImage = false,
-                    )
-                } else {
-                    Spacer(Modifier.height(TrackizerTheme.spacing.extraLarge))
-                    Text(
-                        text = stringResource(UiRes.string.subscriptions),
-                        style = TrackizerTheme.typography.headline3,
-                    )
-                    Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
-                    Box {
-                        state.creditCards.forEach { (card, subscriptionServices) ->
-                            SubscriptionIconsRow(
-                                subscriptionServices = subscriptionServices,
-                                isVisible = card == state.selectedCard,
+            } else {
+                CubeOutRotationEndlessTransition(
+                    items = creditCardsMap.keys.toList(),
+                    onItemVisibleChanged = { onAction(CreditCardAction.SelectCreditCard(it)) },
+                    modifier = Modifier.padding(top = TrackizerTheme.spacing.extraLarge),
+                ) { card ->
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize(),
+                    ) {
+                        CreditCard(
+                            card = card,
+                            onClick = {
+                                onAction(CreditCardAction.ToogleAddCreditCardBottomSheet(card))
+                            },
+                            onLongClick = { onAction(CreditCardAction.ToogleDeleteAlert(card)) },
+                        )
+                        val subscriptionServices = creditCardsMap[card].orEmpty()
+                        if (subscriptionServices.isEmpty()) {
+                            EmptyData(
+                                text = stringResource(
+                                    id = R.string.you_haven_t_added_any_data_yet,
+                                    stringResource(UiRes.string.subscription).lowercase(),
+                                ),
+                                showImage = false,
                             )
+                        } else {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Text(
+                                    text = stringResource(UiRes.string.subscriptions),
+                                    style = TrackizerTheme.typography.headline3,
+                                )
+                                Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
+                                SubscriptionIconsRow(subscriptionServices = subscriptionServices)
+                            }
                         }
                     }
                 }
@@ -177,28 +173,17 @@ internal fun CreditCardsScreen(
     }
 }
 
+
 @Composable
 private fun SubscriptionIconsRow(
     subscriptionServices: List<SubscriptionService>,
-    isVisible: Boolean,
     limitVisible: Int = 4,
 ) {
-    val alphaAnim by animateFloatAsState(
-        targetValue = if (isVisible) 1f else 0f,
-        label = "alpha",
-    )
-
     Row(
         horizontalArrangement = Arrangement.spacedBy(TrackizerTheme.spacing.small),
-        modifier = Modifier
-            .height(TrackizerTheme.size.iconMedium)
-            .graphicsLayer {
-                alpha = alphaAnim
-            },
+        modifier = Modifier.height(TrackizerTheme.size.iconMedium),
     ) {
-        subscriptionServices
-            .take(limitVisible)
-            .forEach { SubscriptionIcon(icon = it) }
+        subscriptionServices.take(limitVisible).forEach { SubscriptionIcon(icon = it) }
 
         if (subscriptionServices.size > limitVisible) {
             TrackizerIcon {
@@ -235,32 +220,30 @@ fun EmptyData(
             text = text,
             style = TrackizerTheme.typography.headline2,
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(horizontal = TrackizerTheme.spacing.extraMedium),
+            modifier = Modifier.padding(horizontal = TrackizerTheme.spacing.extraMedium),
         )
     }
 }
 
-private class CreditCardStatePreviewParamater : PreviewParameterProvider<CreditCardState> {
+private class CreditCardStatePreviewParameter : PreviewParameterProvider<CreditCardState> {
     val state = CreditCardState(
         creditCards = SampleData.cards,
         selectedCard = SampleData.cards.keys.first(),
     )
 
-    override val values: Sequence<CreditCardState> =
-        sequenceOf(
-            CreditCardState(),
-            state,
-            state.copy(
-                selectedCard = state.creditCards.keys.last(),
-            ),
-        )
+    override val values: Sequence<CreditCardState> = sequenceOf(
+        CreditCardState(),
+        state,
+        state.copy(
+            selectedCard = state.creditCards.keys.last(),
+        ),
+    )
 }
 
 @Preview
 @Composable
 private fun CreditCardsScreenPreview(
-    @PreviewParameter(CreditCardStatePreviewParamater::class) state: CreditCardState,
+    @PreviewParameter(CreditCardStatePreviewParameter::class) state: CreditCardState,
 ) {
     TrackizerTheme {
         TrackizerBottomNavigation {
