@@ -6,6 +6,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
@@ -62,7 +63,9 @@ fun TrackizerPasswordTextField(
                 } else {
                     PasswordVisualTransformation()
                 },
-                modifier = Modifier.onFocusChanged { isFocused = it.isFocused },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged { isFocused = it.isFocused },
             )
         }
         Spacer(Modifier.width(TrackizerTheme.spacing.small))
