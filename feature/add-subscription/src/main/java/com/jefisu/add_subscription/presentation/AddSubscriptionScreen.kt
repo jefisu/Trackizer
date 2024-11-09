@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jefisu.add_subscription.R
 import com.jefisu.add_subscription.presentation.components.SubscriptionServicePageItem
+import com.jefisu.add_subscription.presentation.util.SubscriptionDefaults
 import com.jefisu.designsystem.Gray70
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
@@ -124,7 +125,11 @@ internal fun AddSubscriptionScreen(
             ) {
                 TrackizerTextField(
                     text = state.description,
-                    onTextChange = { onAction(AddSubscriptionAction.DescriptionChanged(it)) },
+                    onTextChange = {
+                        if (it.length <= SubscriptionDefaults.DESCRIPTION_LENGTH) {
+                            onAction(AddSubscriptionAction.DescriptionChanged(it))
+                        }
+                    },
                     fieldName = stringResource(UiRes.string.description),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     keyboardOptions = KeyboardOptions(

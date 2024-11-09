@@ -46,6 +46,7 @@ import com.jefisu.spending_budgets.R
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsAction
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsEvent
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsState
+import com.jefisu.spending_budgets.presentation.util.CategoryDefaults
 import com.jefisu.ui.ObserveAsEvents
 import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.UiEventController
@@ -74,7 +75,11 @@ fun AddCategoryBottomSheet(
     ) {
         TrackizerTextField(
             text = state.categoryName,
-            onTextChange = { onAction(SpendingBudgetsAction.CategoryNameChanged(it)) },
+            onTextChange = {
+                if (it.length <= CategoryDefaults.NAME_LENGTH) {
+                    onAction(SpendingBudgetsAction.CategoryNameChanged(it))
+                }
+            },
             fieldName = stringResource(UiRes.string.category_name),
             modifier = Modifier.fillMaxWidth(),
         )

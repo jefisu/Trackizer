@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.domain.CardConstants
 import com.jefisu.credit_cards.presentation.CreditCardAction
@@ -132,7 +133,10 @@ fun AddCreditCardBottomSheet(
             TrackizerTextField(
                 text = state.cardNumber,
                 onTextChange = {
-                    if (it.length <= CardConstants.CARD_NUMBER_LENGTH) {
+                    validateNumberInput(
+                        input = it,
+                        maxLength = CardConstants.CARD_NUMBER_LENGTH,
+                    ) {
                         onAction(CreditCardAction.CardNumberChanged(it))
                     }
                 },
@@ -167,7 +171,10 @@ fun AddCreditCardBottomSheet(
             TrackizerTextField(
                 text = state.expirationDate,
                 onTextChange = {
-                    if (it.length <= CardConstants.EXPIRATION_DATE_LENGTH) {
+                    validateNumberInput(
+                        input = it,
+                        maxLength = CardConstants.EXPIRATION_DATE_LENGTH,
+                    ) {
                         onAction(CreditCardAction.ExpirationDateChanged(it))
                     }
                 },
@@ -182,7 +189,10 @@ fun AddCreditCardBottomSheet(
             TrackizerTextField(
                 text = state.cvv,
                 onTextChange = {
-                    if (it.length <= CardConstants.CVV_LENGTH) {
+                    validateNumberInput(
+                        input = it,
+                        maxLength = CardConstants.CVV_LENGTH,
+                    ) {
                         onAction(CreditCardAction.CvvCodeChanged(it))
                     }
                 },
@@ -200,5 +210,17 @@ fun AddCreditCardBottomSheet(
             onClick = { onAction(CreditCardAction.SaveCard) },
             modifier = Modifier.fillMaxWidth(),
         )
+    }
+}
+
+private fun validateNumberInput(
+    input: String,
+    maxLength: Int,
+    block: () -> Unit,
+) {
+    val lengthValid = input.length <= maxLength
+    val onlyNumbersValid = input.isDigitsOnly()
+    if (lengthValid && onlyNumbersValid) {
+        block()
     }
 }
