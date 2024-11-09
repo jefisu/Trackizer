@@ -178,6 +178,7 @@ class CreditCardViewModel @Inject constructor(
                 cardRepository.delete(card).onError { message ->
                     MessageController.sendMessage(message.asMessageText())
                 }
+                _state.update { it.copy(showDeleteAlert = false) }
             }
         }
     }

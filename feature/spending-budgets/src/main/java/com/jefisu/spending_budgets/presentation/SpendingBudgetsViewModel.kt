@@ -137,7 +137,10 @@ class SpendingBudgetsViewModel @Inject constructor(
     private fun deleteCategory() {
         _state.value.category?.let {
             viewModelScope.launch {
-                categoryRepository.delete(it)
+                categoryRepository.delete(it).onError {
+                    MessageController.sendMessage(it.asMessageText())
+                }
+                _state.update { it.copy(showDeleteAlert = false) }
             }
         }
     }
