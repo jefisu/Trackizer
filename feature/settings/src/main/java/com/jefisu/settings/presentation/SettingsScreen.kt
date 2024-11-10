@@ -38,9 +38,9 @@ import com.jefisu.settings.presentation.components.SettingOptionItem
 import com.jefisu.settings.presentation.components.SettingOptions
 import com.jefisu.settings.presentation.components.UserProfile
 import com.jefisu.settings.presentation.util.SettingsConstants
-import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.util.SampleData
 import java.util.Locale
+import com.jefisu.ui.R as UiRes
 
 @Composable
 internal fun SettingsScreen(
@@ -71,7 +71,7 @@ internal fun SettingsScreen(
         items = SettingsConstants.currencys,
         onDismiss = { onAction(SettingsAction.ToogleCurrencyPicker) },
         onSelectClick = { onAction(SettingsAction.CurrencyChanged(it)) },
-        startIndex = SettingsConstants.currencys.indexOf(settings.currency),
+        startIndex = SettingsConstants.currencys.indexOfFirst { it.symbol == settings.currency.symbol },
     ) { currency ->
         TrackizerPickerDefaults.PickerItem(
             text = currency.displayNameWithSymbol(),
@@ -87,7 +87,7 @@ internal fun SettingsScreen(
         items = SettingsConstants.localesAvailable,
         onDismiss = { onAction(SettingsAction.ToogleLanguagePicker) },
         onSelectClick = { onAction(SettingsAction.LanguageChanged(it)) },
-        startIndex = SettingsConstants.localesAvailable.indexOf(Locale.getDefault()),
+        startIndex = SettingsConstants.localesAvailable.indexOfFirst { it.language == settings.languageTag },
     ) { locale ->
         TrackizerPickerDefaults.PickerItem(
             text = locale
