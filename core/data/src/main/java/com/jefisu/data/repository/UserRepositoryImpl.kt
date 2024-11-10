@@ -20,7 +20,7 @@ class UserRepositoryImpl @Inject constructor(private val realm: Realm) : UserRep
         if (firebaseUser == null) return@map null
         User(
             id = firebaseUser.uid,
-            name = firebaseUser.displayName ?: "No name",
+            name = firebaseUser.displayName.orEmpty(),
             email = firebaseUser.email ?: "No email",
             pictureUrl = firebaseUser.photoUrl?.toString(),
         )
