@@ -1,20 +1,18 @@
 package com.jefisu.home.presentation.components
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +24,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,11 +34,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.jefisu.designsystem.Gray50
 import com.jefisu.designsystem.Gray70
@@ -65,65 +66,67 @@ internal fun SubscriptionList(
     val lazyListState = rememberLazyListState()
     val showDivider by remember {
         derivedStateOf {
-            lazyListState.firstVisibleItemIndex > 0 ||
-                lazyListState.isScrollInProgress &&
-                lazyListState.canScrollBackward
+            lazyListState.firstVisibleItemIndex > 0 || lazyListState.firstVisibleItemScrollOffset > 0
         }
     }
     val bottomPadding = 70.dp
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        AnimatedVisibility(
-            visible = subscriptions.isEmpty(),
-            enter = fadeIn() + scaleIn(),
-            exit = fadeOut() + scaleOut(),
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = bottomPadding),
-        ) {
-            Text(
-                text = messageEmptyList,
-                color = Gray50,
-                style = TrackizerTheme.typography.bodyLarge,
+    AnimatedContent(
+        targetState = subscriptions,
+        contentAlignment = Alignment.Center,
+        transitionSpec = {
+            val animationSpec = tween<IntOffset>(durationMillis = 700)
+            fadeIn() + slideInVertically(
+                animationSpec = animationSpec,
+            ) togetherWith fadeOut() + slideOutVertically(
+                animationSpec = animationSpec,
             )
-        }
-
-        AnimatedVisibility(
-            visible = subscriptions.isNotEmpty(),
-            enter = fadeIn() + slideInVertically(animationSpec = tween(700)),
-            exit = fadeOut() + slideOutVertically(animationSpec = tween(700)),
-        ) {
-            Column {
-                AnimatedVisibility(visible = showDivider) {
-                    HorizontalDivider(color = Gray50)
-                }
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(TrackizerTheme.spacing.small),
-                    contentPadding = PaddingValues(
-                        bottom = bottomPadding,
-                        start = TrackizerTheme.spacing.extraMedium,
-                        end = TrackizerTheme.spacing.extraMedium,
-                    ),
-                    state = lazyListState,
-                    modifier = modifier.weight(1f),
-                ) {
-                    items(
-                        items = subscriptions,
-                        key = { it.id },
-                    ) { sub ->
-                        SubscriptionItem(
-                            subscription = sub,
-                            upcomingBill = upcomingBill,
-                            onClick = { onItemClick(sub) },
-                        )
-                    }
-                    item {
-                        Spacer(
-                            modifier = Modifier.windowInsetsPadding(
-                                WindowInsets.safeContent.only(WindowInsetsSides.Bottom),
-                            ),
-                        )
-                    }
+        },
+        modifier = modifier
+            .windowInsetsPadding(WindowInsets.safeContent.only(WindowInsetsSides.Bottom)),
+    ) { subs ->
+        if (subs.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(
+                    text = messageEmptyList,
+                    color = Gray50,
+                    style = TrackizerTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(bottom = bottomPadding),
+                )
+            }
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(TrackizerTheme.spacing.small),
+                contentPadding = PaddingValues(
+                    bottom = bottomPadding,
+                    start = TrackizerTheme.spacing.extraMedium,
+                    end = TrackizerTheme.spacing.extraMedium,
+                ),
+                state = lazyListState,
+                modifier = Modifier
+                    .drawWithContent {
+                        drawContent()
+                        if (showDivider) {
+                            drawLine(
+                                color = Gray50,
+                                start = Offset(0f, DividerDefaults.Thickness.toPx()),
+                                end = Offset(size.width, DividerDefaults.Thickness.toPx()),
+                                strokeWidth = DividerDefaults.Thickness.toPx(),
+                            )
+                        }
+                    },
+            ) {
+                items(
+                    items = subscriptions,
+                    key = { it.id },
+                ) { sub ->
+                    SubscriptionItem(
+                        subscription = sub,
+                        upcomingBill = upcomingBill,
+                        onClick = { onItemClick(sub) },
+                    )
                 }
             }
         }
