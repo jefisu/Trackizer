@@ -237,7 +237,7 @@ private fun CategoryItem(category: Category) {
 @Composable
 private fun CreditCardItem(card: Card) {
     TrackizerPickerDefaults.PickerItem(
-        text = card.number.take(4),
+        text = card.number.takeLast(4),
         leadingIcon = {
             Text(
                 text = card.flag.name,
