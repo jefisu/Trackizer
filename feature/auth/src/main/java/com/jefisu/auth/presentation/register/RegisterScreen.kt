@@ -31,6 +31,7 @@ import com.jefisu.designsystem.components.TrackizerPasswordTextField
 import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.imeOffset
 
 @Composable
 fun RegisterScreenRoot(navigateToLogin: () -> Unit) {
@@ -57,7 +58,8 @@ internal fun RegisterScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(TrackizerTheme.spacing.extraMedium),
+            .padding(TrackizerTheme.spacing.extraMedium)
+            .imeOffset(imeThresholdPercent = 0.3f)
     ) {
         TrackizerTextField(
             text = state.email,

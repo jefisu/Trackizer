@@ -13,7 +13,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -34,6 +33,7 @@ import com.jefisu.designsystem.components.TrackizerPasswordTextField
 import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.imeOffset
 
 @Composable
 fun LoginScreenRoot(
@@ -67,7 +67,8 @@ internal fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(TrackizerTheme.spacing.extraMedium),
+            .padding(TrackizerTheme.spacing.extraMedium)
+            .imeOffset(imeThresholdPercent = 0.25f)
     ) {
         TrackizerTextField(
             text = state.email,

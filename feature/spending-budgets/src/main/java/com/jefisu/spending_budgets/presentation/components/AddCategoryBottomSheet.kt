@@ -41,6 +41,7 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.asIconResource
 import com.jefisu.designsystem.util.asNameResource
+import com.jefisu.designsystem.util.imeOffset
 import com.jefisu.domain.model.CategoryType
 import com.jefisu.spending_budgets.R
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsAction
@@ -72,6 +73,7 @@ fun AddCategoryBottomSheet(
         sheetState = sheetState,
         isVisible = state.showAddCategoryBottomSheet,
         onDismiss = { onAction(SpendingBudgetsAction.ToggleAddCategoryBottomSheet()) },
+        modifier = Modifier.imeOffset(imeThresholdPercent = 0.35f)
     ) {
         TrackizerTextField(
             text = state.categoryName,
