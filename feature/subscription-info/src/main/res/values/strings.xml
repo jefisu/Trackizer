@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subscription_info">Subscription Info</string>
+
+    <!--  Info Row  -->
+    <string name="name">Name</string>
+    <string name="first_payment">First payment</string>
+    <string name="reminder">Reminder</string>
+    <string name="forever">Forever</string>
+    <string name="never">Never</string>
+    <string name="no_data">Not defined</string>
+    <string name="select_a">Select a %s</string>
+    <string name="reminder_for_the_upcoming_months">Reminder for the upcoming months?</string>
+
+    <!--  Alert bottom sheet - Confirm changes -->
+    <string name="confirm_changes">Confirm changes</string>
+    <string name="do_you_want_to_exit_without_save_changes">Do you want to exit without save changes?</string>
+    <string name="discard">Discard</string>
+</resources>

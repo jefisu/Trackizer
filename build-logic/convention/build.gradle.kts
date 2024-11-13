@@ -58,5 +58,13 @@ gradlePlugin {
             id = "trackizer.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
+        register("androidFirebase") {
+            id = "trackizer.android.firebase"
+            implementationClass = "AndroidFirebaseConventionPlugin"
+        }
+        register("androidRealm") {
+            id = "trackizer.android.realm"
+            implementationClass = "AndroidRealmConventionPlugin"
+        }
     }
 }

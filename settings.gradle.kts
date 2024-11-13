@@ -17,9 +17,24 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { setUrl("https://jitpack.io") }
     }
 }
 
 rootProject.name = "Trackizer"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
+include(":core:presentation:designsystem")
+include(":feature:welcome")
+include(":feature:auth")
+include(":core:domain")
+include(":core:data")
+include(":core:di")
+include(":feature:home")
+include(":feature:spending-budgets")
+include(":feature:calendar")
+include(":feature:credit-cards")
+include(":core:presentation:ui")
+include(":feature:add-subscription")
+include(":feature:subscription-info")
+include(":feature:settings")

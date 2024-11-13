@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Trackizer</string>
+
+    <!-- Flash message titles -->
+    <string name="success_flash_message">Well done!</string>
+    <string name="error_flash_message">Oh snap!</string>
+    <string name="warning_flash_message">Warning! </string>
+    <string name="help_flash_message">Hi there!</string>
+
+    <!-- Password field name -->
+    <string name="password">Password</string>
+</resources>

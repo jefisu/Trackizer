@@ -1,4 +1,5 @@
 import com.jefisu.trackizer.build_logic.convention.implementation
+import com.jefisu.trackizer.build_logic.convention.ksp
 import com.jefisu.trackizer.build_logic.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -13,8 +14,8 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                implementation(libs.findLibrary("hilt-android").get())
-                "ksp"(libs.findLibrary("hilt-compiler").get())
+                implementation(libs.findBundle("hilt").get())
+                ksp(libs.findBundle("hilt-ksp").get())
             }
         }
     }

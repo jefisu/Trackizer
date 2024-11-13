@@ -1,9 +1,12 @@
 import com.jefisu.trackizer.build_logic.convention.implementation
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.trackizer.android.application)
     alias(libs.plugins.trackizer.android.application.compose)
     alias(libs.plugins.trackizer.android.hilt)
+    alias(libs.plugins.trackizer.android.firebase)
+    alias(libs.plugins.secret.gradle)
 }
 
 android {
@@ -20,19 +23,65 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+            signingConfig = signingConfigs.create(this.name) {
+                keyAlias = getSigningConfigProperty("keyAlias")
+                keyPassword = getSigningConfigProperty("keyPassword")
+                storeFile = file(getSigningConfigProperty("storeFile"))
+                storePassword = getSigningConfigProperty("storePassword")
+                enableV1Signing = true
+                enableV2Signing = true
+                enableV3Signing = true
+                enableV4Signing = true
+            }
         }
     }
 }
 
 dependencies {
+    // Feature
+    implementation(projects.feature.welcome)
+    implementation(projects.feature.auth)
+    implementation(projects.feature.home)
+    implementation(projects.feature.spendingBudgets)
+    implementation(projects.feature.calendar)
+    implementation(projects.feature.creditCards)
+    implementation(projects.feature.addSubscription)
+    implementation(projects.feature.subscriptionInfo)
+    implementation(projects.feature.settings)
+
+    // Modules
+    implementation(projects.core.data)
+    implementation(projects.core.di)
+    implementation(projects.core.domain)
+    implementation(projects.core.presentation.ui)
+
+    // SplashScreen
+    implementation(libs.androidx.core.splashscreen)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.navigation.compose)
+}
+
+fun getSigningConfigProperty(propertyName: String): String {
+    val propertiesFile = rootProject.file("local.properties")
+    val properties = Properties().apply {
+        load(propertiesFile.inputStream())
+    }
+    return properties.getProperty(propertyName)
 }

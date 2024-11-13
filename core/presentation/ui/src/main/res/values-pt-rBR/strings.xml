@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Messages -->
+    <string name="item_deleted">O %s foi excluído com sucesso.</string>
+    <string name="item_not_deleted">Houve um problema e não foi possível excluir o %s.</string>
+    <string name="item_can_t_be_blank">O %s não pode estar em branco.</string>
+    <string name="data_can_t_be_zero">O %s não pode ser zero.</string>
+    <string name="functionality_unavailable">Funcionalidade indisponível.</string>
+    <string name="item_not_found">O %s não foi encontrado.</string>
+    <string name="item_not_added">O %s não foi adicionado.</string>
+    <string name="unknown_error">Ocorreu um erro desconhecido.</string>
+    <string name="data_not_available">Não há %s disponíveis para seleção. Adicione um e tente novamente.</string>
+
+    <!-- Arguments -->
+    <string name="user">Usuário</string>
+    <string name="subscription">Assinatura</string>
+    <string name="subscriptions">Assinaturas</string>
+    <string name="subscription_price">Preço da assinatura</string>
+    <string name="category">Categoria</string>
+    <string name="category_budget">Orçamento da categoria</string>
+    <string name="card">Cartão</string>
+    <string name="credit_card">Cartão de crédito</string>
+    <string name="credit_cards">Cartões de crédito</string>
+    <string name="category_name">Nome da categoria</string>
+    <string name="budget">Orçamento</string>
+    <string name="price">Preço</string>
+    <string name="select">Selecionar</string>
+    <string name="description">Descrição</string>
+    <string name="save">Salvar</string>
+
+    <!--  Category Type  -->
+    <string name="transport">Transporte</string>
+    <string name="entertainment">Lazer</string>
+    <string name="security">Segurança</string>
+
+    <!-- Delete Alert  -->
+    <string name="delete_alert_title">Excluir %s</string>
+    <string name="delete_alert_description">Tem certeza que deseja excluir este %s?</string>
+    <string name="button_alert_cancel">Cancelar</string>
+    <string name="button_alert_delete">Excluir</string>
+</resources>

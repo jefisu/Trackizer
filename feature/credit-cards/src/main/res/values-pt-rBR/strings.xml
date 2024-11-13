@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_new_card">Adicionar novo cartão</string>
+    <string name="you_haven_t_added_any_data_yet">Você ainda não adicionou nenhuma %s</string>
+
+    <!-- AddCreditCardBottomSheet -->
+    <string name="edit_card">Editar cartão</string>
+    <string name="add_card">Adicionar cartão</string>
+    <string name="card_name">Nome do cartão</string>
+    <string name="card_holder">Titular do cartão</string>
+    <string name="card_number">Número do cartão</string>
+    <string name="expiration_date">Data de vencimento</string>
+    <string name="cvv">CVV</string>
+    <string name="save_changes">Salvar alterações</string>
+
+    <!-- Validation Message Error -->
+    <string name="empty_data">%s é obrigatório.</string>
+    <string name="invalid_data">%s inválida.</string>
+</resources>

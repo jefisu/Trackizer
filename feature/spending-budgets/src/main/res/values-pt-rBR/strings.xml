@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_screen"><![CDATA[Gastos & Orçamentos]]></string>
+
+    <!--  Budget Gauge  -->
+    <string name="of_budget">do orçamento de %s</string>
+    <string name="your_budgets_are_on_track">Seus orçamentos estão no caminho certo %s</string>
+
+    <!-- Category Item  -->
+    <string name="left_to_spend">%s restante para gastar</string>
+    <string name="exceeded_budget">%s excedeu o orçamento</string>
+    <string name="of">de %s</string>
+
+    <!--  Add Category Button  -->
+    <string name="add_new_category">Adicionar nova categoria</string>
+
+    <!--  Add/Edit Category Bottom Sheet  -->
+    <string name="add_category">Adicionar categoria</string>
+    <string name="edit_category">Editar categoria</string>
+    <string name="category_type">Tipo de categoria</string>
+
+    <!--  Select Category Type Bottom Sheet  -->
+    <string name="select_a_category_type">Selecionar tipo de categoria</string>
+</resources>

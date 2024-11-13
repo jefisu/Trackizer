@@ -1,5 +1,6 @@
 import com.android.build.gradle.LibraryExtension
 import com.jefisu.trackizer.build_logic.convention.configureKotlinAndroid
+import com.jefisu.trackizer.build_logic.convention.implementation
 import com.jefisu.trackizer.build_logic.convention.libs
 import com.jefisu.trackizer.build_logic.convention.testImplementation
 import org.gradle.api.Plugin
@@ -14,6 +15,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
+                apply("org.jetbrains.kotlin.plugin.serialization")
             }
 
             extensions.configure<LibraryExtension> {
@@ -24,6 +26,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
+                implementation(libs.findLibrary("kotlinx-serialization-json").get())
+                implementation(libs.findLibrary("androidx-worker").get())
                 testImplementation(kotlin("test"))
             }
         }

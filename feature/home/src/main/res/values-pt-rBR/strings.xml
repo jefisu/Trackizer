@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  Subscription Dashboard  -->
+    <string name="this_month_bills">Faturas deste mês</string>
+    <string name="see_your_budget">Veja seu orçamento</string>
+    <string name="active_subs">Assin. Ativas</string>
+    <string name="highest_subs">Maior Assin.</string>
+    <string name="lowest_subs">Menor Assin.</string>
+
+    <!--  Subscription Tabs  -->
+    <string name="your_subscriptions_tab">Suas assinaturas</string>
+    <string name="upcoming_bills_tab">Contas futuras</string>
+
+    <!--  Subscription List  -->
+    <string name="you_don_t_have_any">Você não tem %s cadastradas</string>
+</resources>

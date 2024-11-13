@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subscription_info">Detalhes da Assinatura</string>
+
+    <!--  Info Row  -->
+    <string name="name">Nome</string>
+    <string name="first_payment">Primeiro pagamento</string>
+    <string name="reminder">Lembrete</string>
+    <string name="forever">Sempre</string>
+    <string name="never">Nunca</string>
+    <string name="no_data">Não definido</string>
+    <string name="select_a">Selecione um %s</string>
+    <string name="reminder_for_the_upcoming_months">Lembrete para os próximos meses?</string>
+
+    <!--  Alert bottom sheet - Confirm changes -->
+    <string name="confirm_changes">Confirmar alterações</string>
+    <string name="do_you_want_to_exit_without_save_changes">Você deseja sair sem salvar as alterações?</string>
+    <string name="discard">Descartar</string>
+</resources>
