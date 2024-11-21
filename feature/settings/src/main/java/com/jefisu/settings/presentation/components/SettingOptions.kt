@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.jefisu.designsystem.BorderBrush
 import com.jefisu.designsystem.Gray30
 import com.jefisu.designsystem.Gray60
-import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.TrackizerSwitch
 import com.jefisu.designsystem.size
@@ -33,6 +32,8 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.settings.R
+import com.jefisu.ui.screen.LocalScreenIsSmall
+import com.jefisu.designsystem.R as DesignSystemRes
 
 @Composable
 internal fun SettingOptions(
@@ -59,7 +60,9 @@ internal fun SettingOptions(
                 )
                 .padding(
                     horizontal = TrackizerTheme.spacing.extraMedium,
-                    vertical = TrackizerTheme.spacing.medium,
+                    vertical = if (LocalScreenIsSmall.current) {
+                        TrackizerTheme.spacing.extraSmall
+                    } else TrackizerTheme.spacing.medium,
                 ),
         ) {
             options()
