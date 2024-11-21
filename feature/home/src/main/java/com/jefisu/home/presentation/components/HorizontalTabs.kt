@@ -42,6 +42,7 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.home.R
+import com.jefisu.ui.screen.LocalScreenIsSmall
 import kotlinx.coroutines.launch
 
 @Composable
@@ -54,9 +55,13 @@ internal fun HorizontalTabs(
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState { tabs.size }
     val selectedTabAnim = rememberSeletableTab()
+    val isSmallScreen = LocalScreenIsSmall.current
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(TrackizerTheme.spacing.medium),
+        verticalArrangement = Arrangement.spacedBy(
+            if (isSmallScreen) TrackizerTheme.spacing.extraSmall
+            else TrackizerTheme.spacing.medium,
+        ),
     ) {
         Row(
             modifier = modifier
