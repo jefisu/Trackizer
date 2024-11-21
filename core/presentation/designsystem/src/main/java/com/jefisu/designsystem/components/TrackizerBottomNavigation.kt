@@ -8,13 +8,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
@@ -25,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.geometry.Offset
@@ -70,13 +69,6 @@ fun TrackizerBottomNavigation(
             Destination.CreditCardScreen,
         )
 
-        val safeDrawingInsets = WindowInsets.safeDrawing.asPaddingValues()
-        val bottomPadding = if (safeDrawingInsets.calculateBottomPadding() == 0.dp) {
-            TrackizerTheme.spacing.medium
-        } else {
-            safeDrawingInsets.calculateBottomPadding()
-        }
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -84,7 +76,7 @@ fun TrackizerBottomNavigation(
                 .background(
                     Brush.verticalGradient(
                         0f to Color.Transparent,
-                        0.51f to Gray80,
+                        0.15f to Gray80,
                     ),
                 ),
         ) {
@@ -93,8 +85,9 @@ fun TrackizerBottomNavigation(
                 modifier = modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomStart)
+                    .navigationBarsPadding()
                     .padding(horizontal = TrackizerTheme.spacing.extraMedium)
-                    .padding(bottom = bottomPadding)
+                    .padding(bottom = TrackizerTheme.spacing.extraSmall)
                     .paint(
                         painter = painterResource(R.drawable.bg_bottom_navigation),
                         contentScale = ContentScale.FillWidth,
