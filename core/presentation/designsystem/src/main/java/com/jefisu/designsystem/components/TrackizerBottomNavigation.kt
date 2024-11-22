@@ -23,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.geometry.Offset
@@ -50,6 +49,7 @@ import com.jefisu.designsystem.util.asDestinationRes
 import com.jefisu.designsystem.util.dropShadow
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -60,6 +60,7 @@ fun TrackizerBottomNavigation(
     onNavigateClick: (Destination) -> Unit = {},
     content: @Composable () -> Unit,
 ) {
+    val isSmallScreen = LocalScreenIsSmall.current
     val bottomNavigation = @Composable {
         val bottomDestinations = listOf(
             Destination.HomeScreen,
@@ -76,7 +77,7 @@ fun TrackizerBottomNavigation(
                 .background(
                     Brush.verticalGradient(
                         0f to Color.Transparent,
-                        0.15f to Gray80,
+                        (if (isSmallScreen) 0.15f else 0.35f) to Gray80,
                     ),
                 ),
         ) {
