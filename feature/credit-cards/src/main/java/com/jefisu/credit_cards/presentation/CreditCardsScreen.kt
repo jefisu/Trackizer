@@ -30,10 +30,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import com.composables.core.SheetDetent
+import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.presentation.components.AddCreditCardBottomSheet
 import com.jefisu.credit_cards.presentation.components.CreditCard
 import com.jefisu.designsystem.Gray70
+import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.CubeOutRotationEndlessTransition
@@ -49,18 +52,19 @@ import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.domain.model.SubscriptionService
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.util.SampleData
-import com.jefisu.designsystem.R as DesignSystemRes
-import com.jefisu.ui.R as UiRes
 
 @Composable
 internal fun CreditCardsScreen(
     state: CreditCardState,
     onAction: (CreditCardAction) -> Unit,
 ) {
+    val deleteSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
+
     TrackizerAlertBottomSheet(
-        isVisible = state.showDeleteAlert,
+        sheetState = deleteSheetState,
         title = stringResource(
             id = UiRes.string.delete_alert_title,
             stringResource(UiRes.string.credit_card).lowercase(),
@@ -79,7 +83,9 @@ internal fun CreditCardsScreen(
         },
     )
 
+    val addSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     AddCreditCardBottomSheet(
+        sheetState = addSheetState,
         state = state,
         onAction = onAction,
     )
@@ -108,7 +114,10 @@ internal fun CreditCardsScreen(
                 TrackizerOutlinedButton(
                     text = stringResource(R.string.add_new_card),
                     contentPadding = PaddingValues(TrackizerTheme.spacing.medium),
-                    onClick = { onAction(CreditCardAction.ToogleAddCreditCardBottomSheet()) },
+                    onClick = {
+                        onAction(CreditCardAction.ToogleAddCreditCardBottomSheet())
+                        addSheetState.currentDetent = SheetDetent.FullyExpanded
+                    },
                 )
             }
         },
@@ -140,8 +149,12 @@ internal fun CreditCardsScreen(
                             card = card,
                             onClick = {
                                 onAction(CreditCardAction.ToogleAddCreditCardBottomSheet(card))
+                                addSheetState.currentDetent = SheetDetent.FullyExpanded
                             },
-                            onLongClick = { onAction(CreditCardAction.ToogleDeleteAlert(card)) },
+                            onLongClick = {
+                                onAction(CreditCardAction.ToogleDeleteAlert(card))
+                                deleteSheetState.currentDetent = SheetDetent.FullyExpanded
+                            },
                         )
                         val subscriptionServices = creditCardsMap[card].orEmpty()
                         if (subscriptionServices.isEmpty()) {
@@ -172,7 +185,6 @@ internal fun CreditCardsScreen(
         }
     }
 }
-
 
 @Composable
 private fun SubscriptionIconsRow(

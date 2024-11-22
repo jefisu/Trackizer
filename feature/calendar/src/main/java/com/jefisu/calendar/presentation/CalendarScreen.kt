@@ -36,6 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.composables.core.SheetDetent
+import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.calendar.R
 import com.jefisu.calendar.presentation.components.DayBadgeItem
 import com.jefisu.calendar.presentation.components.DropDown
@@ -152,7 +154,9 @@ private fun SubscriptionSchedule(
         )
     }
 
+    val monthSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     MonthPickerBottomSheet(
+        sheetState = monthSheetState,
         state = state,
         onAction = onAction,
     )
@@ -188,7 +192,7 @@ private fun SubscriptionSchedule(
             )
             DropDown(
                 text = state.selectedMonth.formatMonthName(),
-                onClick = { onAction(CalendarAction.ToggleMonthPicker) },
+                onClick = { monthSheetState.currentDetent = SheetDetent.FullyExpanded },
             )
         }
         LazyRow(
@@ -252,7 +256,7 @@ fun ScheduledSubscriptionsPerDay(
     val showDivider by remember {
         derivedStateOf {
             lazyGridState.firstVisibleItemIndex > 0 ||
-                lazyGridState.firstVisibleItemScrollOffset > 0
+                    lazyGridState.firstVisibleItemScrollOffset > 0
         }
     }
 

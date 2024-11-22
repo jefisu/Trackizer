@@ -22,6 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.composables.core.SheetDetent
+import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.TrackizerButton
@@ -61,14 +63,15 @@ internal fun SettingsScreen(
         }
     }
 
+    val currentySheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     TrackizerOptionPicker(
+        sheetState = currentySheetState,
         title = stringResource(
             id = R.string.select_a,
             stringResource(R.string.currency),
         ),
-        visible = state.isCurrencyPickerVisible,
         items = SettingsConstants.currencys,
-        onDismiss = { onAction(SettingsAction.ToogleCurrencyPicker) },
+        onDismiss = {},
         onSelectClick = { onAction(SettingsAction.CurrencyChanged(it)) },
         startIndex = SettingsConstants.currencys.indexOfFirst { it.symbol == settings.currency.symbol },
     ) { currency ->
@@ -77,14 +80,15 @@ internal fun SettingsScreen(
         )
     }
 
+    val selectLanguageSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     TrackizerOptionPicker(
+        sheetState = selectLanguageSheetState,
         title = stringResource(
             id = R.string.select_a,
             stringResource(R.string.language),
         ),
-        visible = state.isLanguagePickerVisible,
         items = SettingsConstants.localesAvailable,
-        onDismiss = { onAction(SettingsAction.ToogleLanguagePicker) },
+        onDismiss = { },
         onSelectClick = { onAction(SettingsAction.LanguageChanged(it)) },
         startIndex = SettingsConstants.localesAvailable.indexOfFirst { it.language == settings.languageTag },
     ) { locale ->
@@ -183,7 +187,7 @@ internal fun SettingsScreen(
                         title = stringResource(R.string.default_currency),
                         settingSelected = settings.currency.displayCodeWithSymbol(),
                         onClick = {
-                            onAction(SettingsAction.ToogleCurrencyPicker)
+                            currentySheetState.currentDetent = SheetDetent.FullyExpanded
                         },
                     )
                 }
@@ -204,7 +208,7 @@ internal fun SettingsScreen(
                                 .replaceFirstChar { it.titlecase() }
                         },
                         onClick = {
-                            onAction(SettingsAction.ToogleLanguagePicker)
+                            selectLanguageSheetState.currentDetent = SheetDetent.FullyExpanded
                         },
                     )
                 }

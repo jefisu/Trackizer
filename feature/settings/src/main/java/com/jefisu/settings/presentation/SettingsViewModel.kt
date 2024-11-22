@@ -11,16 +11,15 @@ import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.navigation.Navigator
 import com.jefisu.ui.util.asMessageText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.Locale
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Locale
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -58,11 +57,7 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.ToggleCloudSync -> toggleCloudSync()
             is SettingsAction.SignOut -> signOut()
             is SettingsAction.LanguageChanged -> updateLanguage(action.locale)
-            SettingsAction.ToogleLanguagePicker -> toggleLanguagePicker()
             is SettingsAction.CurrencyChanged -> updateCurrency(action.currency)
-
-            SettingsAction.ToogleCurrencyPicker -> toggleCurrencyPicker()
-
             is SettingsAction.Navigate -> {
                 viewModelScope.launch { navigator.navigate(action.destination) }
             }
@@ -76,22 +71,6 @@ class SettingsViewModel @Inject constructor(
     private fun toggleCloudSync() {
         viewModelScope.launch {
             settingsRepository.updateCloudSyncStatus()
-        }
-    }
-
-    private fun toggleLanguagePicker() {
-        _state.update {
-            it.copy(
-                isLanguagePickerVisible = !it.isLanguagePickerVisible,
-            )
-        }
-    }
-
-    private fun toggleCurrencyPicker() {
-        _state.update {
-            it.copy(
-                isCurrencyPickerVisible = !it.isCurrencyPickerVisible,
-            )
         }
     }
 

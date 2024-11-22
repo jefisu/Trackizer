@@ -17,9 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +29,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
+import com.composables.core.ModalBottomSheetState
+import com.composables.core.SheetDetent
+import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.domain.CardConstants
 import com.jefisu.credit_cards.presentation.CreditCardAction
@@ -43,7 +44,6 @@ import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.TrackizerBottomSheet
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.components.TrackizerTextField
-import com.jefisu.designsystem.components.hideSheet
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
@@ -54,12 +54,10 @@ import com.steliospapamichail.creditcardmasker.viewtransformations.ExpirationDat
 
 @Composable
 fun AddCreditCardBottomSheet(
+    sheetState: ModalBottomSheetState,
     state: CreditCardState,
     onAction: (CreditCardAction) -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
-
     val title = stringResource(
         if (state.editCard != null) R.string.edit_card else R.string.add_card,
     )
@@ -69,17 +67,11 @@ fun AddCreditCardBottomSheet(
 
     ObserveAsEvents(UiEventController.events) { event ->
         if (event is CreditCardUiEvent.HideBottomSheet) {
-            sheetState.hideSheet(
-                scope = scope,
-                onDismiss = {
-                    onAction(CreditCardAction.ToogleAddCreditCardBottomSheet())
-                },
-            )
+            sheetState.currentDetent = SheetDetent.Hidden
         }
     }
 
     TrackizerBottomSheet(
-        isVisible = state.showAddCreditCardBottomSheet,
         sheetState = sheetState,
         onDismiss = { onAction(CreditCardAction.ToogleAddCreditCardBottomSheet()) },
     ) {
@@ -94,12 +86,7 @@ fun AddCreditCardBottomSheet(
             Spacer(Modifier.width(TrackizerTheme.spacing.medium))
             IconButton(
                 onClick = {
-                    sheetState.hideSheet(
-                        scope = scope,
-                        onDismiss = {
-                            onAction(CreditCardAction.ToogleAddCreditCardBottomSheet())
-                        },
-                    )
+                    sheetState.currentDetent = SheetDetent.Hidden
                 },
             ) {
                 Icon(

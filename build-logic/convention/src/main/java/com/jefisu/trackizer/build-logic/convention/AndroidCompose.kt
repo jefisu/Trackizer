@@ -25,6 +25,8 @@ internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*,
             implementation(libs.findLibrary("kotlinx-serialization-json").get())
 
             implementation(libs.findLibrary("coil-compose").get())
+
+            implementation(libs.findLibrary("compose-unstyled").get())
         }
     }
 }

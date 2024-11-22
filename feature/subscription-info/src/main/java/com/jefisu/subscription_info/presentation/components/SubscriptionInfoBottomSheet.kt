@@ -8,11 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -21,6 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.composables.core.ModalBottomSheetState
+import com.composables.core.SheetDetent
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.DatePickerState
@@ -32,7 +31,6 @@ import com.jefisu.designsystem.components.TrackizerPicker
 import com.jefisu.designsystem.components.TrackizerPickerDefaults
 import com.jefisu.designsystem.components.TrackizerPickerState
 import com.jefisu.designsystem.components.TrackizerTextField
-import com.jefisu.designsystem.components.hideSheet
 import com.jefisu.designsystem.components.rememberTrackizerDatePickerState
 import com.jefisu.designsystem.components.rememberTrackizerPickerState
 import com.jefisu.designsystem.spacing
@@ -48,18 +46,16 @@ import com.jefisu.ui.R as UiRes
 
 @Composable
 fun SubscriptionInfoBottomSheet(
+    sheetState: ModalBottomSheetState,
     state: SubscriptionInfoState,
     onAction: (SubscriptionInfoAction) -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
     state.subscription?.let { subscription ->
         val datePickerState = rememberTrackizerDatePickerState(
             initialDate = subscription.firstPayment,
         )
 
         TrackizerBottomSheet(
-            isVisible = state.showSubscriptionInfoSheet,
             sheetState = sheetState,
             horizontalAligment = Alignment.Start,
             onDismiss = { onAction(SubscriptionInfoAction.ToggleSubscriptionInfoSheet()) },
@@ -78,10 +74,9 @@ fun SubscriptionInfoBottomSheet(
 private fun BottomSheetContent(
     state: SubscriptionInfoState,
     datePickerState: DatePickerState,
-    sheetState: SheetState,
+    sheetState: ModalBottomSheetState,
     onAction: (SubscriptionInfoAction) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val categoryPickerState = rememberTrackizerPickerState(
         startIndex = state.categories.indexOf(state.subscription?.category),
         itemsCount = state.categories.size,
@@ -186,12 +181,8 @@ private fun BottomSheetContent(
 
                     else -> Unit
                 }
-                sheetState.hideSheet(
-                    scope = scope,
-                    onDismiss = {
-                        onAction(SubscriptionInfoAction.ToggleSubscriptionInfoSheet())
-                    },
-                )
+                sheetState.currentDetent = SheetDetent.Hidden
+                onAction(SubscriptionInfoAction.ToggleSubscriptionInfoSheet())
             },
             modifier = Modifier.fillMaxWidth(),
         )

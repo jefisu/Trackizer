@@ -21,8 +21,5 @@ sealed interface SubscriptionInfoAction {
     data class ReminderChanged(val reminder: Boolean, val applyChanges: Boolean = false) :
         SubscriptionInfoAction
 
-    data object ToogleDeleteAlert : SubscriptionInfoAction
-    data object ToogleUnsavedChangesAlert : SubscriptionInfoAction
-
     data object NavigateBack : SubscriptionInfoAction
 }

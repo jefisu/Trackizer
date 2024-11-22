@@ -15,19 +15,19 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.composables.core.ModalBottomSheetState
+import com.composables.core.SheetDetent
+import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.designsystem.Gray50
 import com.jefisu.designsystem.Gray70
-import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.CurrencyTextField
@@ -35,7 +35,6 @@ import com.jefisu.designsystem.components.TrackizerBottomSheet
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.components.TrackizerOptionPicker
 import com.jefisu.designsystem.components.TrackizerTextField
-import com.jefisu.designsystem.components.hideSheet
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
@@ -49,31 +48,26 @@ import com.jefisu.spending_budgets.presentation.SpendingBudgetsEvent
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsState
 import com.jefisu.spending_budgets.presentation.util.CategoryDefaults
 import com.jefisu.ui.ObserveAsEvents
-import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.UiEventController
+import com.jefisu.designsystem.R as DesignSystemRes
+import com.jefisu.ui.R as UiRes
 
 @Composable
 fun AddCategoryBottomSheet(
+    sheetState: ModalBottomSheetState,
     state: SpendingBudgetsState,
     onAction: (SpendingBudgetsAction) -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
-
     ObserveAsEvents(UiEventController.events) { event ->
         if (event is SpendingBudgetsEvent.HideAddCategoryBottomSheet) {
-            sheetState.hideSheet(
-                scope = scope,
-                onDismiss = { onAction(SpendingBudgetsAction.ToggleAddCategoryBottomSheet()) },
-            )
+            sheetState.currentDetent = SheetDetent.Hidden
         }
     }
 
     TrackizerBottomSheet(
         sheetState = sheetState,
-        isVisible = state.showAddCategoryBottomSheet,
         onDismiss = { onAction(SpendingBudgetsAction.ToggleAddCategoryBottomSheet()) },
-        modifier = Modifier.imeOffset(imeThresholdPercent = 0.35f)
+        modifier = Modifier.imeOffset(imeThresholdPercent = 0.35f),
     ) {
         TrackizerTextField(
             text = state.categoryName,
@@ -118,14 +112,13 @@ fun CategoryTypePicker(
 ) {
     val categoriesType = remember { CategoryType.entries }
 
+    val categoryTypeSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     TrackizerOptionPicker(
+        sheetState = categoryTypeSheetState,
         title = stringResource(R.string.select_a_category_type),
-        visible = state.isSelectingCategoryType,
         items = categoriesType,
         startIndex = categoriesType.indexOf(state.categoryType),
-        onDismiss = {
-            onAction(SpendingBudgetsAction.ToogleCategoryTypePicker)
-        },
+        onDismiss = {},
         onSelectClick = {
             onAction(SpendingBudgetsAction.CategorTypeChanged(it))
         },
@@ -164,10 +157,8 @@ fun CategoryTypePicker(
                 indication = null,
                 interactionSource = null,
                 onClick = {
-                    listOf(
-                        SpendingBudgetsAction.CategorTypeChanged(state.categoryType),
-                        SpendingBudgetsAction.ToogleCategoryTypePicker,
-                    ).forEach(onAction)
+                    onAction(SpendingBudgetsAction.CategorTypeChanged(state.categoryType))
+                    categoryTypeSheetState.currentDetent = SheetDetent.Hidden
                 },
             ),
         ) {

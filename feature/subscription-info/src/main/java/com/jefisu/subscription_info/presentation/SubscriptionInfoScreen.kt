@@ -29,6 +29,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.composables.core.SheetDetent
+import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.designsystem.Black23
 import com.jefisu.designsystem.BorderBrush
 import com.jefisu.designsystem.Gray100
@@ -64,10 +66,11 @@ internal fun SubscriptionInfoScreen(
 ) {
     val horizontalSpacingInfoRow = 20.dp
 
+    val deleteSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     TrackizerAlertBottomSheet(
-        isVisible = state.showDeleteAlert,
+        sheetState = deleteSheetState,
         title = stringResource(
-            id = com.jefisu.ui.R.string.delete_alert_title,
+            id = UiRes.string.delete_alert_title,
             stringResource(UiRes.string.subscription).lowercase(),
         ),
         description = stringResource(
@@ -76,22 +79,20 @@ internal fun SubscriptionInfoScreen(
         ),
         onDismissTextButton = stringResource(UiRes.string.button_alert_cancel),
         onConfirmTextButton = stringResource(UiRes.string.button_alert_delete),
-        onDismiss = {
-            onAction(SubscriptionInfoAction.ToogleDeleteAlert)
-        },
+        onDismiss = {},
         onConfirm = {
             onAction(SubscriptionInfoAction.DeleteSubscription)
         },
     )
 
+    val unsavedChangesSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     TrackizerAlertBottomSheet(
-        isVisible = state.showUnsavedChangesAlert,
+        sheetState = unsavedChangesSheetState,
         title = stringResource(R.string.confirm_changes),
         description = stringResource(R.string.do_you_want_to_exit_without_save_changes),
         onDismissTextButton = stringResource(R.string.discard),
         onConfirmTextButton = stringResource(UiRes.string.save),
         onDismiss = {
-            onAction(SubscriptionInfoAction.ToogleUnsavedChangesAlert)
             onAction(SubscriptionInfoAction.NavigateBack)
         },
         onConfirm = {
@@ -99,7 +100,9 @@ internal fun SubscriptionInfoScreen(
         },
     )
 
+    val infoSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     SubscriptionInfoBottomSheet(
+        sheetState = infoSheetState,
         state = state,
         onAction = onAction,
     )
@@ -160,7 +163,8 @@ internal fun SubscriptionInfoScreen(
                         TrackizerTopBarDefaults.backNavigationIcon(
                             onClick = {
                                 if (state.hasUnsavedChanges) {
-                                    onAction(SubscriptionInfoAction.ToogleUnsavedChangesAlert)
+                                    unsavedChangesSheetState.currentDetent =
+                                        SheetDetent.FullyExpanded
                                     return@backNavigationIcon
                                 }
                                 onAction(SubscriptionInfoAction.NavigateBack)
@@ -171,7 +175,7 @@ internal fun SubscriptionInfoScreen(
                     actions = {
                         IconButton(
                             onClick = {
-                                onAction(SubscriptionInfoAction.ToogleDeleteAlert)
+                                deleteSheetState.currentDetent = SheetDetent.FullyExpanded
                             },
                         ) {
                             Icon(

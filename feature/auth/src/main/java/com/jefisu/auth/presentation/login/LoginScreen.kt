@@ -22,6 +22,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.composables.core.SheetDetent
+import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.auth.R
 import com.jefisu.auth.presentation.login.components.ForgotPasswordBottomSheet
 import com.jefisu.designsystem.Gray50
@@ -57,7 +59,9 @@ internal fun LoginScreen(
 ) {
     val focusManager = LocalFocusManager.current
 
+    val forgotPasswordSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     ForgotPasswordBottomSheet(
+        sheetState = forgotPasswordSheetState,
         state = state,
         onAction = onAction,
     )
@@ -68,7 +72,7 @@ internal fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(TrackizerTheme.spacing.extraMedium)
-            .imeOffset(imeThresholdPercent = 0.25f)
+            .imeOffset(imeThresholdPercent = 0.25f),
     ) {
         TrackizerTextField(
             text = state.email,
@@ -99,7 +103,7 @@ internal fun LoginScreen(
             )
             Spacer(modifier = Modifier.weight(1f))
             TextButton(
-                onClick = { onAction(LoginAction.ToggleForgotPasswordBottomSheet) },
+                onClick = { forgotPasswordSheetState.currentDetent = SheetDetent.FullyExpanded },
             ) {
                 Text(
                     text = stringResource(R.string.forgot_password),
@@ -112,7 +116,7 @@ internal fun LoginScreen(
         TrackizerButton(
             text = stringResource(R.string.sign_in),
             type = ButtonType.Primary,
-            isLoading = state.isLoading && !state.showForgotPasswordSheet,
+            isLoading = state.isLoading && forgotPasswordSheetState.currentDetent == SheetDetent.Hidden,
             onClick = { onAction(LoginAction.Login) },
             modifier = Modifier.fillMaxWidth(),
         )

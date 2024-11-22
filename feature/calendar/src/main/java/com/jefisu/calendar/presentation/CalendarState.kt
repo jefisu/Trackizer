@@ -7,5 +7,4 @@ data class CalendarState(
     val selectedMonth: LocalDate = LocalDate.now(),
     val selectedDay: LocalDate = selectedMonth,
     val subscriptions: List<Subscription> = emptyList(),
-    val showMonthPicker: Boolean = false,
 )

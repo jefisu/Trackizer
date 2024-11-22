@@ -76,7 +76,6 @@ class CreditCardViewModel @Inject constructor(
                     .orEmpty()
 
                 it.copy(
-                    showAddCreditCardBottomSheet = !it.showAddCreditCardBottomSheet,
                     editCard = action.card,
                     cardName = action.card?.name.orEmpty(),
                     cardHolder = action.card?.cardHolder.orEmpty(),
@@ -113,10 +112,7 @@ class CreditCardViewModel @Inject constructor(
 
             is CreditCardAction.SaveCard -> saveCard()
             is CreditCardAction.ToogleDeleteAlert -> _state.update {
-                it.copy(
-                    showDeleteAlert = !it.showDeleteAlert,
-                    editCard = action.card,
-                )
+                it.copy(editCard = action.card)
             }
 
             is CreditCardAction.DeleteCard -> deleteCard()
@@ -178,7 +174,6 @@ class CreditCardViewModel @Inject constructor(
                 cardRepository.delete(card).onError { message ->
                     MessageController.sendMessage(message.asMessageText())
                 }
-                _state.update { it.copy(showDeleteAlert = false) }
             }
         }
     }
