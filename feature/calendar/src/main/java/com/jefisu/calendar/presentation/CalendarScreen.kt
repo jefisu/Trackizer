@@ -61,6 +61,7 @@ import com.jefisu.domain.model.util.filterUpcomingBills
 import com.jefisu.ui.ext.formatMonthName
 import com.jefisu.ui.ext.toDateFormat
 import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
 import java.time.LocalDate
 
@@ -77,6 +78,7 @@ internal fun CalendarScreen(
     }
     val total = upcomingBills.sumOf { it.price.toDouble() }
     val settings = LocalSettings.current
+    val isSmallScreen = LocalScreenIsSmall.current
 
     TrackizerScaffold(
         topBar = {
@@ -101,7 +103,11 @@ internal fun CalendarScreen(
                 onAction = onAction,
                 countSubscriptionsForToday = upcomingBills.size,
             )
-            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
+            Spacer(
+                modifier = Modifier.height(
+                    if (isSmallScreen) TrackizerTheme.spacing.medium else TrackizerTheme.spacing.extraMedium,
+                ),
+            )
             CalendarRow(
                 leftValue = state.selectedMonth.formatMonthName(
                     settings.toLanguageLocale(),
@@ -120,7 +126,11 @@ internal fun CalendarScreen(
                 color = Gray30,
                 modifier = Modifier.padding(horizontal = TrackizerTheme.spacing.extraMedium),
             )
-            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
+            Spacer(
+                modifier = Modifier.height(
+                    if (isSmallScreen) TrackizerTheme.spacing.medium else TrackizerTheme.spacing.extraMedium,
+                ),
+            )
             ScheduledSubscriptionsPerDay(
                 subscriptions = upcomingBills,
                 onNavigate = {
@@ -144,6 +154,7 @@ private fun SubscriptionSchedule(
         }
     }
     val lazyListState = rememberLazyListState()
+    val isSmallScreen = LocalScreenIsSmall.current
 
     LaunchedEffect(Unit) {
         val today = LocalDate.now()
@@ -168,11 +179,17 @@ private fun SubscriptionSchedule(
         Text(
             text = stringResource(R.string.subs_schedule),
             style = TrackizerTheme.typography.headline7,
-            modifier = Modifier
-                .padding(top = TrackizerTheme.spacing.extraMedium)
-                .padding(horizontal = TrackizerTheme.spacing.extraMedium),
+            modifier = Modifier.padding(horizontal = TrackizerTheme.spacing.extraMedium),
         )
-        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
+        Spacer(
+            modifier = Modifier.height(
+                if (isSmallScreen) {
+                    TrackizerTheme.spacing.small
+                } else {
+                    TrackizerTheme.spacing.medium
+                },
+            ),
+        )
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = TrackizerTheme.spacing.extraMedium),
@@ -197,7 +214,10 @@ private fun SubscriptionSchedule(
         }
         LazyRow(
             state = lazyListState,
-            contentPadding = PaddingValues(TrackizerTheme.spacing.extraMedium),
+            contentPadding = PaddingValues(
+                horizontal = TrackizerTheme.spacing.extraMedium,
+                vertical = if (isSmallScreen) 20.dp else TrackizerTheme.spacing.extraMedium,
+            ),
             horizontalArrangement = Arrangement.spacedBy(TrackizerTheme.spacing.small),
         ) {
             items(daysOfMonth) { day ->
@@ -256,7 +276,7 @@ fun ScheduledSubscriptionsPerDay(
     val showDivider by remember {
         derivedStateOf {
             lazyGridState.firstVisibleItemIndex > 0 ||
-                    lazyGridState.firstVisibleItemScrollOffset > 0
+                lazyGridState.firstVisibleItemScrollOffset > 0
         }
     }
 
