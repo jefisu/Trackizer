@@ -67,7 +67,8 @@ fun TrackizerBottomSheet(
                         .padding(vertical = TrackizerTheme.spacing.medium)
                         .height(5.dp)
                         .width(40.dp)
-                        .background(Gray50, CircleShape),
+                        .background(Gray50, CircleShape)
+                        .align(Alignment.CenterHorizontally),
                 )
                 content()
             }

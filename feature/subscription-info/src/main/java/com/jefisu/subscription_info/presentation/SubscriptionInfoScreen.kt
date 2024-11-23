@@ -57,6 +57,7 @@ import com.jefisu.subscription_info.presentation.util.InfoRow
 import com.jefisu.subscription_info.presentation.util.InfoRowType
 import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.ext.toDateFormat
+import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
 
 @Composable
@@ -64,6 +65,8 @@ internal fun SubscriptionInfoScreen(
     state: SubscriptionInfoState,
     onAction: (SubscriptionInfoAction) -> Unit,
 ) {
+    val isSmallScreen = LocalScreenIsSmall.current
+    val scaleScreen = if (isSmallScreen) 0.8f else 1f
     val horizontalSpacingInfoRow = 20.dp
 
     val deleteSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
@@ -153,7 +156,10 @@ internal fun SubscriptionInfoScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(TrackizerTheme.spacing.extraMedium)
+                    .padding(
+                        horizontal = TrackizerTheme.spacing.extraMedium,
+                        vertical = if (isSmallScreen) TrackizerTheme.spacing.small else TrackizerTheme.spacing.extraMedium,
+                    )
                     .clip(RoundedCornerShape(24.dp))
                     .background(Black23),
             ) {
@@ -184,18 +190,23 @@ internal fun SubscriptionInfoScreen(
                             )
                         }
                     },
-                    modifier = Modifier.padding(TrackizerTheme.spacing.medium),
+                    modifier = Modifier.padding(
+                        horizontal = TrackizerTheme.spacing.medium,
+                        vertical = if (isSmallScreen) 0.dp else TrackizerTheme.spacing.small,
+                    ),
                 )
                 SubscriptionIcon(
                     icon = subscription.service,
-                    containerSize = 106.dp,
-                    iconSize = 61.dp,
-                    cornerSize = 30.dp,
+                    containerSize = 106.dp * scaleScreen,
+                    iconSize = 61.dp * scaleScreen,
+                    cornerSize = 30.dp * scaleScreen,
                 )
                 Spacer(Modifier.height(TrackizerTheme.spacing.medium))
                 Text(
                     text = subscription.service.title,
-                    style = TrackizerTheme.typography.headline6,
+                    style = TrackizerTheme.typography.headline6.copy(
+                        fontSize = TrackizerTheme.typography.headline6.fontSize * scaleScreen,
+                    ),
                     modifier = Modifier.basicMarquee(),
                 )
                 Spacer(Modifier.height(TrackizerTheme.spacing.small))
@@ -207,7 +218,11 @@ internal fun SubscriptionInfoScreen(
                     style = TrackizerTheme.typography.headline4,
                     color = Gray30,
                 )
-                Spacer(Modifier.height(TrackizerTheme.spacing.large))
+                Spacer(
+                    Modifier.height(
+                        if (isSmallScreen) TrackizerTheme.spacing.small else TrackizerTheme.spacing.large,
+                    ),
+                )
                 CustomDivider()
                 Column(
                     modifier = Modifier
@@ -216,7 +231,7 @@ internal fun SubscriptionInfoScreen(
                         .background(Gray70)
                         .padding(
                             horizontal = horizontalSpacingInfoRow,
-                            vertical = TrackizerTheme.spacing.medium,
+                            vertical = if (isSmallScreen) TrackizerTheme.spacing.small else TrackizerTheme.spacing.medium,
                         ),
                 ) {
                     Column(
@@ -237,9 +252,10 @@ internal fun SubscriptionInfoScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .rippleClickable {
+                                        if (info.type == InfoRowType.Name) return@rippleClickable
                                         onAction(
                                             SubscriptionInfoAction.ToggleSubscriptionInfoSheet(
-                                                info,
+                                                infoRow = info,
                                             ),
                                         )
                                         infoSheetState.currentDetent = SheetDetent.FullyExpanded
@@ -248,7 +264,11 @@ internal fun SubscriptionInfoScreen(
                             )
                         }
                     }
-                    Spacer(Modifier.height(TrackizerTheme.spacing.large))
+                    Spacer(
+                        Modifier.height(
+                            if (isSmallScreen) TrackizerTheme.spacing.medium else TrackizerTheme.spacing.large,
+                        ),
+                    )
                     TrackizerButton(
                         text = stringResource(UiRes.string.save),
                         type = ButtonType.Secondary,
