@@ -1,6 +1,6 @@
 package com.jefisu.auth.presentation.login
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,16 +31,16 @@ import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.LabeledCheckbox
 import com.jefisu.designsystem.components.TrackizerButton
+import com.jefisu.designsystem.components.TrackizerLogoBox
 import com.jefisu.designsystem.components.TrackizerPasswordTextField
 import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.imeOffset
+import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @Composable
-fun LoginScreenRoot(
-    navigateToRegister: () -> Unit,
-) {
+fun LoginScreenRoot(navigateToRegister: () -> Unit) {
     val viewModel = hiltViewModel<LoginViewModel>()
     val state = viewModel.state
 
@@ -58,6 +58,7 @@ internal fun LoginScreen(
     navigateToRegisterScreen: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
+    val isSmallScreen = LocalScreenIsSmall.current
 
     val forgotPasswordSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     ForgotPasswordBottomSheet(
@@ -66,73 +67,85 @@ internal fun LoginScreen(
         onAction = onAction,
     )
 
-    Column(
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(TrackizerTheme.spacing.extraMedium)
-            .imeOffset(imeThresholdPercent = 0.25f),
+            .padding(TrackizerTheme.spacing.extraMedium),
     ) {
-        TrackizerTextField(
-            text = state.email,
-            onTextChange = { onAction(LoginAction.EmailChanged(it)) },
-            fieldName = stringResource(R.string.login),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            keyboardActions = KeyboardActions {
-                focusManager.moveFocus(FocusDirection.Down)
-            },
-        )
-        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
-        TrackizerPasswordTextField(
-            text = state.password,
-            onTextChange = { onAction(LoginAction.PasswordChanged(it)) },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions {
-                focusManager.clearFocus()
-            },
-        )
-        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraSmall))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .imeOffset(
+                    imeThresholdPercent = if (isSmallScreen) 0.3f else 0.1f,
+                ),
         ) {
-            LabeledCheckbox(
-                isChecked = state.rememberMeCredentials,
-                onCheckedChange = { onAction(LoginAction.RememberMeCredentials) },
-                label = stringResource(R.string.remember_me),
+            TrackizerTextField(
+                text = state.email,
+                onTextChange = { onAction(LoginAction.EmailChanged(it)) },
+                fieldName = stringResource(R.string.login),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions {
+                    focusManager.moveFocus(FocusDirection.Down)
+                },
             )
-            Spacer(modifier = Modifier.weight(1f))
-            TextButton(
-                onClick = { forgotPasswordSheetState.currentDetent = SheetDetent.FullyExpanded },
+            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
+            TrackizerPasswordTextField(
+                text = state.password,
+                onTextChange = { onAction(LoginAction.PasswordChanged(it)) },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions {
+                    focusManager.clearFocus()
+                },
+            )
+            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraSmall))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = stringResource(R.string.forgot_password),
-                    style = TrackizerTheme.typography.bodyMedium,
-                    color = Gray50,
+                LabeledCheckbox(
+                    isChecked = state.rememberMeCredentials,
+                    onCheckedChange = { onAction(LoginAction.RememberMeCredentials) },
+                    label = stringResource(R.string.remember_me),
                 )
+                Spacer(modifier = Modifier.weight(1f))
+                TextButton(
+                    onClick = {
+                        forgotPasswordSheetState.currentDetent = SheetDetent.FullyExpanded
+                    },
+                ) {
+                    Text(
+                        text = stringResource(R.string.forgot_password),
+                        style = TrackizerTheme.typography.bodyMedium,
+                        color = Gray50,
+                    )
+                }
             }
+            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraSmall))
+            TrackizerButton(
+                text = stringResource(R.string.sign_in),
+                type = ButtonType.Primary,
+                isLoading =
+                state.isLoading && forgotPasswordSheetState.currentDetent == SheetDetent.Hidden,
+                onClick = { onAction(LoginAction.Login) },
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
-        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraSmall))
-        TrackizerButton(
-            text = stringResource(R.string.sign_in),
-            type = ButtonType.Primary,
-            isLoading = state.isLoading && forgotPasswordSheetState.currentDetent == SheetDetent.Hidden,
-            onClick = { onAction(LoginAction.Login) },
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(152.dp))
-        Text(
-            text = stringResource(R.string.if_you_don_t_have_an_account_yet),
-            style = TrackizerTheme.typography.bodyMedium,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        TrackizerButton(
-            text = stringResource(R.string.sign_up),
-            type = ButtonType.Secondary,
-            onClick = navigateToRegisterScreen,
-            modifier = Modifier.fillMaxWidth(),
-        )
+        Column(
+            modifier = Modifier.align(Alignment.BottomStart),
+        ) {
+            Text(
+                text = stringResource(R.string.if_you_don_t_have_an_account_yet),
+                style = TrackizerTheme.typography.bodyMedium,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            TrackizerButton(
+                text = stringResource(R.string.sign_up),
+                type = ButtonType.Secondary,
+                onClick = navigateToRegisterScreen,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
 }
 
@@ -140,10 +153,12 @@ internal fun LoginScreen(
 @Composable
 private fun LoginScreenPreview() {
     TrackizerTheme {
-        LoginScreen(
-            state = LoginState(),
-            onAction = {},
-            navigateToRegisterScreen = {},
-        )
+        TrackizerLogoBox {
+            LoginScreen(
+                state = LoginState(),
+                onAction = {},
+                navigateToRegisterScreen = {},
+            )
+        }
     }
 }
