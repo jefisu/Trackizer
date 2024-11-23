@@ -242,6 +242,7 @@ internal fun SubscriptionInfoScreen(
                                                 info,
                                             ),
                                         )
+                                        infoSheetState.currentDetent = SheetDetent.FullyExpanded
                                     }
                                     .padding(horizontal = horizontalSpacingInfoRow),
                             )

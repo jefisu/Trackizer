@@ -7,12 +7,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.RoundRect
@@ -37,12 +37,14 @@ import com.jefisu.designsystem.Gray20
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.Gray80
 import com.jefisu.designsystem.TrackizerTheme
+import com.jefisu.designsystem.components.AutoResizedText
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.domain.model.Card
 import com.jefisu.ui.ext.formatExpirationDate
+import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
 
 @Composable
@@ -53,12 +55,13 @@ fun CreditCard(
     onLongClick: () -> Unit = {},
 ) {
     val cornerDp = 16.dp
+    val percentUsed = if (LocalScreenIsSmall.current) 0.8f else 1f
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .width(TrackizerTheme.size.creditCardWidth)
-            .height(TrackizerTheme.size.creditCardHeight)
+            .width(TrackizerTheme.size.creditCardWidth * percentUsed)
+            .height(TrackizerTheme.size.creditCardHeight * percentUsed)
             .drawBehind {
                 drawCardEdge(
                     rotateDegrees = 8f,
@@ -85,26 +88,26 @@ fun CreditCard(
             painter = painterResource(card.flag.asFlagResource()),
             contentDescription = card.name,
             contentScale = ContentScale.FillWidth,
-            modifier = Modifier.width(56.dp),
+            modifier = Modifier.width(56.dp * percentUsed),
         )
         Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
-        Text(
+        AutoResizedText(
             text = card.name,
             style = TrackizerTheme.typography.headline3,
         )
         Spacer(modifier = Modifier.weight(1f))
-        Text(
+        AutoResizedText(
             text = card.cardHolder,
             style = TrackizerTheme.typography.headline1,
             color = Gray20,
         )
         Spacer(modifier = Modifier.height(TrackizerTheme.spacing.small))
-        Text(
+        AutoResizedText(
             text = formatCardNumber(card.number),
             style = TrackizerTheme.typography.headline3,
         )
         Spacer(modifier = Modifier.height(TrackizerTheme.spacing.small))
-        Text(
+        AutoResizedText(
             text = card.expirationDate.formatExpirationDate(),
             style = TrackizerTheme.typography.headline2,
         )
@@ -112,6 +115,7 @@ fun CreditCard(
         Image(
             painter = painterResource(R.drawable.ic_chip),
             contentDescription = null,
+            modifier = Modifier.scale(percentUsed),
         )
     }
 }

@@ -54,6 +54,7 @@ import com.jefisu.designsystem.typography
 import com.jefisu.domain.model.SubscriptionService
 import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
 
 @Composable
@@ -61,6 +62,7 @@ internal fun CreditCardsScreen(
     state: CreditCardState,
     onAction: (CreditCardAction) -> Unit,
 ) {
+    val isSmallScreen = LocalScreenIsSmall.current
     val deleteSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
 
     TrackizerAlertBottomSheet(
@@ -106,10 +108,17 @@ internal fun CreditCardsScreen(
         bottomBar = {
             Box(
                 modifier = Modifier
-                    .height(210.dp)
+                    .height(210.dp * if (isSmallScreen) 1.1f else 1f)
                     .clip(RoundedCornerShape(24.dp))
                     .background(Gray70)
-                    .padding(TrackizerTheme.spacing.extraMedium),
+                    .padding(
+                        horizontal = TrackizerTheme.spacing.extraMedium,
+                        vertical = if (isSmallScreen) {
+                            TrackizerTheme.spacing.medium
+                        } else {
+                            TrackizerTheme.spacing.extraMedium
+                        },
+                    ),
             ) {
                 TrackizerOutlinedButton(
                     text = stringResource(R.string.add_new_card),
@@ -136,7 +145,13 @@ internal fun CreditCardsScreen(
                 CubeOutRotationEndlessTransition(
                     items = creditCardsMap.keys.toList(),
                     onItemVisibleChanged = { onAction(CreditCardAction.SelectCreditCard(it)) },
-                    modifier = Modifier.padding(top = TrackizerTheme.spacing.extraLarge),
+                    modifier = Modifier.padding(
+                        top = if (isSmallScreen) {
+                            TrackizerTheme.spacing.extraSmall
+                        } else {
+                            TrackizerTheme.spacing.extraLarge
+                        },
+                    ),
                 ) { card ->
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -167,9 +182,13 @@ internal fun CreditCardsScreen(
                             )
                         } else {
                             Column(
-                                modifier = Modifier.fillMaxSize(),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(
+                                        top = TrackizerTheme.spacing.extraSmall
+                                    ),
                             ) {
                                 Text(
                                     text = stringResource(UiRes.string.subscriptions),
@@ -216,9 +235,7 @@ fun EmptyData(
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .safeDrawingPadding()
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
     ) {
         if (showImage) {
             Image(
