@@ -15,7 +15,6 @@ import com.jefisu.ui.UiEventController
 import com.jefisu.ui.navigation.Navigator
 import com.jefisu.ui.util.asMessageText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,6 +22,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class SpendingBudgetsViewModel @Inject constructor(
@@ -68,7 +68,6 @@ class SpendingBudgetsViewModel @Inject constructor(
             is SpendingBudgetsAction.ToggleAddCategoryBottomSheet -> {
                 _state.update {
                     it.copy(
-                        showAddCategoryBottomSheet = !it.showAddCategoryBottomSheet,
                         category = action.category,
                         categoryName = action.category?.name.orEmpty(),
                         categoryBudget = toCurrencyString(action.category?.budget ?: 0f),
@@ -77,19 +76,8 @@ class SpendingBudgetsViewModel @Inject constructor(
                 }
             }
 
-            is SpendingBudgetsAction.ToogleCategoryTypePicker -> {
-                _state.update {
-                    it.copy(isSelectingCategoryType = !it.isSelectingCategoryType)
-                }
-            }
-
             is SpendingBudgetsAction.ToogleDeleteAlert -> {
-                _state.update {
-                    it.copy(
-                        showDeleteAlert = !it.showDeleteAlert,
-                        category = action.category,
-                    )
-                }
+                _state.update { it.copy(category = action.category) }
             }
 
             is SpendingBudgetsAction.AddCategory -> addCategory()
@@ -140,7 +128,6 @@ class SpendingBudgetsViewModel @Inject constructor(
                 categoryRepository.delete(it).onError {
                     MessageController.sendMessage(it.asMessageText())
                 }
-                _state.update { it.copy(showDeleteAlert = false) }
             }
         }
     }

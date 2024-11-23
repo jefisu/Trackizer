@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -49,6 +48,7 @@ import com.jefisu.designsystem.util.imeOffset
 import com.jefisu.designsystem.util.rememberEndlessPagerState
 import com.jefisu.domain.model.SubscriptionService
 import com.jefisu.ui.R as UiRes
+import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @Composable
 internal fun AddSubscriptionScreen(
@@ -58,6 +58,7 @@ internal fun AddSubscriptionScreen(
     val services = SubscriptionService.entries
     val pagerState = rememberEndlessPagerState(startPage = Int.MAX_VALUE / 2)
     val focusManager = LocalFocusManager.current
+    val isSmallScreen = LocalScreenIsSmall.current
 
     LaunchedEffect(Unit) {
         snapshotFlow { pagerState.currentPage }.collect { index ->
@@ -82,7 +83,9 @@ internal fun AddSubscriptionScreen(
                 ),
             )
         },
-        modifier = Modifier.imeOffset(imeThresholdPercent = 0.95f),
+        modifier = Modifier.imeOffset(
+            imeThresholdPercent = 0.9f
+        ),
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -90,20 +93,24 @@ internal fun AddSubscriptionScreen(
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxHeight(0.58f)
                     .clip(RoundedCornerShape(0.dp, 0.dp, 24.dp, 24.dp))
-                    .background(Gray70),
+                    .background(Gray70)
+                    .padding(bottom = TrackizerTheme.spacing.extraMedium),
             ) {
                 Text(
                     text = stringResource(R.string.add_new_subscription),
-                    style = TrackizerTheme.typography.headline7,
+                    style = if (isSmallScreen) TrackizerTheme.typography.headline6 else TrackizerTheme.typography.headline7,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = TrackizerTheme.spacing.large)
-                        .padding(horizontal = TrackizerTheme.spacing.extraMedium),
+                        .padding(top = if (isSmallScreen) 0.dp else TrackizerTheme.spacing.large)
+                        .padding(horizontal = TrackizerTheme.spacing.extraLarge),
                 )
-                Spacer(Modifier.height(TrackizerTheme.spacing.extraLarge))
+                Spacer(
+                    Modifier.height(
+                        if (isSmallScreen) TrackizerTheme.spacing.extraMedium else TrackizerTheme.spacing.extraLarge,
+                    ),
+                )
                 HorizontalPager(
                     state = pagerState,
                     contentPadding = PaddingValues(
@@ -121,7 +128,10 @@ internal fun AddSubscriptionScreen(
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(TrackizerTheme.spacing.extraMedium),
+                    .padding(
+                        horizontal = TrackizerTheme.spacing.extraMedium,
+                        vertical = if (isSmallScreen) TrackizerTheme.spacing.extraSmall else TrackizerTheme.spacing.large,
+                    ),
             ) {
                 TrackizerTextField(
                     text = state.description,

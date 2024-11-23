@@ -12,6 +12,7 @@ data class Size(
     val iconExtraLarge: Dp = 100.dp,
     val appLogoSmall: Dp = 29.dp,
     val buttonHeightSmall: Dp = 36.dp,
+    val buttonHeightSmallScreen: Dp = 32.dp,
     val buttonHeight: Dp = 48.dp,
     val buttonMaxWidth: Dp = 280.dp,
     val circularProgressSmall: Dp = 30.dp,

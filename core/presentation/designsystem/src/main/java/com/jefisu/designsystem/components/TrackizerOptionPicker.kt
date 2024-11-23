@@ -1,19 +1,16 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.jefisu.designsystem.components
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.composables.core.ModalBottomSheetState
+import com.composables.core.SheetDetent
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
@@ -21,8 +18,8 @@ import com.jefisu.ui.R as UiRes
 
 @Composable
 fun <T> TrackizerOptionPicker(
+    sheetState: ModalBottomSheetState,
     title: String,
-    visible: Boolean,
     items: List<T>,
     onSelectClick: (T) -> Unit,
     onDismiss: () -> Unit,
@@ -30,21 +27,20 @@ fun <T> TrackizerOptionPicker(
     startIndex: Int = 0,
     itemContent: @Composable (T) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val pickerState = rememberTrackizerPickerState(
         itemsCount = items.size,
         startIndex = startIndex,
     )
-    val sheetState = rememberModalBottomSheetState()
 
-    LaunchedEffect(visible) {
-        if (!visible && pickerState.selectedIndex != startIndex) {
+    LaunchedEffect(sheetState.currentDetent) {
+        if (sheetState.currentDetent == SheetDetent.FullyExpanded
+            && pickerState.selectedIndex != startIndex
+        ) {
             pickerState.setIndex(startIndex)
         }
     }
 
     TrackizerBottomSheet(
-        isVisible = visible,
         sheetState = sheetState,
         horizontalAligment = Alignment.Start,
         onDismiss = onDismiss,
@@ -66,10 +62,8 @@ fun <T> TrackizerOptionPicker(
             type = ButtonType.Primary,
             onClick = {
                 onSelectClick(items[pickerState.selectedIndex])
-                sheetState.hideSheet(
-                    scope = scope,
-                    onDismiss = onDismiss,
-                )
+                sheetState.currentDetent = SheetDetent.Hidden
+                onDismiss()
             },
             modifier = Modifier.fillMaxWidth(),
         )

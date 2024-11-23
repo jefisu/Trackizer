@@ -101,14 +101,6 @@ class SubscriptionInfoViewModel @Inject constructor(
                 state = state.copy(reminder = action.reminder)
             }
 
-            is SubscriptionInfoAction.ToogleDeleteAlert -> {
-                state = state.copy(showDeleteAlert = !state.showDeleteAlert)
-            }
-
-            is SubscriptionInfoAction.ToogleUnsavedChangesAlert -> {
-                state = state.copy(showUnsavedChangesAlert = !state.showUnsavedChangesAlert)
-            }
-
             SubscriptionInfoAction.NavigateBack -> {
                 viewModelScope.launch { navigator.navigateUp() }
             }
@@ -132,7 +124,6 @@ class SubscriptionInfoViewModel @Inject constructor(
         }
 
         state = state.copy(
-            showSubscriptionInfoSheet = !state.showSubscriptionInfoSheet,
             selectedInfoRow = info,
             description = state.subscription?.description.orEmpty(),
             reminder = state.subscription?.reminder ?: false,

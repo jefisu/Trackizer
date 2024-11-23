@@ -13,6 +13,7 @@ import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.ui.MessageController
+import com.jefisu.ui.UiEventController
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -59,10 +60,6 @@ class LoginViewModel @Inject constructor(
 
             is LoginAction.Login -> login()
 
-            is LoginAction.ToggleForgotPasswordBottomSheet -> {
-                state = state.copy(showForgotPasswordSheet = !state.showForgotPasswordSheet)
-            }
-
             is LoginAction.EmailResetPasswordChanged -> {
                 state = state.copy(emailResetPassword = action.email)
             }
@@ -104,10 +101,8 @@ class LoginViewModel @Inject constructor(
                 authRepository.sendPasswordResetEmail(emailResetPassword)
                     .onSuccess { message ->
                         MessageController.sendMessage(message.asMessageText())
-                        state = copy(
-                            showForgotPasswordSheet = false,
-                            emailResetPassword = "",
-                        )
+                        state = copy(emailResetPassword = "")
+                        UiEventController.sendEvent(LoginEvent.HideForgotPasswordBottomSheet)
                     }
                     .onError { error ->
                         MessageController.sendMessage(error.asMessageText())

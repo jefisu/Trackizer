@@ -27,6 +27,7 @@ import com.jefisu.home.presentation.components.SubscriptionList
 import com.jefisu.home.presentation.components.SubscriptionTab
 import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
 
 @Composable
@@ -34,6 +35,8 @@ internal fun HomeScreen(
     state: HomeState,
     onAction: (HomeAction) -> Unit,
 ) {
+    val isSmallScreen = LocalScreenIsSmall.current
+
     TrackizerScaffold(
         topBar = {
             TrackizerTopBar(
@@ -55,7 +58,12 @@ internal fun HomeScreen(
                     onAction(HomeAction.Navigate(Destination.SpendingBudgetsScreen))
                 },
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(
+                modifier = Modifier.height(
+                    if (isSmallScreen) TrackizerTheme.spacing.extraSmall
+                    else TrackizerTheme.spacing.medium,
+                ),
+            )
             HorizontalTabs(
                 modifier = Modifier.padding(horizontal = TrackizerTheme.spacing.extraMedium),
             ) { tab ->

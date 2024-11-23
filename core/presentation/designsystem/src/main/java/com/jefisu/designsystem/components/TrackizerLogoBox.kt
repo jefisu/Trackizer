@@ -22,6 +22,7 @@ import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @Composable
 fun TrackizerLogoBox(content: @Composable BoxScope.() -> Unit) {
@@ -29,7 +30,7 @@ fun TrackizerLogoBox(content: @Composable BoxScope.() -> Unit) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(top = 70.dp)
+                .padding(top = 70.dp.times(if (LocalScreenIsSmall.current) 0.8f else 1f))
                 .align(Alignment.TopCenter),
         ) {
             Image(

@@ -31,6 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.composables.core.SheetDetent
+import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.TrackizerAlertBottomSheet
@@ -78,8 +80,9 @@ internal fun SpendingBudgetScreen(
         }
     }
 
+    val deleteSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     TrackizerAlertBottomSheet(
-        isVisible = state.showDeleteAlert,
+        sheetState = deleteSheetState,
         title = stringResource(
             id = UiRes.string.delete_alert_title,
             stringResource(UiRes.string.category).lowercase()
@@ -98,7 +101,9 @@ internal fun SpendingBudgetScreen(
         },
     )
 
+    val categorySheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     AddCategoryBottomSheet(
+        sheetState = categorySheetState,
         state = state,
         onAction = onAction,
     )
@@ -172,6 +177,7 @@ internal fun SpendingBudgetScreen(
                     contentPadding = PaddingValues(TrackizerTheme.spacing.large),
                     onClick = {
                         onAction(SpendingBudgetsAction.ToggleAddCategoryBottomSheet())
+                        categorySheetState.currentDetent = SheetDetent.FullyExpanded
                     },
                     modifier = Modifier.padding(bottom = TrackizerTheme.spacing.small),
                 )
@@ -189,9 +195,11 @@ internal fun SpendingBudgetScreen(
                                 onAction(
                                     SpendingBudgetsAction.ToggleAddCategoryBottomSheet(category),
                                 )
+                                categorySheetState.currentDetent = SheetDetent.FullyExpanded
                             },
                             onLongClick = {
                                 onAction(SpendingBudgetsAction.ToogleDeleteAlert(category))
+                                deleteSheetState.currentDetent = SheetDetent.FullyExpanded
                             },
                         ),
                 )

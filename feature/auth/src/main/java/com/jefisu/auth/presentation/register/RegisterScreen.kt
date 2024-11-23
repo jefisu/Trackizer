@@ -1,6 +1,6 @@
 package com.jefisu.auth.presentation.register
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jefisu.auth.R
 import com.jefisu.auth.presentation.register.components.PasswordStrengthMeter
@@ -32,6 +31,7 @@ import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.imeOffset
+import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @Composable
 fun RegisterScreenRoot(navigateToLogin: () -> Unit) {
@@ -52,66 +52,76 @@ internal fun RegisterScreen(
     navigateToLogin: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
+    val isSmallScreen = LocalScreenIsSmall.current
 
-    Column(
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(TrackizerTheme.spacing.extraMedium)
-            .imeOffset(imeThresholdPercent = 0.3f)
+            .padding(TrackizerTheme.spacing.extraMedium),
     ) {
-        TrackizerTextField(
-            text = state.email,
-            onTextChange = { onAction(RegisterAction.EmailChanged(it)) },
-            fieldName = stringResource(R.string.e_mail_address),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            keyboardActions = KeyboardActions {
-                focusManager.moveFocus(FocusDirection.Down)
-            },
-        )
-        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
-        TrackizerPasswordTextField(
-            text = state.password,
-            onTextChange = { onAction(RegisterAction.PasswordChanged(it)) },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions {
-                focusManager.clearFocus()
-            },
-        )
-        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
-        PasswordStrengthMeter(
-            passwordStrength = state.passwordStrength,
-        )
-        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
-        Text(
-            text = stringResource(R.string.use_8_or_more_characters),
-            style = TrackizerTheme.typography.bodySmall,
-            color = Gray50,
-            textAlign = TextAlign.Justify,
-        )
-        Spacer(modifier = Modifier.height(40.dp))
-        TrackizerButton(
-            text = stringResource(R.string.get_started_it_s_free),
-            type = ButtonType.Primary,
-            onClick = {
-                onAction(RegisterAction.Register)
-            },
-            isLoading = state.isLoading,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(130.dp))
-        Text(
-            text = stringResource(R.string.do_you_have_already_an_account),
-            style = TrackizerTheme.typography.bodyMedium,
-        )
-        Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
-        TrackizerButton(
-            text = stringResource(R.string.sign_in),
-            type = ButtonType.Secondary,
-            onClick = navigateToLogin,
-            modifier = Modifier.fillMaxWidth(),
-        )
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .imeOffset(
+                    imeThresholdPercent = if (isSmallScreen) 0.3f else 0.1f,
+                ),
+        ) {
+            TrackizerTextField(
+                text = state.email,
+                onTextChange = { onAction(RegisterAction.EmailChanged(it)) },
+                fieldName = stringResource(R.string.e_mail_address),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions {
+                    focusManager.moveFocus(FocusDirection.Down)
+                },
+            )
+            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
+            TrackizerPasswordTextField(
+                text = state.password,
+                onTextChange = { onAction(RegisterAction.PasswordChanged(it)) },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions {
+                    focusManager.clearFocus()
+                },
+            )
+            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
+            PasswordStrengthMeter(
+                passwordStrength = state.passwordStrength,
+            )
+            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
+            Text(
+                text = stringResource(R.string.use_8_or_more_characters),
+                style = TrackizerTheme.typography.bodySmall,
+                color = Gray50,
+                textAlign = TextAlign.Justify,
+            )
+            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.medium))
+            TrackizerButton(
+                text = stringResource(R.string.get_started_it_s_free),
+                type = ButtonType.Primary,
+                onClick = {
+                    onAction(RegisterAction.Register)
+                },
+                isLoading = state.isLoading,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+        Column(
+            modifier = Modifier.align(Alignment.BottomStart),
+        ) {
+            Text(
+                text = stringResource(R.string.do_you_have_already_an_account),
+                style = TrackizerTheme.typography.bodyMedium,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+            Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
+            TrackizerButton(
+                text = stringResource(R.string.sign_in),
+                type = ButtonType.Secondary,
+                onClick = navigateToLogin,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
 }
 

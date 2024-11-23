@@ -1,18 +1,17 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.jefisu.auth.presentation.login.components
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.composables.core.ModalBottomSheetState
+import com.composables.core.SheetDetent
 import com.jefisu.auth.R
 import com.jefisu.auth.presentation.login.LoginAction
+import com.jefisu.auth.presentation.login.LoginEvent
 import com.jefisu.auth.presentation.login.LoginState
 import com.jefisu.designsystem.Gray50
 import com.jefisu.designsystem.TrackizerTheme
@@ -22,18 +21,24 @@ import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.ui.ObserveAsEvents
+import com.jefisu.ui.UiEventController
 
 @Composable
 fun ForgotPasswordBottomSheet(
+    sheetState: ModalBottomSheetState,
     state: LoginState,
     onAction: (LoginAction) -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    ObserveAsEvents(UiEventController.events) { event ->
+        if (event is LoginEvent.HideForgotPasswordBottomSheet) {
+            sheetState.currentDetent = SheetDetent.Hidden
+        }
+    }
 
     TrackizerBottomSheet(
-        isVisible = state.showForgotPasswordSheet,
         sheetState = sheetState,
-        onDismiss = { onAction(LoginAction.ToggleForgotPasswordBottomSheet) },
+        onDismiss = { },
     ) {
         Text(
             text = stringResource(R.string.forgot_your_password),

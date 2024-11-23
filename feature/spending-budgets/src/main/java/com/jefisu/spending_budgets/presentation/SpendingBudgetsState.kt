@@ -5,11 +5,8 @@ import com.jefisu.domain.model.CategoryType
 
 data class SpendingBudgetsState(
     val categories: List<Category> = emptyList(),
-    val showAddCategoryBottomSheet: Boolean = false,
     val category: Category? = null,
-    val isSelectingCategoryType: Boolean = false,
     val categoryName: String = "",
     val categoryBudget: String = "",
     val categoryType: CategoryType = CategoryType.Entertainment,
-    val showDeleteAlert: Boolean = false,
 )

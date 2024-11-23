@@ -16,21 +16,25 @@ import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.domain.model.SubscriptionService
+import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @Composable
 internal fun SubscriptionServicePageItem(
     service: SubscriptionService,
     modifier: Modifier = Modifier,
 ) {
+    val isSmallScreen = LocalScreenIsSmall.current
+    val scaleComponent = if (isSmallScreen) 0.8f else 1f
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
     ) {
         SubscriptionIcon(
             icon = service,
-            containerSize = 161.dp,
-            cornerSize = 50.dp,
-            iconSize = TrackizerTheme.size.iconExtraLarge,
+            containerSize = 161.dp * scaleComponent,
+            cornerSize = 50.dp * scaleComponent,
+            iconSize = TrackizerTheme.size.iconExtraLarge * scaleComponent,
         )
         Spacer(Modifier.height(TrackizerTheme.spacing.extraMedium))
         Text(

@@ -26,9 +26,11 @@ import com.jefisu.designsystem.components.TrackizerLogoBox
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @Composable
 internal fun WelcomeScreen(onNavigate: (Destination) -> Unit) {
+    val isSmallScreen = LocalScreenIsSmall.current
     TrackizerLogoBox {
         Image(
             painter = painterResource(id = R.drawable.welcome_asset),
@@ -36,7 +38,7 @@ internal fun WelcomeScreen(onNavigate: (Destination) -> Unit) {
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 120.dp),
+                .padding(top = 120.dp * if (isSmallScreen) 0.6f else 1f),
         )
         Image(
             painter = painterResource(id = R.drawable.shapes_to_blur),

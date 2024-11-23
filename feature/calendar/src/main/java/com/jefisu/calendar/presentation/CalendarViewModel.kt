@@ -43,12 +43,6 @@ internal class CalendarViewModel @Inject constructor(
                 }
             }
 
-            is CalendarAction.ToggleMonthPicker -> {
-                state = state.copy(
-                    showMonthPicker = !state.showMonthPicker,
-                )
-            }
-
             is CalendarAction.Navigate -> {
                 viewModelScope.launch { navigator.navigate(action.destination) }
             }

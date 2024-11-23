@@ -29,6 +29,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.composables.core.SheetDetent
+import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.designsystem.Black23
 import com.jefisu.designsystem.BorderBrush
 import com.jefisu.designsystem.Gray100
@@ -55,6 +57,7 @@ import com.jefisu.subscription_info.presentation.util.InfoRow
 import com.jefisu.subscription_info.presentation.util.InfoRowType
 import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.ext.toDateFormat
+import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
 
 @Composable
@@ -62,12 +65,15 @@ internal fun SubscriptionInfoScreen(
     state: SubscriptionInfoState,
     onAction: (SubscriptionInfoAction) -> Unit,
 ) {
+    val isSmallScreen = LocalScreenIsSmall.current
+    val scaleScreen = if (isSmallScreen) 0.8f else 1f
     val horizontalSpacingInfoRow = 20.dp
 
+    val deleteSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     TrackizerAlertBottomSheet(
-        isVisible = state.showDeleteAlert,
+        sheetState = deleteSheetState,
         title = stringResource(
-            id = com.jefisu.ui.R.string.delete_alert_title,
+            id = UiRes.string.delete_alert_title,
             stringResource(UiRes.string.subscription).lowercase(),
         ),
         description = stringResource(
@@ -76,22 +82,20 @@ internal fun SubscriptionInfoScreen(
         ),
         onDismissTextButton = stringResource(UiRes.string.button_alert_cancel),
         onConfirmTextButton = stringResource(UiRes.string.button_alert_delete),
-        onDismiss = {
-            onAction(SubscriptionInfoAction.ToogleDeleteAlert)
-        },
+        onDismiss = {},
         onConfirm = {
             onAction(SubscriptionInfoAction.DeleteSubscription)
         },
     )
 
+    val unsavedChangesSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     TrackizerAlertBottomSheet(
-        isVisible = state.showUnsavedChangesAlert,
+        sheetState = unsavedChangesSheetState,
         title = stringResource(R.string.confirm_changes),
         description = stringResource(R.string.do_you_want_to_exit_without_save_changes),
         onDismissTextButton = stringResource(R.string.discard),
         onConfirmTextButton = stringResource(UiRes.string.save),
         onDismiss = {
-            onAction(SubscriptionInfoAction.ToogleUnsavedChangesAlert)
             onAction(SubscriptionInfoAction.NavigateBack)
         },
         onConfirm = {
@@ -99,7 +103,9 @@ internal fun SubscriptionInfoScreen(
         },
     )
 
+    val infoSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     SubscriptionInfoBottomSheet(
+        sheetState = infoSheetState,
         state = state,
         onAction = onAction,
     )
@@ -150,7 +156,10 @@ internal fun SubscriptionInfoScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(TrackizerTheme.spacing.extraMedium)
+                    .padding(
+                        horizontal = TrackizerTheme.spacing.extraMedium,
+                        vertical = if (isSmallScreen) TrackizerTheme.spacing.small else TrackizerTheme.spacing.extraMedium,
+                    )
                     .clip(RoundedCornerShape(24.dp))
                     .background(Black23),
             ) {
@@ -160,7 +169,8 @@ internal fun SubscriptionInfoScreen(
                         TrackizerTopBarDefaults.backNavigationIcon(
                             onClick = {
                                 if (state.hasUnsavedChanges) {
-                                    onAction(SubscriptionInfoAction.ToogleUnsavedChangesAlert)
+                                    unsavedChangesSheetState.currentDetent =
+                                        SheetDetent.FullyExpanded
                                     return@backNavigationIcon
                                 }
                                 onAction(SubscriptionInfoAction.NavigateBack)
@@ -171,7 +181,7 @@ internal fun SubscriptionInfoScreen(
                     actions = {
                         IconButton(
                             onClick = {
-                                onAction(SubscriptionInfoAction.ToogleDeleteAlert)
+                                deleteSheetState.currentDetent = SheetDetent.FullyExpanded
                             },
                         ) {
                             Icon(
@@ -180,18 +190,23 @@ internal fun SubscriptionInfoScreen(
                             )
                         }
                     },
-                    modifier = Modifier.padding(TrackizerTheme.spacing.medium),
+                    modifier = Modifier.padding(
+                        horizontal = TrackizerTheme.spacing.medium,
+                        vertical = if (isSmallScreen) 0.dp else TrackizerTheme.spacing.small,
+                    ),
                 )
                 SubscriptionIcon(
                     icon = subscription.service,
-                    containerSize = 106.dp,
-                    iconSize = 61.dp,
-                    cornerSize = 30.dp,
+                    containerSize = 106.dp * scaleScreen,
+                    iconSize = 61.dp * scaleScreen,
+                    cornerSize = 30.dp * scaleScreen,
                 )
                 Spacer(Modifier.height(TrackizerTheme.spacing.medium))
                 Text(
                     text = subscription.service.title,
-                    style = TrackizerTheme.typography.headline6,
+                    style = TrackizerTheme.typography.headline6.copy(
+                        fontSize = TrackizerTheme.typography.headline6.fontSize * scaleScreen,
+                    ),
                     modifier = Modifier.basicMarquee(),
                 )
                 Spacer(Modifier.height(TrackizerTheme.spacing.small))
@@ -203,7 +218,11 @@ internal fun SubscriptionInfoScreen(
                     style = TrackizerTheme.typography.headline4,
                     color = Gray30,
                 )
-                Spacer(Modifier.height(TrackizerTheme.spacing.large))
+                Spacer(
+                    Modifier.height(
+                        if (isSmallScreen) TrackizerTheme.spacing.small else TrackizerTheme.spacing.large,
+                    ),
+                )
                 CustomDivider()
                 Column(
                     modifier = Modifier
@@ -212,7 +231,7 @@ internal fun SubscriptionInfoScreen(
                         .background(Gray70)
                         .padding(
                             horizontal = horizontalSpacingInfoRow,
-                            vertical = TrackizerTheme.spacing.medium,
+                            vertical = if (isSmallScreen) TrackizerTheme.spacing.small else TrackizerTheme.spacing.medium,
                         ),
                 ) {
                     Column(
@@ -233,17 +252,23 @@ internal fun SubscriptionInfoScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .rippleClickable {
+                                        if (info.type == InfoRowType.Name) return@rippleClickable
                                         onAction(
                                             SubscriptionInfoAction.ToggleSubscriptionInfoSheet(
-                                                info,
+                                                infoRow = info,
                                             ),
                                         )
+                                        infoSheetState.currentDetent = SheetDetent.FullyExpanded
                                     }
                                     .padding(horizontal = horizontalSpacingInfoRow),
                             )
                         }
                     }
-                    Spacer(Modifier.height(TrackizerTheme.spacing.large))
+                    Spacer(
+                        Modifier.height(
+                            if (isSmallScreen) TrackizerTheme.spacing.medium else TrackizerTheme.spacing.large,
+                        ),
+                    )
                     TrackizerButton(
                         text = stringResource(UiRes.string.save),
                         type = ButtonType.Secondary,
