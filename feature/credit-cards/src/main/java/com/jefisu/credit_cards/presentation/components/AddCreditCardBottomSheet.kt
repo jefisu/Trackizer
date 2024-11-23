@@ -1,9 +1,12 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 
 package com.jefisu.credit_cards.presentation.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,9 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import com.composables.core.ModalBottomSheetState
 import com.composables.core.SheetDetent
-import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.domain.CardConstants
 import com.jefisu.credit_cards.presentation.CreditCardAction
@@ -47,8 +49,10 @@ import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.ui.ObserveAsEvents
 import com.jefisu.ui.UiEventController
+import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.steliospapamichail.creditcardmasker.viewtransformations.CardNumberMask
 import com.steliospapamichail.creditcardmasker.viewtransformations.ExpirationDateMask
 
@@ -84,37 +88,47 @@ fun AddCreditCardBottomSheet(
                 modifier = Modifier.weight(1f),
             )
             Spacer(Modifier.width(TrackizerTheme.spacing.medium))
-            IconButton(
-                onClick = {
-                    sheetState.currentDetent = SheetDetent.Hidden
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = "Close add card bottom sheet",
-                )
-            }
+            Icon(
+                imageVector = Icons.Rounded.Close,
+                contentDescription = "Close add card bottom sheet",
+                modifier = Modifier.rippleClickable(
+                    indication = rememberRipple(
+                        bounded = false,
+                        radius = 16.dp,
+                    ),
+                    onClick = {
+                        sheetState.currentDetent = SheetDetent.Hidden
+                    },
+                ),
+            )
         }
-        Spacer(Modifier.height(TrackizerTheme.spacing.small))
-        TrackizerTextField(
-            text = state.cardName,
-            onTextChange = {
-                if (it.length <= CardConstants.CARD_NAME_LENGTH) {
-                    onAction(CreditCardAction.CardNameChanged(it))
-                }
-            },
-            fieldName = stringResource(R.string.card_name),
-        )
         Spacer(Modifier.height(TrackizerTheme.spacing.medium))
-        TrackizerTextField(
-            text = state.cardHolder,
-            onTextChange = {
-                if (it.length <= CardConstants.CARD_HOLDER_LENGTH) {
-                    onAction(CreditCardAction.CardHolderChanged(it))
-                }
-            },
-            fieldName = stringResource(R.string.card_holder),
-        )
+        FlowRow(
+            maxItemsInEachRow = if (LocalScreenIsSmall.current) 2 else 1,
+            horizontalArrangement = Arrangement.spacedBy(TrackizerTheme.spacing.medium),
+            verticalArrangement = Arrangement.spacedBy(TrackizerTheme.spacing.medium),
+        ) {
+            TrackizerTextField(
+                text = state.cardName,
+                onTextChange = {
+                    if (it.length <= CardConstants.CARD_NAME_LENGTH) {
+                        onAction(CreditCardAction.CardNameChanged(it))
+                    }
+                },
+                fieldName = stringResource(R.string.card_name),
+                modifier = Modifier.weight(1f),
+            )
+            TrackizerTextField(
+                text = state.cardHolder,
+                onTextChange = {
+                    if (it.length <= CardConstants.CARD_HOLDER_LENGTH) {
+                        onAction(CreditCardAction.CardHolderChanged(it))
+                    }
+                },
+                fieldName = stringResource(R.string.card_holder),
+                modifier = Modifier.weight(1f),
+            )
+        }
         Spacer(Modifier.height(TrackizerTheme.spacing.medium))
         Row {
             TrackizerTextField(
@@ -190,7 +204,11 @@ fun AddCreditCardBottomSheet(
                 modifier = Modifier.weight(1f),
             )
         }
-        Spacer(Modifier.height(TrackizerTheme.spacing.large))
+        Spacer(
+            Modifier.height(
+                if (LocalScreenIsSmall.current) TrackizerTheme.spacing.medium else TrackizerTheme.spacing.large,
+            ),
+        )
         TrackizerButton(
             text = buttonText,
             type = ButtonType.Primary,

@@ -5,14 +5,17 @@ package com.jefisu.designsystem.components
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -53,15 +56,18 @@ fun TrackizerBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        bottom = TrackizerTheme.spacing.extraMedium,
+                        bottom = TrackizerTheme.spacing.small,
                         start = TrackizerTheme.spacing.extraMedium,
                         end = TrackizerTheme.spacing.extraMedium,
                     )
                     .navigationBarsPadding(),
             ) {
-                BottomSheetDefaults.DragHandle(
-                    color = Gray50,
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                Box(
+                    modifier = Modifier
+                        .padding(vertical = TrackizerTheme.spacing.medium)
+                        .height(5.dp)
+                        .width(40.dp)
+                        .background(Gray50, CircleShape),
                 )
                 content()
             }

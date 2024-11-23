@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -67,7 +68,7 @@ fun AddCategoryBottomSheet(
     TrackizerBottomSheet(
         sheetState = sheetState,
         onDismiss = { onAction(SpendingBudgetsAction.ToggleAddCategoryBottomSheet()) },
-        modifier = Modifier.imeOffset(imeThresholdPercent = 0.35f),
+        modifier = Modifier.imePadding()
     ) {
         TrackizerTextField(
             text = state.categoryName,
@@ -92,7 +93,7 @@ fun AddCategoryBottomSheet(
             label = stringResource(UiRes.string.budget),
             modifier = Modifier.fillMaxWidth(),
         )
-        Spacer(Modifier.height(TrackizerTheme.spacing.large))
+        Spacer(Modifier.height(TrackizerTheme.spacing.extraMedium))
         TrackizerButton(
             text = stringResource(
                 state.category?.let { R.string.edit_category } ?: R.string.add_category,
