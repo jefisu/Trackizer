@@ -35,16 +35,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            signingConfig = signingConfigs.create(this.name) {
-                keyAlias = getSigningConfigProperty("keyAlias")
-                keyPassword = getSigningConfigProperty("keyPassword")
-                storeFile = file(getSigningConfigProperty("storeFile"))
-                storePassword = getSigningConfigProperty("storePassword")
-                enableV1Signing = true
-                enableV2Signing = true
-                enableV3Signing = true
-                enableV4Signing = true
-            }
         }
     }
 }
