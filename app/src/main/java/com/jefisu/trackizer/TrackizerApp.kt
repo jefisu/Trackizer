@@ -47,10 +47,10 @@ class TrackizerApp :
 
     private fun initFirebase() {
         val options = FirebaseOptions.Builder()
-            .setProjectId(BuildConfig.firebaseProjectId)
-            .setApplicationId(BuildConfig.firebaseAppId)
-            .setApiKey(BuildConfig.firebaseApiKey)
-            .setStorageBucket(BuildConfig.firebaseStorageBucket)
+            .setProjectId(BuildConfig.FIREBASE_PROJECT_ID)
+            .setApplicationId(BuildConfig.FIREBASE_APP_ID)
+            .setApiKey(BuildConfig.FIREBASE_API_KEY)
+            .setStorageBucket(BuildConfig.FIREBASE_STORAGE_BUCKET)
             .build()
 
         FirebaseApp.initializeApp(this, options)
