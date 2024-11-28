@@ -35,6 +35,7 @@ jobs:
         with:
           gradlePath: app/build.gradle.kts
           versionCode: ${{ github.run_number }}
+          versionName: '0.${{ github.run_number }}'
 
       - name: Assemble Release Bundle
         run: ./gradlew bundleRelease
@@ -58,4 +59,4 @@ jobs:
           packageName: com.jefisu.trackizer
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: 'internal'
-          status: 'completed'
+          status: 'draft'
