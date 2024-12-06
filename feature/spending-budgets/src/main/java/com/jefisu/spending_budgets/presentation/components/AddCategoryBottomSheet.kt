@@ -29,6 +29,7 @@ import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.designsystem.Gray50
 import com.jefisu.designsystem.Gray70
+import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.CurrencyTextField
@@ -41,7 +42,6 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.asIconResource
 import com.jefisu.designsystem.util.asNameResource
-import com.jefisu.designsystem.util.imeOffset
 import com.jefisu.domain.model.CategoryType
 import com.jefisu.spending_budgets.R
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsAction
@@ -49,9 +49,8 @@ import com.jefisu.spending_budgets.presentation.SpendingBudgetsEvent
 import com.jefisu.spending_budgets.presentation.SpendingBudgetsState
 import com.jefisu.spending_budgets.presentation.util.CategoryDefaults
 import com.jefisu.ui.ObserveAsEvents
-import com.jefisu.ui.UiEventController
-import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.ui.R as UiRes
+import com.jefisu.ui.UiEventController
 
 @Composable
 fun AddCategoryBottomSheet(
@@ -68,7 +67,7 @@ fun AddCategoryBottomSheet(
     TrackizerBottomSheet(
         sheetState = sheetState,
         onDismiss = { onAction(SpendingBudgetsAction.ToggleAddCategoryBottomSheet()) },
-        modifier = Modifier.imePadding()
+        modifier = Modifier.imePadding(),
     ) {
         TrackizerTextField(
             text = state.categoryName,
@@ -159,7 +158,7 @@ fun CategoryTypePicker(
                 interactionSource = null,
                 onClick = {
                     onAction(SpendingBudgetsAction.CategorTypeChanged(state.categoryType))
-                    categoryTypeSheetState.currentDetent = SheetDetent.Hidden
+                    categoryTypeSheetState.currentDetent = SheetDetent.FullyExpanded
                 },
             ),
         ) {
