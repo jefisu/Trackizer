@@ -11,5 +11,7 @@ sealed interface SettingsAction {
     data class LanguageChanged(val locale: Locale) : SettingsAction
     data class CurrencyChanged(val currency: Currency) : SettingsAction
     data class Navigate(val destination: Destination) : SettingsAction
+    data class PasswordChanged(val password: String) : SettingsAction
+    data object DeleteAccount : SettingsAction
     data object NavigateBack : SettingsAction
 }

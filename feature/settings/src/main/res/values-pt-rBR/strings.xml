@@ -12,6 +12,7 @@
     <string name="cloud_sync">Sincronização em nuvem</string>
     <string name="default_currency">Moeda padrão</string>
     <string name="language">Idioma</string>
+    <string name="account_and_security">Conta e Segurança</string>
 
     <!-- Button text   -->
     <string name="sign_out">Sair</string>
@@ -19,4 +20,8 @@
     <!--  Picker options title   -->
     <string name="select_a">Selecione um %s</string>
     <string name="currency">moeda</string>
+    <string name="delete_account">Deletar conta</string>
+
+    <!-- Delete account -->
+    <string name="delete_account_description">Tem certeza de que deseja excluir sua conta? Esta ação é permanente e não pode ser desfeita.</string>
 </resources>

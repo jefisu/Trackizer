@@ -10,6 +10,8 @@
     <string name="item_not_added">O %s não foi adicionado.</string>
     <string name="unknown_error">Ocorreu um erro desconhecido.</string>
     <string name="data_not_available">Não há %s disponíveis para seleção. Adicione um e tente novamente.</string>
+    <string name="incorrect_password_error">A senha que você digitou está incorreta. Por favor, tente novamente.</string>
+    <string name="delete_account_failed_error">Falha ao excluir conta. Por favor, tente novamente mais tarde.</string>
 
     <!-- Arguments -->
     <string name="user">Usuário</string>

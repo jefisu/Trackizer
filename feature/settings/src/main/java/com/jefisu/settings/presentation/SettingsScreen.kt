@@ -26,6 +26,7 @@ import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
+import com.jefisu.designsystem.components.TrackizerAlertBottomSheet
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.components.TrackizerOptionPicker
 import com.jefisu.designsystem.components.TrackizerPickerDefaults
@@ -35,6 +36,7 @@ import com.jefisu.designsystem.components.TrackizerTopBar
 import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
 import com.jefisu.settings.R
+import com.jefisu.settings.presentation.components.DeleteAccountAlert
 import com.jefisu.settings.presentation.components.SettingOptionItem
 import com.jefisu.settings.presentation.components.SettingOptions
 import com.jefisu.settings.presentation.components.UserProfile
@@ -99,6 +101,13 @@ internal fun SettingsScreen(
                 .replaceFirstChar { it.titlecase() },
         )
     }
+
+    val deleteAccountSheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
+    DeleteAccountAlert(
+        sheetState = deleteAccountSheetState,
+        settingsState = state,
+        onAction = onAction
+    )
 
     @Composable
     fun Space(defaultSpace: Dp, smallerSpace: Dp) {
@@ -209,6 +218,21 @@ internal fun SettingsScreen(
                         },
                         onClick = {
                             selectLanguageSheetState.currentDetent = SheetDetent.FullyExpanded
+                        },
+                    )
+                }
+                Space(
+                    defaultSpace = TrackizerTheme.spacing.extraMedium,
+                    smallerSpace = TrackizerTheme.spacing.medium,
+                )
+                SettingOptions(
+                    title = stringResource(R.string.account_and_security),
+                ) {
+                    SettingOptionItem(
+                        icon = R.drawable.ic_user_account,
+                        title = stringResource(R.string.delete_account),
+                        onClick = {
+                            deleteAccountSheetState.currentDetent = SheetDetent.FullyExpanded
                         },
                     )
                 }

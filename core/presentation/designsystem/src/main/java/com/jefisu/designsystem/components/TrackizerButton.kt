@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.jefisu.designsystem.AccentPrimary100
+import com.jefisu.designsystem.Gray50
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
@@ -44,8 +45,9 @@ fun TrackizerButton(
     @DrawableRes leadingIconRes: Int? = null,
     isLoading: Boolean = false,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    enabled: Boolean = true,
 ) {
-    val shadowModifier = if (type.hasShadow) {
+    val shadowModifier = if (type.hasShadow && enabled) {
         Modifier.dropShadow(
             shape = CircleShape,
             color = type.containerColor.copy(alpha = 0.5f),
@@ -58,13 +60,15 @@ fun TrackizerButton(
 
     Button(
         onClick = onClick,
+        enabled = enabled,
         border = BorderStroke(
             width = 1.dp,
-            brush = type.borderGradient,
+            brush = if (enabled) type.borderGradient else SolidColor(Color.Transparent),
         ),
         colors = ButtonDefaults.buttonColors(
             containerColor = type.containerColor,
             contentColor = type.contentColor,
+            disabledContentColor = Gray50
         ),
         contentPadding = contentPadding,
         modifier = modifier
