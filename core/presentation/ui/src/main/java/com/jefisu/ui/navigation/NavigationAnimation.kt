@@ -20,7 +20,7 @@ enum class AnimationType {
 
 class NavigationAnimation(
     private val animConfigs: List<AnimationConfig> = emptyList(),
-    private val animDuration: Int = 700,
+    val animDuration: Int = 700,
 ) {
 
     private fun getSlideDirection(
