@@ -10,6 +10,8 @@
     <string name="item_not_added">The %s was not added.</string>
     <string name="unknown_error">An unknown error occurred.</string>
     <string name="data_not_available">There are no %s available to select. Please add one and try again.</string>
+    <string name="incorrect_password_error">The password you entered is incorrect. Please try again.</string>
+    <string name="delete_account_failed_error">Failed to delete account. Please try again later.</string>
 
     <!-- Arguments -->
     <string name="user">User</string>

@@ -12,6 +12,7 @@
     <string name="cloud_sync">Cloud Sync</string>
     <string name="default_currency">Default currency</string>
     <string name="language">Language</string>
+    <string name="account_and_security">Account and Security</string>
 
     <!-- Button text   -->
     <string name="sign_out">Sign out</string>
@@ -19,4 +20,8 @@
     <!--  Picker options title   -->
     <string name="select_a">Select a %s</string>
     <string name="currency">currency</string>
+    <string name="delete_account">Delete account</string>
+
+    <!-- Delete account -->
+    <string name="delete_account_description">Are you sure you want to delete your account? This action is permanent and cannot be undone.</string>
 </resources>

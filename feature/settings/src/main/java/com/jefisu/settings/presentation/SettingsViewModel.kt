@@ -1,12 +1,19 @@
 package com.jefisu.settings.presentation
 
+import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jefisu.domain.model.Category
+import com.jefisu.domain.model.CategoryType
 import com.jefisu.domain.model.Currency
+import com.jefisu.domain.repository.CategoryRepository
 import com.jefisu.domain.repository.SettingsRepository
 import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.DataMessage
+import com.jefisu.domain.util.onError
+import com.jefisu.domain.util.onSuccess
 import com.jefisu.ui.MessageController
+import com.jefisu.ui.UiEventController
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.navigation.Navigator
 import com.jefisu.ui.util.asMessageText
@@ -16,6 +23,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Locale
 import javax.inject.Inject
@@ -25,6 +33,7 @@ import kotlin.time.Duration.Companion.seconds
 class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val userRepository: UserRepository,
+    private val categoryRepository: CategoryRepository,
     private val navigator: Navigator,
 ) : ViewModel() {
 
@@ -43,6 +52,20 @@ class SettingsViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(5.seconds),
         _state.value,
     )
+
+    init {
+        (1..100).toList().fastForEach { i ->
+            viewModelScope.launch {
+                categoryRepository.insert(
+                    Category(
+                        name = "Teste $i",
+                        budget = i.toFloat(),
+                        type = CategoryType.Security,
+                    ),
+                )
+            }
+        }
+    }
 
     fun onAction(action: SettingsAction) {
         when (action) {
@@ -65,6 +88,17 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.NavigateBack -> {
                 viewModelScope.launch { navigator.navigateUp() }
             }
+
+            is SettingsAction.PasswordChanged -> {
+                _state.update {
+                    it.copy(
+                        userPassword = action.password,
+                        canDeleteAccount = action.password.isNotBlank(),
+                    )
+                }
+            }
+
+            SettingsAction.DeleteAccount -> deleteAccount()
         }
     }
 
@@ -96,6 +130,26 @@ class SettingsViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private fun deleteAccount() {
+        viewModelScope.launch {
+            _state.update { it.copy(deleteAccountInProgress = true) }
+            val result = userRepository.deleteAccount(_state.value.userPassword)
+            result
+                .onSuccess {
+                    UiEventController.sendEvent(SettingsEvent.DeletedAccount)
+                    navigator.navigate(Destination.AuthGraph) {
+                        popUpTo(Destination.AuthenticatedGraph) {
+                            inclusive = true
+                        }
+                    }
+                }
+                .onError { message ->
+                    MessageController.sendMessage(message.asMessageText())
+                }
+            _state.update { it.copy(deleteAccountInProgress = false) }
         }
     }
 }

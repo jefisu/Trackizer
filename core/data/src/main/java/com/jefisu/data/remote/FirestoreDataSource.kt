@@ -15,8 +15,10 @@ import com.jefisu.domain.util.DataMessage
 import com.jefisu.domain.util.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class FirestoreDataSource<T : FirestoreDocumentSync>(
@@ -54,5 +56,20 @@ class FirestoreDataSource<T : FirestoreDocumentSync>(
         causedException = "Delete in Firestore - $clazz",
     ) {
         _collection.document(id).delete().await()
+    }
+
+    suspend fun deleteAll(): Result<Unit, DataMessage> = safeCallResult(
+        dispatcher = dispatcher.io,
+        causedException = "Delete all in Firestore - $clazz",
+    ) {
+        _collection
+            .whereEqualTo("userId", _userFlow.firstOrNull()?.uid)
+            .get()
+            .await()
+            .forEach { snapshot ->
+                launch {
+                    snapshot.reference.delete()
+                }
+            }
     }
 }
