@@ -40,9 +40,12 @@ import com.jefisu.domain.model.Card
 import com.jefisu.domain.model.Category
 import com.jefisu.subscription_info.R
 import com.jefisu.subscription_info.presentation.SubscriptionInfoAction
+import com.jefisu.subscription_info.presentation.SubscriptionInfoEvent
 import com.jefisu.subscription_info.presentation.SubscriptionInfoState
 import com.jefisu.subscription_info.presentation.util.InfoRowType
+import com.jefisu.ui.ObserveAsEvents
 import com.jefisu.ui.R as UiRes
+import com.jefisu.ui.UiEventController
 
 @Composable
 fun SubscriptionInfoBottomSheet(
@@ -54,6 +57,16 @@ fun SubscriptionInfoBottomSheet(
         val datePickerState = rememberTrackizerDatePickerState(
             initialDate = subscription.firstPayment,
         )
+
+        ObserveAsEvents(UiEventController.events) { event ->
+            if (event is SubscriptionInfoEvent.ToogleBottomSheet) {
+                sheetState.currentDetent = if (sheetState.currentDetent == SheetDetent.Hidden) {
+                    SheetDetent.FullyExpanded
+                } else {
+                    SheetDetent.Hidden
+                }
+            }
+        }
 
         TrackizerBottomSheet(
             sheetState = sheetState,
