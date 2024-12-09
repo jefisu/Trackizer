@@ -1,12 +1,8 @@
 package com.jefisu.settings.presentation
 
-import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jefisu.domain.model.Category
-import com.jefisu.domain.model.CategoryType
 import com.jefisu.domain.model.Currency
-import com.jefisu.domain.repository.CategoryRepository
 import com.jefisu.domain.repository.SettingsRepository
 import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.DataMessage
@@ -33,7 +29,6 @@ import kotlin.time.Duration.Companion.seconds
 class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val userRepository: UserRepository,
-    private val categoryRepository: CategoryRepository,
     private val navigator: Navigator,
 ) : ViewModel() {
 
@@ -52,20 +47,6 @@ class SettingsViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(5.seconds),
         _state.value,
     )
-
-    init {
-        (1..100).toList().fastForEach { i ->
-            viewModelScope.launch {
-                categoryRepository.insert(
-                    Category(
-                        name = "Teste $i",
-                        budget = i.toFloat(),
-                        type = CategoryType.Security,
-                    ),
-                )
-            }
-        }
-    }
 
     fun onAction(action: SettingsAction) {
         when (action) {
