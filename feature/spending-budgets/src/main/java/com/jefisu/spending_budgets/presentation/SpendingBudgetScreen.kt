@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -50,9 +49,9 @@ import com.jefisu.spending_budgets.presentation.components.AddCategoryBottomShee
 import com.jefisu.spending_budgets.presentation.components.BudgetGauge
 import com.jefisu.spending_budgets.presentation.components.CategoryItem
 import com.jefisu.spending_budgets.presentation.components.PieData
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.util.SampleData
-import com.jefisu.ui.R as UiRes
 
 @Composable
 internal fun SpendingBudgetScreen(
@@ -85,11 +84,11 @@ internal fun SpendingBudgetScreen(
         sheetState = deleteSheetState,
         title = stringResource(
             id = UiRes.string.delete_alert_title,
-            stringResource(UiRes.string.category).lowercase()
+            stringResource(UiRes.string.category).lowercase(),
         ),
         description = stringResource(
             id = UiRes.string.delete_alert_description,
-            stringResource(UiRes.string.category).lowercase()
+            stringResource(UiRes.string.category).lowercase(),
         ),
         onDismissTextButton = stringResource(UiRes.string.button_alert_cancel),
         onConfirmTextButton = stringResource(UiRes.string.button_alert_delete),
@@ -123,6 +122,7 @@ internal fun SpendingBudgetScreen(
                         IconButton(
                             onClick = {
                                 onAction(SpendingBudgetsAction.ToggleAddCategoryBottomSheet())
+                                categorySheetState.currentDetent = SheetDetent.FullyExpanded
                             },
                         ) {
                             Icon(
