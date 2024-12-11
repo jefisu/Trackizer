@@ -17,6 +17,7 @@ import com.jefisu.domain.util.onSuccess
 import com.jefisu.subscription_info.presentation.util.InfoRow
 import com.jefisu.subscription_info.presentation.util.InfoRowType
 import com.jefisu.ui.MessageController
+import com.jefisu.ui.UiEventController
 import com.jefisu.ui.navigation.Navigator
 import com.jefisu.ui.util.asMessageText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -128,6 +129,9 @@ class SubscriptionInfoViewModel @Inject constructor(
             description = state.subscription?.description.orEmpty(),
             reminder = state.subscription?.reminder ?: false,
         )
+        viewModelScope.launch {
+            UiEventController.sendEvent(SubscriptionInfoEvent.ToogleBottomSheet)
+        }
     }
 
     private fun getSubscription() {
