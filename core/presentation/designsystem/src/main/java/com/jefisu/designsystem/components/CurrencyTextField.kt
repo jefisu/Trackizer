@@ -62,6 +62,7 @@ fun CurrencyTextField(
     maxLength: Int = 8,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+    priceChangeStep: Int = 100,
 ) {
     val settings = LocalSettings.current
     val focusManager = LocalFocusManager.current
@@ -88,7 +89,7 @@ fun CurrencyTextField(
             modifier = Modifier
                 .roundedSquare()
                 .rippleClickable {
-                    updatePrice(-1)
+                    updatePrice(-priceChangeStep)
                 },
         )
         BasicTextField(
@@ -140,7 +141,7 @@ fun CurrencyTextField(
             modifier = Modifier
                 .roundedSquare()
                 .rippleClickable {
-                    updatePrice(+1)
+                    updatePrice(+priceChangeStep)
                 },
         )
     }
