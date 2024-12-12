@@ -106,7 +106,7 @@ internal fun SettingsScreen(
     DeleteAccountAlert(
         sheetState = deleteAccountSheetState,
         settingsState = state,
-        onAction = onAction
+        onAction = onAction,
     )
 
     @Composable
@@ -236,11 +236,8 @@ internal fun SettingsScreen(
                         },
                     )
                 }
-                Spacer(
-                    Modifier
-                        .weight(1f)
-                        .heightIn(min = TrackizerTheme.spacing.medium),
-                )
+                Spacer(Modifier.weight(1f))
+                Spacer(Modifier.height(TrackizerTheme.spacing.large))
                 TrackizerButton(
                     text = stringResource(R.string.sign_out),
                     type = ButtonType.Secondary,
