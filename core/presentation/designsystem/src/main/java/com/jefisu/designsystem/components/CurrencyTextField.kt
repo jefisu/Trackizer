@@ -96,10 +96,7 @@ fun CurrencyTextField(
             value = text,
             onValueChange = { newValue ->
                 if (newValue.isDigitsOnly() && newValue.length <= maxLength) {
-                    newValue
-                        .ifEmpty { "0" }
-                        .let { if (it.length > 1) it.removePrefix("0") else it }
-                        .let(onTextChange)
+                    onTextChange(newValue)
                 }
             },
             modifier = Modifier.weight(1f),
