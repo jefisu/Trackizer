@@ -35,6 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.NativeKeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -99,7 +106,14 @@ fun CurrencyTextField(
                     onTextChange(newValue)
                 }
             },
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .onKeyEvent { event ->
+                    if (event.nativeKeyEvent.keyCode == NativeKeyEvent.KEYCODE_DEL) {
+                        onTextChange(text.dropLast(1))
+                    }
+                    false
+                },
             singleLine = true,
             visualTransformation = CurrencyVisualTransformation(
                 settings.currency.toLocale(),
