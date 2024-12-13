@@ -130,6 +130,7 @@ internal fun CreditCardsScreen(
     ) { innerPadding ->
         Crossfade(
             targetState = state.creditCards,
+            modifier = Modifier.padding(innerPadding),
         ) { creditCardsMap ->
             if (creditCardsMap.isEmpty()) {
                 EmptyData(
@@ -153,9 +154,7 @@ internal fun CreditCardsScreen(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                     ) {
                         CreditCard(
                             card = card,
