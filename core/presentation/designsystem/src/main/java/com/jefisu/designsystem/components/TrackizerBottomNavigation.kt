@@ -44,12 +44,12 @@ import com.jefisu.designsystem.Gray30
 import com.jefisu.designsystem.Gray80
 import com.jefisu.designsystem.R
 import com.jefisu.designsystem.TrackizerTheme
+import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.util.asDestinationRes
 import com.jefisu.designsystem.util.dropShadow
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.ui.navigation.Destination
-import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -60,7 +60,6 @@ fun TrackizerBottomNavigation(
     onNavigateClick: (Destination) -> Unit = {},
     content: @Composable () -> Unit,
 ) {
-    val isSmallScreen = LocalScreenIsSmall.current
     val bottomNavigation = @Composable {
         val bottomDestinations = listOf(
             Destination.HomeScreen,
@@ -73,11 +72,11 @@ fun TrackizerBottomNavigation(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(140.dp)
+                .height(TrackizerTheme.size.bottomNavigationHeight)
                 .background(
                     Brush.verticalGradient(
                         0f to Color.Transparent,
-                        (if (isSmallScreen) 0.15f else 0.35f) to Gray80,
+                        0.65f to Gray80,
                     ),
                 ),
         ) {

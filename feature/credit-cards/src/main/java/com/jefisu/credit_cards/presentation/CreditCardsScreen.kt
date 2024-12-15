@@ -4,9 +4,7 @@ package com.jefisu.credit_cards.presentation
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,15 +12,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -36,7 +33,6 @@ import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.presentation.components.AddCreditCardBottomSheet
 import com.jefisu.credit_cards.presentation.components.CreditCard
 import com.jefisu.designsystem.Gray70
-import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.CubeOutRotationEndlessTransition
@@ -52,10 +48,11 @@ import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.domain.model.SubscriptionService
-import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
+import com.jefisu.designsystem.R as DesignSystemRes
+import com.jefisu.ui.R as UiRes
 
 @Composable
 internal fun CreditCardsScreen(
@@ -106,19 +103,9 @@ internal fun CreditCardsScreen(
             )
         },
         bottomBar = {
-            Box(
-                modifier = Modifier
-                    .height(210.dp * if (isSmallScreen) 1.1f else 1f)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(Gray70)
-                    .padding(
-                        horizontal = TrackizerTheme.spacing.extraMedium,
-                        vertical = if (isSmallScreen) {
-                            TrackizerTheme.spacing.medium
-                        } else {
-                            TrackizerTheme.spacing.extraMedium
-                        },
-                    ),
+            Surface(
+                shape = RoundedCornerShape(24.dp),
+                color = Gray70,
             ) {
                 TrackizerOutlinedButton(
                     text = stringResource(R.string.add_new_card),
@@ -127,12 +114,23 @@ internal fun CreditCardsScreen(
                         onAction(CreditCardAction.ToogleAddCreditCardBottomSheet())
                         addSheetState.currentDetent = SheetDetent.FullyExpanded
                     },
+                    modifier = Modifier
+                        .padding(horizontal = TrackizerTheme.spacing.extraMedium)
+                        .padding(
+                            bottom = TrackizerTheme.size.bottomNavigationHeight * .95f,
+                            top = if (isSmallScreen) {
+                                TrackizerTheme.spacing.medium
+                            } else {
+                                TrackizerTheme.spacing.extraMedium
+                            },
+                        ),
                 )
             }
         },
     ) { innerPadding ->
         Crossfade(
             targetState = state.creditCards,
+            modifier = Modifier.padding(innerPadding),
         ) { creditCardsMap ->
             if (creditCardsMap.isEmpty()) {
                 EmptyData(
@@ -156,9 +154,7 @@ internal fun CreditCardsScreen(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                     ) {
                         CreditCard(
                             card = card,
@@ -187,7 +183,7 @@ internal fun CreditCardsScreen(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        top = TrackizerTheme.spacing.extraSmall
+                                        top = TrackizerTheme.spacing.extraSmall,
                                     ),
                             ) {
                                 Text(

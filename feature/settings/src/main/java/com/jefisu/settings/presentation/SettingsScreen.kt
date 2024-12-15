@@ -5,13 +5,8 @@ package com.jefisu.settings.presentation
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -26,7 +21,6 @@ import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
-import com.jefisu.designsystem.components.TrackizerAlertBottomSheet
 import com.jefisu.designsystem.components.TrackizerButton
 import com.jefisu.designsystem.components.TrackizerOptionPicker
 import com.jefisu.designsystem.components.TrackizerPickerDefaults
@@ -37,7 +31,7 @@ import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
 import com.jefisu.settings.R
 import com.jefisu.settings.presentation.components.DeleteAccountAlert
-import com.jefisu.settings.presentation.components.SettingOptionItem
+import com.jefisu.settings.presentation.components.SettingOption
 import com.jefisu.settings.presentation.components.SettingOptions
 import com.jefisu.settings.presentation.components.UserProfile
 import com.jefisu.settings.presentation.util.SettingsConstants
@@ -106,7 +100,7 @@ internal fun SettingsScreen(
     DeleteAccountAlert(
         sheetState = deleteAccountSheetState,
         settingsState = state,
-        onAction = onAction
+        onAction = onAction,
     )
 
     @Composable
@@ -137,10 +131,8 @@ internal fun SettingsScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .fillMaxSize()
                     .padding(innerPadding)
-                    .padding(horizontal = TrackizerTheme.spacing.extraMedium)
-                    .verticalScroll(rememberScrollState()),
+                    .padding(horizontal = TrackizerTheme.spacing.extraMedium),
             ) {
                 UserProfile(
                     user = user,
@@ -172,84 +164,80 @@ internal fun SettingsScreen(
                 )
                 SettingOptions(
                     title = stringResource(R.string.general),
-                ) {
-                    SettingOptionItem(
-                        icon = R.drawable.ic_cloud_sync,
-                        title = stringResource(R.string.cloud_sync),
-                        leadingContent = {
-                            TrackizerSwitch(
-                                checked = settings.isCloudSyncEnabled,
-                                onCheckedChange = { onAction(SettingsAction.ToggleCloudSync) },
-                            )
-                        },
-                    )
-                }
+                    options = listOf(
+                        SettingOption(
+                            icon = R.drawable.ic_cloud_sync,
+                            title = stringResource(R.string.cloud_sync),
+                            leadingContent = {
+                                TrackizerSwitch(
+                                    checked = settings.isCloudSyncEnabled,
+                                    onCheckedChange = { onAction(SettingsAction.ToggleCloudSync) },
+                                )
+                            },
+                        ),
+                    ),
+                )
                 Space(
                     defaultSpace = TrackizerTheme.spacing.extraMedium,
                     smallerSpace = TrackizerTheme.spacing.medium,
                 )
                 SettingOptions(
                     title = stringResource(R.string.my_subscriptions),
-                ) {
-                    SettingOptionItem(
-                        icon = R.drawable.ic_currency,
-                        title = stringResource(R.string.default_currency),
-                        settingSelected = settings.currency.displayCodeWithSymbol(),
-                        onClick = {
-                            currentySheetState.currentDetent = SheetDetent.FullyExpanded
-                        },
-                    )
-                }
+                    options = listOf(
+                        SettingOption(
+                            icon = R.drawable.ic_currency,
+                            title = stringResource(R.string.default_currency),
+                            settingSelected = settings.currency.displayCodeWithSymbol(),
+                            onClick = {
+                                currentySheetState.currentDetent = SheetDetent.FullyExpanded
+                            },
+                        ),
+                    ),
+                )
                 Space(
                     defaultSpace = TrackizerTheme.spacing.extraMedium,
                     smallerSpace = TrackizerTheme.spacing.medium,
                 )
                 SettingOptions(
                     title = stringResource(R.string.appearance),
-                ) {
-                    SettingOptionItem(
-                        icon = R.drawable.ic_language,
-                        title = stringResource(R.string.language),
-                        settingSelected = settings.run {
-                            Locale.forLanguageTag(languageTag)
-                                .displayLanguage
-                                .lowercase()
-                                .replaceFirstChar { it.titlecase() }
-                        },
-                        onClick = {
-                            selectLanguageSheetState.currentDetent = SheetDetent.FullyExpanded
-                        },
-                    )
-                }
+                    options = listOf(
+                        SettingOption(
+                            icon = R.drawable.ic_language,
+                            title = stringResource(R.string.language),
+                            settingSelected = settings.run {
+                                Locale.forLanguageTag(languageTag)
+                                    .displayLanguage
+                                    .lowercase()
+                                    .replaceFirstChar { it.titlecase() }
+                            },
+                            onClick = {
+                                selectLanguageSheetState.currentDetent = SheetDetent.FullyExpanded
+                            },
+                        ),
+                    ),
+                )
                 Space(
                     defaultSpace = TrackizerTheme.spacing.extraMedium,
                     smallerSpace = TrackizerTheme.spacing.medium,
                 )
                 SettingOptions(
                     title = stringResource(R.string.account_and_security),
-                ) {
-                    SettingOptionItem(
-                        icon = R.drawable.ic_user_account,
-                        title = stringResource(R.string.delete_account),
-                        onClick = {
-                            deleteAccountSheetState.currentDetent = SheetDetent.FullyExpanded
-                        },
-                    )
-                }
-                Spacer(
-                    Modifier
-                        .weight(1f)
-                        .heightIn(min = TrackizerTheme.spacing.medium),
-                )
-                TrackizerButton(
-                    text = stringResource(R.string.sign_out),
-                    type = ButtonType.Secondary,
-                    onClick = {
-                        onAction(SettingsAction.SignOut)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = TrackizerTheme.spacing.extraMedium),
+                    options = listOf(
+                        SettingOption(
+                            icon = R.drawable.ic_logout,
+                            title = stringResource(R.string.sign_out),
+                            onClick = {
+                                onAction(SettingsAction.SignOut)
+                            },
+                        ),
+                        SettingOption(
+                            icon = R.drawable.ic_user_account,
+                            title = stringResource(R.string.delete_account),
+                            onClick = {
+                                deleteAccountSheetState.currentDetent = SheetDetent.FullyExpanded
+                            },
+                        ),
+                    ),
                 )
             }
         }

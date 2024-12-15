@@ -9,7 +9,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.jefisu.ui.screen.LocalScreenIsSmall
 
@@ -29,7 +28,7 @@ fun TrackizerTheme(content: @Composable () -> Unit) {
     }
 
     val config = LocalConfiguration.current
-    val isSmallScreen = (config.screenWidthDp.dp / config.screenHeightDp.dp) > 0.6
+    val isSmallScreen = (config.screenWidthDp / config.screenHeightDp.toFloat()) > 0.45f
 
     CompositionLocalProvider(
         LocalTextStyle provides TrackizerTheme.typography.bodyLarge,
