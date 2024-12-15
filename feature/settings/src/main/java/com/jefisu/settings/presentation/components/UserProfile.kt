@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,7 @@ internal fun UserProfile(
     user: User,
     modifier: Modifier = Modifier,
 ) {
+    val isPreviewMode = LocalInspectionMode.current
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
@@ -43,7 +45,7 @@ internal fun UserProfile(
                 .clip(CircleShape)
                 .paint(
                     painter = painterResource(R.drawable.user_picture_profile),
-                    alpha = if (user.pictureUrl == null) 1f else 0f,
+                    alpha = if (user.pictureUrl == null || isPreviewMode) 1f else 0f,
                 ),
         )
         Spacer(Modifier.height(TrackizerTheme.spacing.medium))
