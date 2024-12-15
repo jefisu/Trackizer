@@ -5,7 +5,6 @@ package com.jefisu.settings.presentation
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -225,6 +224,13 @@ internal fun SettingsScreen(
                     title = stringResource(R.string.account_and_security),
                     options = listOf(
                         SettingOption(
+                            icon = R.drawable.ic_logout,
+                            title = stringResource(R.string.sign_out),
+                            onClick = {
+                                onAction(SettingsAction.SignOut)
+                            },
+                        ),
+                        SettingOption(
                             icon = R.drawable.ic_user_account,
                             title = stringResource(R.string.delete_account),
                             onClick = {
@@ -232,18 +238,6 @@ internal fun SettingsScreen(
                             },
                         ),
                     ),
-                )
-                Spacer(Modifier.weight(1f))
-                Spacer(Modifier.height(TrackizerTheme.spacing.large))
-                TrackizerButton(
-                    text = stringResource(R.string.sign_out),
-                    type = ButtonType.Secondary,
-                    onClick = {
-                        onAction(SettingsAction.SignOut)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = TrackizerTheme.spacing.extraMedium),
                 )
             }
         }
