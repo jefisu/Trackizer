@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -20,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +35,7 @@ import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.credit_cards.R
 import com.jefisu.credit_cards.presentation.components.AddCreditCardBottomSheet
 import com.jefisu.credit_cards.presentation.components.CreditCard
+import com.jefisu.credit_cards.presentation.components.SlidingArrowAnimation
 import com.jefisu.designsystem.Gray70
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
@@ -47,6 +51,7 @@ import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.size
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
+import com.jefisu.designsystem.util.rememberEndlessPagerState
 import com.jefisu.domain.model.SubscriptionService
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.screen.LocalScreenIsSmall
@@ -140,7 +145,9 @@ internal fun CreditCardsScreen(
                     ),
                 )
             } else {
+                val pagerState = rememberEndlessPagerState()
                 CubeOutRotationEndlessTransition(
+                    pagerState = pagerState,
                     items = creditCardsMap.keys.toList(),
                     onItemVisibleChanged = { onAction(CreditCardAction.SelectCreditCard(it)) },
                     modifier = Modifier.padding(
@@ -156,17 +163,39 @@ internal fun CreditCardsScreen(
                         verticalArrangement = Arrangement.Center,
                         modifier = Modifier.fillMaxSize(),
                     ) {
-                        CreditCard(
-                            card = card,
-                            onClick = {
-                                onAction(CreditCardAction.ToogleAddCreditCardBottomSheet(card))
-                                addSheetState.currentDetent = SheetDetent.FullyExpanded
-                            },
-                            onLongClick = {
-                                onAction(CreditCardAction.ToogleDeleteAlert(card))
-                                deleteSheetState.currentDetent = SheetDetent.FullyExpanded
-                            },
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = TrackizerTheme.spacing.large),
+                        ) {
+                            SlidingArrowAnimation(
+                                modifier = Modifier
+                                    .rotate(180f)
+                                    .graphicsLayer {
+                                        alpha =
+                                            if (!pagerState.isScrollInProgress && state.creditCards.size > 1) 1f else 0f
+                                    },
+                            )
+                            CreditCard(
+                                card = card,
+                                onClick = {
+                                    onAction(CreditCardAction.ToogleAddCreditCardBottomSheet(card))
+                                    addSheetState.currentDetent = SheetDetent.FullyExpanded
+                                },
+                                onLongClick = {
+                                    onAction(CreditCardAction.ToogleDeleteAlert(card))
+                                    deleteSheetState.currentDetent = SheetDetent.FullyExpanded
+                                },
+                            )
+                            SlidingArrowAnimation(
+                                modifier = Modifier.graphicsLayer {
+                                    alpha =
+                                        if (!pagerState.isScrollInProgress && pagerState.currentPage != 0) 1f else 0f
+                                },
+                            )
+                        }
                         val subscriptionServices = creditCardsMap[card].orEmpty()
                         if (subscriptionServices.isEmpty()) {
                             EmptyData(
@@ -255,13 +284,16 @@ private class CreditCardStatePreviewParameter : PreviewParameterProvider<CreditC
         creditCards = SampleData.cards,
         selectedCard = SampleData.cards.keys.first(),
     )
+    val stateWithServices = state.copy(
+        creditCards = state.creditCards.entries
+            .sortedByDescending { entry -> entry.value.size }
+            .associate { it.toPair() },
+    )
 
     override val values: Sequence<CreditCardState> = sequenceOf(
         CreditCardState(),
         state,
-        state.copy(
-            selectedCard = state.creditCards.keys.last(),
-        ),
+        stateWithServices,
     )
 }
 

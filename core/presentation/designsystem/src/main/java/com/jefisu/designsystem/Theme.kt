@@ -28,7 +28,7 @@ fun TrackizerTheme(content: @Composable () -> Unit) {
     }
 
     val config = LocalConfiguration.current
-    val isSmallScreen = (config.screenWidthDp / config.screenHeightDp.toFloat()) > 0.45f
+    val isSmallScreen = (config.screenWidthDp / config.screenHeightDp.toFloat()) > 0.5f
 
     CompositionLocalProvider(
         LocalTextStyle provides TrackizerTheme.typography.bodyLarge,
