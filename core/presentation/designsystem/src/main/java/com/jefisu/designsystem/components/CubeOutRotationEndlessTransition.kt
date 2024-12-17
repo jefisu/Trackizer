@@ -22,11 +22,11 @@ import kotlin.math.absoluteValue
 @Composable
 fun <T> CubeOutRotationEndlessTransition(
     modifier: Modifier = Modifier,
+    pagerState: PagerState = rememberEndlessPagerState(),
     onItemVisibleChanged: ((T) -> Unit)? = null,
     items: List<T>,
     content: @Composable (T) -> Unit,
 ) {
-    val pagerState = rememberEndlessPagerState()
     val enabledScroll by remember(items) {
         derivedStateOf { items.size > 1 }
     }
