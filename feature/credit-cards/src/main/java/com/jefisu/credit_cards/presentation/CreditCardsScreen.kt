@@ -255,13 +255,16 @@ private class CreditCardStatePreviewParameter : PreviewParameterProvider<CreditC
         creditCards = SampleData.cards,
         selectedCard = SampleData.cards.keys.first(),
     )
+    val stateWithServices = state.copy(
+        creditCards = state.creditCards.entries
+            .sortedByDescending { entry -> entry.value.size }
+            .associate { it.toPair() },
+    )
 
     override val values: Sequence<CreditCardState> = sequenceOf(
         CreditCardState(),
         state,
-        state.copy(
-            selectedCard = state.creditCards.keys.last(),
-        ),
+        stateWithServices,
     )
 }
 
