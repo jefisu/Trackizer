@@ -68,7 +68,7 @@ fun TrackizerButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = type.containerColor,
             contentColor = type.contentColor,
-            disabledContentColor = Gray50
+            disabledContentColor = Gray50,
         ),
         contentPadding = contentPadding,
         modifier = modifier

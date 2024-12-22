@@ -16,9 +16,7 @@ import com.jefisu.designsystem.Gray70
 import com.jefisu.designsystem.TrackizerTheme
 
 @Composable
-fun CustomDivider(
-    modifier: Modifier = Modifier,
-) {
+fun CustomDivider(modifier: Modifier = Modifier) {
     Canvas(
         modifier = modifier
             .fillMaxWidth()

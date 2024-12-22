@@ -50,7 +50,7 @@ fun TrackizerOutlinedButton(
         ),
         modifier = modifier
             .fillMaxWidth()
-            .dashBorder(cornerDp)
+            .dashBorder(cornerDp),
     ) {
         Text(
             text = text,

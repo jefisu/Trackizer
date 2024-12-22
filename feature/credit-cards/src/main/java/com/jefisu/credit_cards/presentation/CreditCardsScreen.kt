@@ -37,6 +37,7 @@ import com.jefisu.credit_cards.presentation.components.AddCreditCardBottomSheet
 import com.jefisu.credit_cards.presentation.components.CreditCard
 import com.jefisu.credit_cards.presentation.components.SlidingArrowAnimation
 import com.jefisu.designsystem.Gray70
+import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.CubeOutRotationEndlessTransition
@@ -53,11 +54,10 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.rememberEndlessPagerState
 import com.jefisu.domain.model.SubscriptionService
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
-import com.jefisu.designsystem.R as DesignSystemRes
-import com.jefisu.ui.R as UiRes
 
 @Composable
 internal fun CreditCardsScreen(

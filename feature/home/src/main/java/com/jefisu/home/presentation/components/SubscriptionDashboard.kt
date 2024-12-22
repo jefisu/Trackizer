@@ -57,6 +57,7 @@ import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.Gray70
 import com.jefisu.designsystem.Primary10
 import com.jefisu.designsystem.Purple90
+import com.jefisu.designsystem.R as UiRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.AnimatedText
 import com.jefisu.designsystem.components.AutoResizedText
@@ -71,7 +72,6 @@ import com.jefisu.home.R
 import com.jefisu.home.presentation.HomeState
 import com.jefisu.ui.screen.LocalScreenIsSmall
 import java.time.LocalDate
-import com.jefisu.designsystem.R as UiRes
 
 private const val START_ANGLE = 135f
 private const val SWEEP_ANGLE = 270f
@@ -146,33 +146,45 @@ internal fun SubscriptionDashboard(
                     }
                     Spacer(
                         modifier = Modifier.height(
-                            if (isSmallScreen) TrackizerTheme.spacing.extraSmall
-                            else TrackizerTheme.spacing.medium,
+                            if (isSmallScreen) {
+                                TrackizerTheme.spacing.extraSmall
+                            } else {
+                                TrackizerTheme.spacing.medium
+                            },
                         ),
                     )
                     AnimatedText(
                         text = formatCurrency(monthlyBillsValue),
                         style = if (isSmallScreen) {
                             TrackizerTheme.typography.headline6
-                        } else TrackizerTheme.typography.headline7,
+                        } else {
+                            TrackizerTheme.typography.headline7
+                        },
                     )
                     Spacer(
                         modifier = Modifier.height(
-                            if (isSmallScreen) TrackizerTheme.spacing.extraSmall
-                            else TrackizerTheme.spacing.medium,
+                            if (isSmallScreen) {
+                                TrackizerTheme.spacing.extraSmall
+                            } else {
+                                TrackizerTheme.spacing.medium
+                            },
                         ),
                     )
                     Text(
                         text = stringResource(R.string.this_month_bills),
                         style = if (isSmallScreen) {
                             TrackizerTheme.typography.headline1
-                        } else TrackizerTheme.typography.headline2,
+                        } else {
+                            TrackizerTheme.typography.headline2
+                        },
                         color = Gray40,
                     )
                     Spacer(
                         modifier = if (isSmallScreen) {
                             Modifier.height(TrackizerTheme.spacing.medium)
-                        } else Modifier.weight(1f),
+                        } else {
+                            Modifier.weight(1f)
+                        },
                     )
                     TrackizerButton(
                         text = stringResource(R.string.see_your_budget),
@@ -181,12 +193,18 @@ internal fun SubscriptionDashboard(
                         contentPadding = PaddingValues(8.dp),
                         modifier = Modifier
                             .height(
-                                if (isSmallScreen) TrackizerTheme.size.buttonHeightSmallScreen
-                                else TrackizerTheme.size.buttonHeightSmall,
+                                if (isSmallScreen) {
+                                    TrackizerTheme.size.buttonHeightSmallScreen
+                                } else {
+                                    TrackizerTheme.size.buttonHeightSmall
+                                },
                             )
                             .width(
-                                if (isSmallScreen) 100.dp
-                                else 130.dp,
+                                if (isSmallScreen) {
+                                    100.dp
+                                } else {
+                                    130.dp
+                                },
                             ),
                     )
                 }

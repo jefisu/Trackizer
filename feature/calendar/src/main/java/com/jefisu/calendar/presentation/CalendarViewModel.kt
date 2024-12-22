@@ -8,10 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.jefisu.domain.repository.SubscriptionRepository
 import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 internal class CalendarViewModel @Inject constructor(

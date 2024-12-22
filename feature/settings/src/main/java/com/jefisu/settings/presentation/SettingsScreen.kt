@@ -35,10 +35,10 @@ import com.jefisu.settings.presentation.components.SettingOption
 import com.jefisu.settings.presentation.components.SettingOptions
 import com.jefisu.settings.presentation.components.UserProfile
 import com.jefisu.settings.presentation.util.SettingsConstants
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
 import java.util.Locale
-import com.jefisu.ui.R as UiRes
 
 @Composable
 internal fun SettingsScreen(
@@ -86,7 +86,9 @@ internal fun SettingsScreen(
         items = SettingsConstants.localesAvailable,
         onDismiss = { },
         onSelectClick = { onAction(SettingsAction.LanguageChanged(it)) },
-        startIndex = SettingsConstants.localesAvailable.indexOfFirst { it.language == settings.languageTag },
+        startIndex = SettingsConstants.localesAvailable.indexOfFirst {
+            it.language == settings.languageTag
+        },
     ) { locale ->
         TrackizerPickerDefaults.PickerItem(
             text = locale
@@ -104,11 +106,17 @@ internal fun SettingsScreen(
     )
 
     @Composable
-    fun Space(defaultSpace: Dp, smallerSpace: Dp) {
+    fun Space(
+        defaultSpace: Dp,
+        smallerSpace: Dp,
+    ) {
         Spacer(
             modifier = Modifier.height(
-                if (LocalScreenIsSmall.current) smallerSpace
-                else defaultSpace,
+                if (LocalScreenIsSmall.current) {
+                    smallerSpace
+                } else {
+                    defaultSpace
+                },
             ),
         )
     }
@@ -140,7 +148,9 @@ internal fun SettingsScreen(
                         .padding(
                             top = if (LocalScreenIsSmall.current) {
                                 0.dp
-                            } else TrackizerTheme.spacing.large,
+                            } else {
+                                TrackizerTheme.spacing.large
+                            },
                         ),
                 )
                 Space(
