@@ -20,6 +20,9 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
+      - name: Setup local.properties
+        run: echo "${{ secrets.LOCAL_PROPERTIES_TO_KTLINT }}" > local.properties
+
       - name: Run ktlintFormat
         run: ./gradlew ktlintFormat
 
@@ -41,6 +44,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout ${{ github.head_ref }}
           git add -u
           git commit -m "Apply ktlintFormat changes"
-          git push
+          git push origin ${{ github.head_ref }}
