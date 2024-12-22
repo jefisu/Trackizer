@@ -24,7 +24,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jefisu.designsystem.BorderBrush
 import com.jefisu.designsystem.Gray30
@@ -80,7 +79,9 @@ internal fun SettingOptions(
                     val calculatePadding = @Composable { isDefaultPadding: Boolean ->
                         val defaultPadding = if (LocalScreenIsSmall.current) {
                             TrackizerTheme.spacing.medium
-                        } else 20.dp
+                        } else {
+                            20.dp
+                        }
                         when {
                             options.size == 1 -> defaultPadding
                             isDefaultPadding -> defaultPadding

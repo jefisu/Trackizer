@@ -15,7 +15,7 @@ data class AnimationConfig(
 
 enum class AnimationType {
     HORIZONTAL,
-    VERTICAL
+    VERTICAL,
 }
 
 class NavigationAnimation(

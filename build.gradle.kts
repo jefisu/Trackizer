@@ -1,3 +1,4 @@
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
@@ -14,11 +15,25 @@ plugins {
 }
 
 allprojects {
+    configureKtlint()
+}
+
+fun Project.configureKtlint() {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
-    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    configure<KtlintExtension> {
+        android.set(true)
+        ignoreFailures.set(true)
+        outputToConsole.set(true)
+        outputColorName.set("RED")
+        enableExperimentalRules.set(true)
         reporters {
             reporter(ReporterType.CHECKSTYLE)
+            reporter(ReporterType.HTML)
         }
+    }
+
+    tasks.matching { it.name == "preBuild" }.configureEach {
+        dependsOn("ktlintFormat")
     }
 }

@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
 import com.jefisu.designsystem.components.TrackizerScaffold
@@ -60,8 +59,11 @@ internal fun HomeScreen(
             )
             Spacer(
                 modifier = Modifier.height(
-                    if (isSmallScreen) TrackizerTheme.spacing.extraSmall
-                    else TrackizerTheme.spacing.medium,
+                    if (isSmallScreen) {
+                        TrackizerTheme.spacing.extraSmall
+                    } else {
+                        TrackizerTheme.spacing.medium
+                    },
                 ),
             )
             HorizontalTabs(

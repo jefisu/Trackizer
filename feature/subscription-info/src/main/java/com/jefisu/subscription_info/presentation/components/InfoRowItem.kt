@@ -91,7 +91,7 @@ private fun InfoRowItemPreview() {
                 value = "This is a sample description",
                 label = stringResource(
                     id = R.string.no_data,
-                    stringResource(UiRes.string.description).lowercase()
+                    stringResource(UiRes.string.description).lowercase(),
                 ),
                 type = InfoRowType.Description,
             ),

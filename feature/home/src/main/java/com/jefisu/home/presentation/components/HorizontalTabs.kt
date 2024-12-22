@@ -59,8 +59,11 @@ internal fun HorizontalTabs(
 
     Column(
         verticalArrangement = Arrangement.spacedBy(
-            if (isSmallScreen) TrackizerTheme.spacing.extraSmall
-            else TrackizerTheme.spacing.medium,
+            if (isSmallScreen) {
+                TrackizerTheme.spacing.extraSmall
+            } else {
+                TrackizerTheme.spacing.medium
+            },
         ),
     ) {
         Row(

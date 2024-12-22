@@ -84,7 +84,7 @@ internal fun AddSubscriptionScreen(
             )
         },
         modifier = Modifier.imeOffset(
-            imeThresholdPercent = 0.9f
+            imeThresholdPercent = 0.9f,
         ),
     ) { innerPadding ->
         Column(

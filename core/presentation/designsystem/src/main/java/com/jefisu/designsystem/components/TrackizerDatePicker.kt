@@ -403,10 +403,10 @@ private fun <T> DateSlideAnimation(
                 initialOffsetX = { direction * it },
                 animationSpec = tween(durationMillis),
             ) + fadeIn(animationSpec = tween(durationMillis)) togetherWith
-                    slideOutHorizontally(
-                        targetOffsetX = { -direction * it },
-                        animationSpec = tween(durationMillis),
-                    ) + fadeOut(animationSpec = tween(durationMillis))
+                slideOutHorizontally(
+                    targetOffsetX = { -direction * it },
+                    animationSpec = tween(durationMillis),
+                ) + fadeOut(animationSpec = tween(durationMillis))
         },
         content = { content(it) },
     )
@@ -426,13 +426,12 @@ private fun TrackizerDatePickerPreview() {
 fun rememberTrackizerDatePickerState(
     initialDate: LocalDate = LocalDate.now(),
     isSelectingDay: Boolean = true,
-): DatePickerState =
-    rememberSaveable(saver = DatePickerState.saver()) {
-        DatePickerState(
-            initialDate = initialDate,
-            isSelectingDay = isSelectingDay,
-        )
-    }
+): DatePickerState = rememberSaveable(saver = DatePickerState.saver()) {
+    DatePickerState(
+        initialDate = initialDate,
+        isSelectingDay = isSelectingDay,
+    )
+}
 
 private fun generateCalendarDays(selectedDate: LocalDate): List<Day> {
     val yearMonth = YearMonth.from(selectedDate)

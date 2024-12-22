@@ -26,9 +26,8 @@ import com.jefisu.settings.presentation.SettingsAction
 import com.jefisu.settings.presentation.SettingsEvent
 import com.jefisu.settings.presentation.SettingsState
 import com.jefisu.ui.ObserveAsEvents
-import com.jefisu.ui.UiEvent
-import com.jefisu.ui.UiEventController
 import com.jefisu.ui.R as UiRes
+import com.jefisu.ui.UiEventController
 
 @Composable
 fun DeleteAccountAlert(

@@ -33,8 +33,8 @@ fun <T> TrackizerOptionPicker(
     )
 
     LaunchedEffect(sheetState.currentDetent) {
-        if (sheetState.currentDetent == SheetDetent.FullyExpanded
-            && pickerState.selectedIndex != startIndex
+        if (sheetState.currentDetent == SheetDetent.FullyExpanded &&
+            pickerState.selectedIndex != startIndex
         ) {
             pickerState.setIndex(startIndex)
         }

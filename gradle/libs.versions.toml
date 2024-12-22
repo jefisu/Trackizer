@@ -1,6 +1,4 @@
 [versions]
-compileTargetSdk = "35"
-minSdk = "31"
 androidGradlePlugin = "8.5.2"
 androidTools = "31.5.2"
 androidxActivity = "1.9.1"
@@ -36,8 +34,8 @@ composeUnstyled = "1.19.1"
 
 [libraries]
 # Compose
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
@@ -124,6 +122,38 @@ trackizer-android-firebase = { id = "trackizer.android.firebase", version = "uns
 trackizer-android-realm = { id = "trackizer.android.realm", version = "unspecified" }
 
 [bundles]
+app = [
+    "androidx-core-splashscreen",
+    "androidx-core-ktx"
+]
+app-compose = [
+    "androidx-activity-compose"
+]
+app-test = [
+    "junit"
+]
+app-android-test = [
+    "androidx-junit",
+    "androidx-espresso-core"
+]
+compose = [
+    "androidx-compose-material3",
+    "androidx-compose-foundation",
+    "androidx-compose-foundation-layout",
+    "androidx-compose-runtime",
+    "androidx-compose-ui-util",
+    "androidx-lifecycle-runtimeCompose",
+    "androidx-lifecycle-viewModelCompose",
+    "androidx-material-icons-extended",
+    "androidx-compose-ui-tooling-preview",
+    "androidx-navigation-compose",
+    "kotlinx-serialization-json",
+    "coil-compose",
+    "compose-unstyled"
+]
+compose-debug = [
+    "androidx-compose-ui-tooling"
+]
 auth = [
     "firebase-auth",
     "firebase-firestore",

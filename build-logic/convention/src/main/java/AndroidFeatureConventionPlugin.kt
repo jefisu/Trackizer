@@ -7,10 +7,8 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply {
-                apply("trackizer.android.library")
-                apply("trackizer.android.hilt")
                 apply("trackizer.android.library.compose")
-                apply("org.jetbrains.kotlin.plugin.serialization")
+                apply("trackizer.android.hilt")
             }
 
             dependencies {

@@ -9,11 +9,15 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, *, *, *, *, *>) {
+    with(pluginManager) {
+        apply("org.jetbrains.kotlin.android")
+    }
+
     commonExtension.apply {
-        compileSdk = libs.findVersion("compileTargetSdk").get().displayName.toInt()
+        compileSdk = 35
 
         defaultConfig {
-            minSdk = libs.findVersion("minSdk").get().displayName.toInt()
+            minSdk = 31
         }
 
         compileOptions {

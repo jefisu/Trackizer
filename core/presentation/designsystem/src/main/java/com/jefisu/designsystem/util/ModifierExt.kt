@@ -97,9 +97,7 @@ fun Modifier.rippleClickable(
     onLongClick = onLongClick,
 )
 
-fun Modifier.imeOffset(
-    imeThresholdPercent: Float = 1f,
-) = composed {
+fun Modifier.imeOffset(imeThresholdPercent: Float = 1f) = composed {
     val imePadding = WindowInsets.ime.asPaddingValues()
     offset {
         IntOffset.Zero.copy(
