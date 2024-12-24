@@ -36,6 +36,9 @@ sealed interface Destination {
 
     @Serializable
     data object SettingsScreen : Destination
+
+    @Serializable
+    data object EditProfileScreen : Destination
 }
 
 val allDestinations: List<Destination>

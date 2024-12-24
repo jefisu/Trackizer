@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.jefisu.domain.model.Currency
 import com.jefisu.domain.repository.SettingsRepository
 import com.jefisu.domain.repository.UserRepository
-import com.jefisu.domain.util.DataMessage
 import com.jefisu.domain.util.onError
 import com.jefisu.domain.util.onSuccess
 import com.jefisu.ui.MessageController
@@ -50,14 +49,6 @@ class SettingsViewModel @Inject constructor(
 
     fun onAction(action: SettingsAction) {
         when (action) {
-            SettingsAction.EditProfile -> {
-                viewModelScope.launch {
-                    MessageController.sendMessage(
-                        DataMessage.FUNCTIONALITY_UNAVAILABLE.asMessageText(),
-                    )
-                }
-            }
-
             SettingsAction.ToggleCloudSync -> toggleCloudSync()
             is SettingsAction.SignOut -> signOut()
             is SettingsAction.LanguageChanged -> updateLanguage(action.locale)

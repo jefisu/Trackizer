@@ -22,6 +22,7 @@ data class Size(
     val switchWidth: Dp = 44.dp,
     val switchHeight: Dp = 24.dp,
     val bottomNavigationHeight: Dp = 140.dp,
+    val editableProfileFieldHeight: Dp = 60.dp,
 )
 
 val TrackizerTheme.size: Size get() = Size()

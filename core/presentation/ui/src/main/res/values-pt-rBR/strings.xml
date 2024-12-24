@@ -12,6 +12,7 @@
     <string name="data_not_available">Não há %s disponíveis para seleção. Adicione um e tente novamente.</string>
     <string name="incorrect_password_error">A senha que você digitou está incorreta. Por favor, tente novamente.</string>
     <string name="delete_account_failed_error">Falha ao excluir conta. Por favor, tente novamente mais tarde.</string>
+    <string name="update_profile_failed_error">Ocorreu um erro ao atualizar o perfil.</string>
 
     <!-- Arguments -->
     <string name="user">Usuário</string>
@@ -29,6 +30,9 @@
     <string name="select">Selecionar</string>
     <string name="description">Descrição</string>
     <string name="save">Salvar</string>
+    <string name="name">Nome</string>
+    <string name="save_changes">Salvar alterações</string>
+    <string name="no_data">Não definido</string>
 
     <!--  Category Type  -->
     <string name="transport">Transporte</string>

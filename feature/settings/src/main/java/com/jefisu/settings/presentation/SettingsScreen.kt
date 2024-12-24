@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +38,7 @@ import com.jefisu.settings.presentation.components.SettingOptions
 import com.jefisu.settings.presentation.components.UserProfile
 import com.jefisu.settings.presentation.util.SettingsConstants
 import com.jefisu.ui.R as UiRes
+import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
 import java.util.Locale
@@ -47,17 +50,6 @@ internal fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val settings = state.settings
-    val userMapped = remember(state.user, settings) {
-        val resource = context.getString(UiRes.string.user)
-        state.user?.let {
-            if (it.name.isBlank()) {
-                return@let it.copy(
-                    name = "$resource ${it.id.filter { it.isDigit() }.take(8)}",
-                )
-            }
-            it
-        }
-    }
 
     val currentySheetState = rememberModalBottomSheetState(initialDetent = SheetDetent.Hidden)
     TrackizerOptionPicker(
@@ -121,7 +113,19 @@ internal fun SettingsScreen(
         )
     }
 
-    userMapped?.let { user ->
+    state.user?.let { user ->
+        val userMapped by remember(user, settings) {
+            derivedStateOf {
+                val resource = context.getString(UiRes.string.user)
+                if (user.name.isNullOrEmpty()) {
+                    val name = "$resource ${user.id.filter { it.isDigit() }.take(8)}"
+                    user.copy(name = name)
+                } else {
+                    user
+                }
+            }
+        }
+
         TrackizerScaffold(
             topBar = {
                 TrackizerTopBar(
@@ -143,7 +147,7 @@ internal fun SettingsScreen(
                     .padding(horizontal = TrackizerTheme.spacing.extraMedium),
             ) {
                 UserProfile(
-                    user = user,
+                    user = userMapped,
                     modifier = Modifier
                         .padding(
                             top = if (LocalScreenIsSmall.current) {
@@ -165,7 +169,7 @@ internal fun SettingsScreen(
                     ),
                     modifier = Modifier.height(36.dp),
                     onClick = {
-                        onAction(SettingsAction.EditProfile)
+                        onAction(SettingsAction.Navigate(Destination.EditProfileScreen))
                     },
                 )
                 Space(

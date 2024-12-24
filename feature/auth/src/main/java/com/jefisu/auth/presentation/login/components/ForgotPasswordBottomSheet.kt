@@ -22,6 +22,7 @@ import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.ui.ObserveAsEvents
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.UiEventController
 
 @Composable
@@ -54,7 +55,7 @@ fun ForgotPasswordBottomSheet(
         TrackizerTextField(
             text = state.emailResetPassword,
             onTextChange = { onAction(LoginAction.EmailResetPasswordChanged(it)) },
-            fieldName = stringResource(R.string.e_mail_address),
+            fieldName = stringResource(UiRes.string.email),
         )
         Spacer(modifier = Modifier.height(TrackizerTheme.spacing.extraMedium))
         TrackizerButton(

@@ -31,6 +31,8 @@ workerManager = "2.9.1"
 realm = "2.0.0"
 playServicesLocation = "21.3.0"
 composeUnstyled = "1.19.1"
+ktor = "3.0.2"
+composeAnimation = "1.7.6"
 
 [libraries]
 # Compose
@@ -47,7 +49,8 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
-compose-unstyled = { module = "com.composables:core", version.ref = "composeUnstyled"}
+androidx-compose-animation = { module = "androidx.compose.animation:animation", version.ref = "composeAnimation" }
+compose-unstyled = { module = "com.composables:core", version.ref = "composeUnstyled" }
 
 # AndroidX
 androidx-worker = { module = "androidx.work:work-runtime-ktx", version.ref = "workerManager" }
@@ -90,6 +93,13 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 # Realm Database
 realm-library = { module = "io.realm.kotlin:library-base", version.ref = "realm" }
 
+# HTTP Client
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -120,6 +130,7 @@ trackizer-android-feature = { id = "trackizer.android.feature", version = "unspe
 trackizer-android-hilt = { id = "trackizer.android.hilt", version = "unspecified" }
 trackizer-android-firebase = { id = "trackizer.android.firebase", version = "unspecified" }
 trackizer-android-realm = { id = "trackizer.android.realm", version = "unspecified" }
+trackizer-android-ktor-client = { id = "trackizer.android.ktor.client", version = "unspecified" }
 
 [bundles]
 app = [
@@ -149,7 +160,8 @@ compose = [
     "androidx-navigation-compose",
     "kotlinx-serialization-json",
     "coil-compose",
-    "compose-unstyled"
+    "compose-unstyled",
+    "androidx-compose-animation"
 ]
 compose-debug = [
     "androidx-compose-ui-tooling"
@@ -171,4 +183,11 @@ hilt = [
 hilt-ksp = [
     "hilt-compiler",
     "hilt-androidx-compiler"
+]
+ktor = [
+    "ktor-client-core",
+    "ktor-client-cio",
+    "ktor-content-negotiation",
+    "ktor-serialization-kotlinx-json",
+    "ktor-client-logging",
 ]

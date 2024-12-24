@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.jefisu.trackizer
 
 import android.annotation.SuppressLint
@@ -6,6 +8,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -17,6 +21,7 @@ import com.jefisu.designsystem.components.FlashMessageDialog
 import com.jefisu.designsystem.util.LocalSettings
 import com.jefisu.trackizer.navigation.AppNavHost
 import com.jefisu.ui.navigation.Navigator
+import com.jefisu.ui.sharedtransition.LocalSharedTransitionScope
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -37,14 +42,17 @@ class MainActivity : ComponentActivity() {
             val state by viewModel.state.collectAsStateWithLifecycle()
 
             TrackizerTheme {
-                CompositionLocalProvider(
-                    LocalSettings provides state.settings,
-                ) {
-                    FlashMessageDialog(
-                        message = state.message,
-                        onDismiss = viewModel::closeMessage,
-                    )
-                    AppNavHost(navigator = navigator)
+                SharedTransitionLayout {
+                    CompositionLocalProvider(
+                        LocalSettings provides state.settings,
+                        LocalSharedTransitionScope provides this,
+                    ) {
+                        FlashMessageDialog(
+                            message = state.message,
+                            onDismiss = viewModel::closeMessage,
+                        )
+                        AppNavHost(navigator = navigator)
+                    }
                 }
             }
         }

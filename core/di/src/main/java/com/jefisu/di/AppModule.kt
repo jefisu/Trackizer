@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import com.jefisu.data.StandardDispatcherProvider
+import com.jefisu.data.util.ImageCompressor
 import com.jefisu.data.worker.WorkerStarter
 import com.jefisu.domain.DispatcherProvider
 import com.jefisu.domain.repository.UserRepository
@@ -44,4 +45,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDispatcherProvider(): DispatcherProvider = StandardDispatcherProvider
+
+    @Provides
+    @Singleton
+    fun provideImageCompressor(app: Application) = ImageCompressor(app)
 }

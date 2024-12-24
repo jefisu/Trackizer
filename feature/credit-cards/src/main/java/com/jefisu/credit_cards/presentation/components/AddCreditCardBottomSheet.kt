@@ -51,6 +51,7 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.rippleClickable
 import com.jefisu.ui.ObserveAsEvents
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.UiEventController
 import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.steliospapamichail.creditcardmasker.viewtransformations.CardNumberMask
@@ -66,7 +67,7 @@ fun AddCreditCardBottomSheet(
         if (state.editCard != null) R.string.edit_card else R.string.add_card,
     )
     val buttonText = stringResource(
-        if (state.editCard != null) R.string.save_changes else R.string.add_card,
+        if (state.editCard != null) UiRes.string.save_changes else R.string.add_card,
     )
 
     ObserveAsEvents(UiEventController.events) { event ->

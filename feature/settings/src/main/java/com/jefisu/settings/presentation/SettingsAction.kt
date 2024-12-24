@@ -5,7 +5,6 @@ import com.jefisu.ui.navigation.Destination
 import java.util.Locale
 
 sealed interface SettingsAction {
-    data object EditProfile : SettingsAction
     data object ToggleCloudSync : SettingsAction
     data object SignOut : SettingsAction
     data class LanguageChanged(val locale: Locale) : SettingsAction

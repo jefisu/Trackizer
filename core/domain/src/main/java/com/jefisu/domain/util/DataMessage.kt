@@ -17,4 +17,5 @@ enum class DataMessage : Message {
     NO_DATA_AVAILABLE,
     INCORRECT_PASSWORD,
     DELETE_ACCOUNT_FAILED,
+    UPDATE_PROFILE_FAILED,
 }

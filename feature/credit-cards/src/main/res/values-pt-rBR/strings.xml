@@ -11,7 +11,6 @@
     <string name="card_number">Número do cartão</string>
     <string name="expiration_date">Data de vencimento</string>
     <string name="cvv">CVV</string>
-    <string name="save_changes">Salvar alterações</string>
 
     <!-- Validation Message Error -->
     <string name="empty_data">%s é obrigatório.</string>

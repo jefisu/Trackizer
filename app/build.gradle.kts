@@ -21,6 +21,7 @@ dependencies {
     implementation(projects.feature.addSubscription)
     implementation(projects.feature.subscriptionInfo)
     implementation(projects.feature.settings)
+    implementation(projects.feature.user)
 
     // Modules
     implementation(projects.core.data)

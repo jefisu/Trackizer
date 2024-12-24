@@ -7,7 +7,7 @@ import com.jefisu.ui.R as UiRes
 data class InfoRow(val value: String, val label: String?, val type: InfoRowType)
 
 enum class InfoRowType(@StringRes val titleId: Int) {
-    Name(R.string.name),
+    Name(UiRes.string.name),
     Description(UiRes.string.description),
     Category(UiRes.string.category),
     FirstPayment(R.string.first_payment),

@@ -66,5 +66,9 @@ gradlePlugin {
             id = "trackizer.android.realm"
             implementationClass = "AndroidRealmConventionPlugin"
         }
+        register("androidKtorClient") {
+            id = "trackizer.android.ktor.client"
+            implementationClass = "AndroidKtorClientConventionPlugin"
+        }
     }
 }
