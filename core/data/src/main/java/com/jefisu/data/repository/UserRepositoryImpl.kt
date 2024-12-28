@@ -17,12 +17,12 @@ import com.jefisu.domain.repository.UserRepository
 import com.jefisu.domain.util.DataMessage
 import com.jefisu.domain.util.Result
 import io.realm.kotlin.Realm
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class UserRepositoryImpl @Inject constructor(
