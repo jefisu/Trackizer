@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jefisu.add_subscription.R
 import com.jefisu.add_subscription.presentation.components.SubscriptionServicePageItem
 import com.jefisu.add_subscription.presentation.util.SubscriptionDefaults
@@ -51,7 +52,17 @@ import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @Composable
-internal fun AddSubscriptionScreen(
+fun AddSubscriptionScreen() {
+    val viewModel = hiltViewModel<AddSubscriptionViewModel>()
+
+    AddSubscriptionScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction,
+    )
+}
+
+@Composable
+private fun AddSubscriptionScreenContent(
     state: AddSubscriptionState,
     onAction: (AddSubscriptionAction) -> Unit,
 ) {
@@ -172,7 +183,7 @@ internal fun AddSubscriptionScreen(
 @Composable
 private fun AddSubscriptionScreenPreview() {
     TrackizerTheme {
-        AddSubscriptionScreen(
+        AddSubscriptionScreenContent(
             state = AddSubscriptionState(),
             onAction = {},
         )

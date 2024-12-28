@@ -6,16 +6,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.util.fastAny
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.jefisu.add_subscription.presentation.addSubscriptionScreen
-import com.jefisu.auth.presentation.authScreen
-import com.jefisu.calendar.presentation.calendarScreen
-import com.jefisu.credit_cards.presentation.creditCardScreen
+import androidx.navigation.toRoute
+import com.jefisu.add_subscription.presentation.AddSubscriptionScreen
+import com.jefisu.auth.presentation.AuthScreen
+import com.jefisu.calendar.presentation.CalendarScreen
+import com.jefisu.credit_cards.presentation.CreditCardsScreen
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
-import com.jefisu.home.presentation.homeScreen
-import com.jefisu.settings.presentation.settingsScreen
-import com.jefisu.spending_budgets.presentation.spendingBudgetsScreen
-import com.jefisu.subscription_info.presentation.subscriptionInfoScreen
+import com.jefisu.home.presentation.HomeScreen
+import com.jefisu.settings.presentation.SettingsScreen
+import com.jefisu.spending_budgets.presentation.SpendingBudgetsScreen
+import com.jefisu.subscription_info.presentation.SubscriptionInfoScreen
 import com.jefisu.ui.navigation.AnimationConfig
 import com.jefisu.ui.navigation.AnimationType
 import com.jefisu.ui.navigation.Destination
@@ -23,8 +25,8 @@ import com.jefisu.ui.navigation.NavigationAnimation
 import com.jefisu.ui.navigation.NavigationRoot
 import com.jefisu.ui.navigation.Navigator
 import com.jefisu.ui.navigation.allDestinations
-import com.jefisu.user.presentation.editprofile.editProfileScreen
-import com.jefisu.welcome.welcomeScreen
+import com.jefisu.user.presentation.editprofile.EditProfileScreen
+import com.jefisu.welcome.WelcomeScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -85,20 +87,42 @@ fun AppNavHost(navigator: Navigator) {
             navigation<Destination.AuthGraph>(
                 startDestination = Destination.WelcomeScreen,
             ) {
-                welcomeScreen()
-                authScreen()
+                composable<Destination.WelcomeScreen> {
+                    WelcomeScreen()
+                }
+                composable<Destination.AuthScreen> {
+                    AuthScreen(
+                        navArgs = it.toRoute(),
+                    )
+                }
             }
             navigation<Destination.AuthenticatedGraph>(
                 startDestination = Destination.HomeScreen,
             ) {
-                homeScreen()
-                spendingBudgetsScreen()
-                calendarScreen()
-                creditCardScreen()
-                addSubscriptionScreen()
-                subscriptionInfoScreen()
-                settingsScreen()
-                editProfileScreen()
+                composable<Destination.HomeScreen> {
+                    HomeScreen()
+                }
+                composable<Destination.SpendingBudgetsScreen> {
+                    SpendingBudgetsScreen()
+                }
+                composable<Destination.CalendarScreen> {
+                    CalendarScreen()
+                }
+                composable<Destination.CreditCardScreen> {
+                    CreditCardsScreen()
+                }
+                composable<Destination.AddSubscriptionScreen> {
+                    AddSubscriptionScreen()
+                }
+                composable<Destination.SubscriptionInfoScreen> {
+                    SubscriptionInfoScreen()
+                }
+                composable<Destination.SettingsScreen> {
+                    SettingsScreen()
+                }
+                composable<Destination.EditProfileScreen> {
+                    EditProfileScreen()
+                }
             }
         }
     }

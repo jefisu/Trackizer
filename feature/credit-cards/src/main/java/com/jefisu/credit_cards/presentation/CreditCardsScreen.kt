@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -30,6 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.credit_cards.R
@@ -60,7 +63,18 @@ import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
 
 @Composable
-internal fun CreditCardsScreen(
+fun CreditCardsScreen() {
+    val viewModel = hiltViewModel<CreditCardViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    CreditCardsScreenContent(
+        state = state,
+        onAction = viewModel::onAction,
+    )
+}
+
+@Composable
+private fun CreditCardsScreenContent(
     state: CreditCardState,
     onAction: (CreditCardAction) -> Unit,
 ) {
@@ -304,7 +318,7 @@ private fun CreditCardsScreenPreview(
 ) {
     TrackizerTheme {
         TrackizerBottomNavigation {
-            CreditCardsScreen(
+            CreditCardsScreenContent(
                 state = state,
                 onAction = { },
             )

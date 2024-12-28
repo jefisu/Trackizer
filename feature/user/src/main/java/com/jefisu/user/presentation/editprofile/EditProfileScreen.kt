@@ -5,6 +5,7 @@ package com.jefisu.user.presentation.editprofile
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -26,6 +29,8 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jefisu.designsystem.Gray30
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
@@ -36,13 +41,29 @@ import com.jefisu.designsystem.components.TrackizerTopBarDefaults
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.ui.R as UiRes
+import com.jefisu.ui.sharedtransition.LocalAnimatedVisibilityScope
 import com.jefisu.ui.util.SampleData
 import com.jefisu.user.R
 import com.jefisu.user.presentation.editprofile.components.EditableProfileField
 import com.jefisu.user.presentation.editprofile.components.ProfilePhoto
 
 @Composable
-internal fun EditProfileScreen(
+fun AnimatedVisibilityScope.EditProfileScreen() {
+    val viewModel = hiltViewModel<EditProfileViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    CompositionLocalProvider(
+        LocalAnimatedVisibilityScope provides this,
+    ) {
+        EditProfileScreenContent(
+            state = state,
+            onAction = viewModel::onAction,
+        )
+    }
+}
+
+@Composable
+private fun EditProfileScreenContent(
     state: EditProfileState,
     onAction: (EditProfileAction) -> Unit,
 ) {
@@ -137,7 +158,7 @@ internal fun EditProfileScreen(
 @Composable
 private fun EditProfileScreenPreview() {
     TrackizerTheme {
-        EditProfileScreen(
+        EditProfileScreenContent(
             state = EditProfileState(
                 user = SampleData.user,
             ),

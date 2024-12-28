@@ -19,7 +19,13 @@ fun AuthScreen(navArgs: Destination.AuthScreen) {
         navArgs.isLogging -> AuthPage.LoginWithEmail
         else -> AuthPage.CustomAuthProviders
     }
+    AuthScreenContent(
+        startPage = startPage,
+    )
+}
 
+@Composable
+private fun AuthScreenContent(startPage: AuthPage) {
     TrackizerLogoBox {
         EndlessHorizontalPager(
             items = AuthPage.entries,
@@ -53,8 +59,8 @@ fun AuthScreen(navArgs: Destination.AuthScreen) {
 @Composable
 private fun AuthScreenPreview() {
     TrackizerTheme {
-        AuthScreen(
-            navArgs = Destination.AuthScreen(isLogging = false),
+        AuthScreenContent(
+            startPage = AuthPage.CustomAuthProviders,
         )
     }
 }
