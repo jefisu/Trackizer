@@ -12,6 +12,7 @@
     <string name="data_not_available">There are no %s available to select. Please add one and try again.</string>
     <string name="incorrect_password_error">The password you entered is incorrect. Please try again.</string>
     <string name="delete_account_failed_error">Failed to delete account. Please try again later.</string>
+    <string name="update_profile_failed_error">An error occurred while updating the profile.</string>
 
     <!-- Arguments -->
     <string name="user">User</string>
@@ -29,6 +30,10 @@
     <string name="select">Select</string>
     <string name="description">Description</string>
     <string name="save">Save</string>
+    <string name="name">Name</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="save_changes">Save changes</string>
+    <string name="no_data">Not defined</string>
 
     <!--  Category Type  -->
     <string name="transport">Transport</string>

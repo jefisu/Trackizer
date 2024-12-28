@@ -18,7 +18,6 @@
     <string name="by_registering_you_agree">Ao se registrar, você concorda com nossos Termos de Uso. Saiba como coletamos, usamos e compartilhamos seus dados.</string>
 
     <!-- Sign Up Screen -->
-    <string name="e_mail_address">E-mail</string>
     <string name="use_8_or_more_characters"><![CDATA[Use 8 ou mais caracteres com mesclando letras, números e caracteres especiais.]]></string>
     <string name="get_started_it_s_free">Comece agora, é gratuito!</string>
     <string name="do_you_have_already_an_account">Já tem uma conta?</string>

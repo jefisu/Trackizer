@@ -125,12 +125,12 @@ internal fun SubscriptionInfoScreen(
                 ),
                 InfoRow(
                     value = subscription.description,
-                    label = stringResource(R.string.no_data),
+                    label = stringResource(UiRes.string.no_data),
                     type = InfoRowType.Description,
                 ),
                 InfoRow(
                     value = subscription.category?.name.orEmpty(),
-                    label = stringResource(id = R.string.no_data),
+                    label = stringResource(id = UiRes.string.no_data),
                     type = InfoRowType.Category,
                 ),
                 InfoRow(
@@ -147,7 +147,7 @@ internal fun SubscriptionInfoScreen(
                 ),
                 InfoRow(
                     value = subscription.card?.number?.takeLast(4).orEmpty(),
-                    label = stringResource(id = R.string.no_data),
+                    label = stringResource(id = UiRes.string.no_data),
                     type = InfoRowType.CreditCard,
                 ),
             )

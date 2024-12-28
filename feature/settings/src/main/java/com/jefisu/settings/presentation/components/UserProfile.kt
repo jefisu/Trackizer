@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.jefisu.settings.presentation.components
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -24,6 +27,8 @@ import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.domain.model.User
 import com.jefisu.settings.R
+import com.jefisu.ui.sharedtransition.SharedTransitionsKeys
+import com.jefisu.ui.sharedtransition.sharedTransition
 import com.jefisu.ui.util.SampleData
 
 @Composable
@@ -32,6 +37,8 @@ internal fun UserProfile(
     modifier: Modifier = Modifier,
 ) {
     val isPreviewMode = LocalInspectionMode.current
+    val imageShape = CircleShape
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
@@ -41,8 +48,17 @@ internal fun UserProfile(
             contentDescription = user.name,
             contentScale = ContentScale.Crop,
             modifier = Modifier
+                .sharedTransition { animatedVisibilityScope ->
+                    Modifier.sharedBounds(
+                        sharedContentState = rememberSharedContentState(
+                            key = SharedTransitionsKeys.USER_PROFILE_IMAGE,
+                        ),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        clipInOverlayDuringTransition = OverlayClip(imageShape),
+                    )
+                }
                 .size(72.dp)
-                .clip(CircleShape)
+                .clip(imageShape)
                 .paint(
                     painter = painterResource(R.drawable.user_picture_profile),
                     alpha = if (user.pictureUrl == null || isPreviewMode) 1f else 0f,
@@ -50,7 +66,7 @@ internal fun UserProfile(
         )
         Spacer(Modifier.height(TrackizerTheme.spacing.medium))
         Text(
-            text = user.name,
+            text = user.name.orEmpty(),
             style = TrackizerTheme.typography.headline4,
         )
         Spacer(Modifier.height(4.dp))

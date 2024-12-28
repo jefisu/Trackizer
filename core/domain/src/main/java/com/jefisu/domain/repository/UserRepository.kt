@@ -10,4 +10,8 @@ interface UserRepository {
     fun isAuthenticated(): Boolean
     suspend fun signOut()
     suspend fun deleteAccount(password: String): Result<Unit, DataMessage>
+    suspend fun updateProfile(
+        name: String?,
+        pictureUrl: String?,
+    ): Result<Unit, DataMessage>
 }

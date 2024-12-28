@@ -54,7 +54,7 @@ object SampleData {
     val user = User(
         name = "John Doe",
         email = "john.doe@gmail.com",
-        pictureUrl = "",
+        pictureUrl = null,
         id = "1234",
     )
 }

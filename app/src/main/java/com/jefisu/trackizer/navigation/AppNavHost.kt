@@ -23,6 +23,7 @@ import com.jefisu.ui.navigation.NavigationAnimation
 import com.jefisu.ui.navigation.NavigationRoot
 import com.jefisu.ui.navigation.Navigator
 import com.jefisu.ui.navigation.allDestinations
+import com.jefisu.user.presentation.editprofile.editProfileScreen
 import com.jefisu.welcome.welcomeScreen
 import kotlinx.coroutines.launch
 
@@ -42,7 +43,10 @@ fun AppNavHost(navigator: Navigator) {
         NavigationAnimation(
             animConfigs = listOf(
                 AnimationConfig(
-                    destinations = listOf(Destination.SettingsScreen),
+                    destinations = listOf(
+                        Destination.SettingsScreen,
+                        Destination.EditProfileScreen,
+                    ),
                     type = AnimationType.HORIZONTAL,
                 ),
                 AnimationConfig(
@@ -94,6 +98,7 @@ fun AppNavHost(navigator: Navigator) {
                 addSubscriptionScreen()
                 subscriptionInfoScreen()
                 settingsScreen()
+                editProfileScreen()
             }
         }
     }

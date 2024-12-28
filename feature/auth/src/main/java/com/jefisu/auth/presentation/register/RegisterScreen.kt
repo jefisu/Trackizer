@@ -31,6 +31,7 @@ import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.imeOffset
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @Composable
@@ -69,7 +70,7 @@ internal fun RegisterScreen(
             TrackizerTextField(
                 text = state.email,
                 onTextChange = { onAction(RegisterAction.EmailChanged(it)) },
-                fieldName = stringResource(R.string.e_mail_address),
+                fieldName = stringResource(UiRes.string.email),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Down)

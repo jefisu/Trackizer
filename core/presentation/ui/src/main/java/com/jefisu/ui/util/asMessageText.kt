@@ -109,4 +109,8 @@ fun DataMessage.asMessageText(vararg args: Argument = emptyArray()): MessageText
     DataMessage.DELETE_ACCOUNT_FAILED -> Error(
         StringResource(R.string.delete_account_failed_error),
     )
+
+    DataMessage.UPDATE_PROFILE_FAILED -> Error(
+        StringResource(R.string.update_profile_failed_error),
+    )
 }
