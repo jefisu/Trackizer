@@ -97,7 +97,11 @@ fun CurrencyTextField(
         BasicTextField(
             value = text,
             onValueChange = { newValue ->
-                if (newValue.isDigitsOnly() && newValue.length <= maxLength) {
+                if (
+                    newValue.isDigitsOnly()
+                    && newValue.length <= maxLength
+                    && !newValue.startsWith("0")
+                ) {
                     onTextChange(newValue)
                 }
             },
