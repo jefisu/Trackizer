@@ -30,6 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.designsystem.Gray60
@@ -54,7 +56,18 @@ import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.util.SampleData
 
 @Composable
-internal fun SpendingBudgetScreen(
+fun SpendingBudgetsScreen() {
+    val viewModel = hiltViewModel<SpendingBudgetsViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    SpendingBudgetScreenContent(
+        state = state,
+        onAction = viewModel::onAction,
+    )
+}
+
+@Composable
+private fun SpendingBudgetScreenContent(
     state: SpendingBudgetsState,
     onAction: (SpendingBudgetsAction) -> Unit,
 ) {
@@ -213,7 +226,7 @@ internal fun SpendingBudgetScreen(
 private fun SpendingBudgetScreenPreview() {
     TrackizerTheme {
         TrackizerBottomNavigation {
-            SpendingBudgetScreen(
+            SpendingBudgetScreenContent(
                 state = SpendingBudgetsState(
                     categories = SampleData.categories,
                 ),

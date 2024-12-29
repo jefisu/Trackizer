@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -26,10 +27,24 @@ import com.jefisu.designsystem.components.TrackizerLogoBox
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.ui.navigation.Destination
+import com.jefisu.ui.navigation.LocalNavigator
 import com.jefisu.ui.screen.LocalScreenIsSmall
+import kotlinx.coroutines.launch
 
 @Composable
-internal fun WelcomeScreen(onNavigate: (Destination) -> Unit) {
+fun WelcomeScreen() {
+    val scope = rememberCoroutineScope()
+    val navigator = LocalNavigator.current
+
+    WelcomeScreenContent(
+        onNavigate = {
+            scope.launch { navigator.navigate(it) }
+        },
+    )
+}
+
+@Composable
+private fun WelcomeScreenContent(onNavigate: (Destination) -> Unit) {
     val isSmallScreen = LocalScreenIsSmall.current
     TrackizerLogoBox {
         Image(
@@ -88,7 +103,7 @@ internal fun WelcomeScreen(onNavigate: (Destination) -> Unit) {
 @Composable
 private fun WelcomeScreenPreview() {
     TrackizerTheme {
-        WelcomeScreen(
+        WelcomeScreenContent(
             onNavigate = {},
         )
     }

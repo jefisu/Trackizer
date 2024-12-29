@@ -36,6 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.calendar.R
@@ -66,7 +68,18 @@ import com.jefisu.ui.util.SampleData
 import java.time.LocalDate
 
 @Composable
-internal fun CalendarScreen(
+fun CalendarScreen() {
+    val viewModel = hiltViewModel<CalendarViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    CalendarScreenContent(
+        state = state,
+        onAction = viewModel::onAction,
+    )
+}
+
+@Composable
+private fun CalendarScreenContent(
     state: CalendarState,
     onAction: (CalendarAction) -> Unit,
 ) {
@@ -313,7 +326,7 @@ fun ScheduledSubscriptionsPerDay(
 private fun CalendarScreenPreview() {
     TrackizerTheme {
         TrackizerBottomNavigation {
-            CalendarScreen(
+            CalendarScreenContent(
                 state = CalendarState(
                     subscriptions = SampleData.subscriptions.map {
                         it.copy(firstPayment = LocalDate.now())

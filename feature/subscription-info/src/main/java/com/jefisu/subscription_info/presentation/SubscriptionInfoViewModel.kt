@@ -1,8 +1,5 @@
 package com.jefisu.subscription_info.presentation
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +19,14 @@ import com.jefisu.ui.navigation.Navigator
 import com.jefisu.ui.util.asMessageText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -33,22 +38,27 @@ class SubscriptionInfoViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    var state by mutableStateOf(SubscriptionInfoState())
-        private set
+    private val _state = MutableStateFlow(SubscriptionInfoState())
+    val state = combine(
+        _state,
+        categoryRepository.allData,
+        cardRepository.allData,
+    ) { _, categories, cards ->
+        _state.updateAndGet {
+            it.copy(
+                categories = categories,
+                creditCards = cards,
+            )
+        }
+    }.onStart { getSubscription() }
+        .onEach { checkDataChanges() }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            SubscriptionInfoState(),
+        )
 
     private var _subscription: Subscription? = null
-
-    init {
-        getSubscription()
-        viewModelScope.launch {
-            launch {
-                categoryRepository.allData.collect { state = state.copy(categories = it) }
-            }
-            launch {
-                cardRepository.allData.collect { state = state.copy(creditCards = it) }
-            }
-        }
-    }
 
     fun onAction(action: SubscriptionInfoAction) {
         when (action) {
@@ -58,48 +68,58 @@ class SubscriptionInfoViewModel @Inject constructor(
 
             is SubscriptionInfoAction.DescriptionChanged -> {
                 if (action.applyChanges) {
-                    state = state.copy(
-                        subscription = state.subscription?.copy(description = action.description),
-                    )
+                    _state.update {
+                        it.copy(
+                            subscription = it.subscription?.copy(description = action.description),
+                        )
+                    }
                     return
                 }
-                state = state.copy(description = action.description)
+                _state.update { it.copy(description = action.description) }
             }
 
             is SubscriptionInfoAction.CategoryChanged -> {
-                state = state.copy(
-                    subscription = state.subscription?.copy(
-                        category = action.category,
-                    ),
-                )
+                _state.update {
+                    it.copy(
+                        subscription = it.subscription?.copy(
+                            category = action.category,
+                        ),
+                    )
+                }
             }
 
             is SubscriptionInfoAction.CreditCardChanged -> {
-                state = state.copy(
-                    subscription = state.subscription?.copy(
-                        card = action.creditCard,
-                    ),
-                )
+                _state.update {
+                    it.copy(
+                        subscription = it.subscription?.copy(
+                            card = action.creditCard,
+                        ),
+                    )
+                }
             }
 
             is SubscriptionInfoAction.FirstPaymentChanged -> {
-                state = state.copy(
-                    subscription = state.subscription?.copy(
-                        firstPayment = action.date,
-                    ),
-                )
+                _state.update {
+                    it.copy(
+                        subscription = it.subscription?.copy(
+                            firstPayment = action.date,
+                        ),
+                    )
+                }
             }
 
             is SubscriptionInfoAction.ReminderChanged -> {
                 if (action.applyChanges) {
-                    state = state.copy(
-                        subscription = state.subscription?.copy(
-                            reminder = action.reminder,
-                        ),
-                    )
+                    _state.update {
+                        it.copy(
+                            subscription = it.subscription?.copy(
+                                reminder = action.reminder,
+                            ),
+                        )
+                    }
                     return
                 }
-                state = state.copy(reminder = action.reminder)
+                _state.update { it.copy(reminder = action.reminder) }
             }
 
             SubscriptionInfoAction.NavigateBack -> {
@@ -113,76 +133,77 @@ class SubscriptionInfoViewModel @Inject constructor(
 
         if (
             info?.type == InfoRowType.Category &&
-            state.categories.isEmpty() ||
+            _state.value.categories.isEmpty() ||
             info?.type == InfoRowType.CreditCard &&
-            state.creditCards.isEmpty()
+            _state.value.creditCards.isEmpty()
         ) {
-            state = state.copy(selectedInfoRow = null)
+            _state.update { it.copy(selectedInfoRow = null) }
             DataMessage.NO_DATA_AVAILABLE
                 .asMessageText(Argument(info.type.titleId))
                 .also(MessageController::sendMessage)
             return
         }
 
-        state = state.copy(
-            selectedInfoRow = info,
-            description = state.subscription?.description.orEmpty(),
-            reminder = state.subscription?.reminder ?: false,
-        )
+        _state.update {
+            it.copy(
+                selectedInfoRow = info,
+                description = _state.value.subscription?.description.orEmpty(),
+                reminder = _state.value.subscription?.reminder ?: false,
+            )
+        }
         viewModelScope.launch {
             UiEventController.sendEvent(SubscriptionInfoEvent.ToogleBottomSheet)
         }
     }
 
     private fun getSubscription() {
-        savedStateHandle.get<String>("id")?.let { id ->
-            viewModelScope.launch {
+        viewModelScope.launch {
+            savedStateHandle.get<String>("id")?.let { id ->
                 subscriptionRepository.getById(id)?.let { subscription ->
+                    _state.update { it.copy(subscription = subscription) }
                     _subscription = subscription
-                    state = state.copy(subscription = subscription)
                 }
             }
         }
     }
 
     private fun saveSubscription() {
+        if (_state.value.subscription == null) return
         viewModelScope.launch {
-            state.subscription?.let { subscription ->
-                subscriptionRepository.insert(subscription)
-                    .onSuccess {
-                        navigator.navigateUp()
-                    }
-                    .onError { MessageController.sendMessage(it.asMessageText()) }
+            if (!_state.value.hasUnsavedChanges) {
+                navigator.navigateUp()
+                return@launch
             }
+            subscriptionRepository.insert(_state.value.subscription!!)
+                .onSuccess { navigator.navigateUp() }
+                .onError { MessageController.sendMessage(it.asMessageText()) }
         }
     }
 
     private fun deleteSubscription() {
+        if (_state.value.subscription == null) return
         viewModelScope.launch {
-            _subscription?.let { subscription ->
-                subscriptionRepository.delete(subscription)
-                    .onSuccess {
-                        navigator.navigateUp()
-                    }
-                    .onError { MessageController.sendMessage(it.asMessageText()) }
-            }
+            subscriptionRepository.delete(_state.value.subscription!!)
+                .onSuccess { navigator.navigateUp() }
+                .onError { MessageController.sendMessage(it.asMessageText()) }
         }
     }
 
-    fun checkDataChanges() {
+    private fun checkDataChanges() {
         _subscription?.let {
+            val subscription = _state.value.subscription
             val hasUnsavedChanges = mapOf(
-                it.service to state.subscription?.service,
-                it.description to state.subscription?.description,
-                it.price to state.subscription?.price,
-                it.firstPayment to state.subscription?.firstPayment,
-                it.reminder to state.subscription?.reminder,
-                it.category?.id to state.subscription?.category?.id,
-                it.card?.id to state.subscription?.card?.id,
+                it.service to subscription?.service,
+                it.description to subscription?.description,
+                it.price to subscription?.price,
+                it.firstPayment to subscription?.firstPayment,
+                it.reminder to subscription?.reminder,
+                it.category?.id to subscription?.category?.id,
+                it.card?.id to subscription?.card?.id,
             ).any { (old, current) ->
                 old != current
             }
-            state = state.copy(hasUnsavedChanges = hasUnsavedChanges)
+            _state.update { it.copy(hasUnsavedChanges = hasUnsavedChanges) }
         }
     }
 }

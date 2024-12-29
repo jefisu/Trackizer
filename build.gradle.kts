@@ -32,8 +32,4 @@ fun Project.configureKtlint() {
             reporter(ReporterType.HTML)
         }
     }
-
-    tasks.matching { it.name == "preBuild" }.configureEach {
-        dependsOn("ktlintFormat")
-    }
 }

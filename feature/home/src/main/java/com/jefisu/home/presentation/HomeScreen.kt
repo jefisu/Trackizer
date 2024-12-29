@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.TrackizerBottomNavigation
 import com.jefisu.designsystem.components.TrackizerScaffold
@@ -30,7 +33,18 @@ import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
 
 @Composable
-internal fun HomeScreen(
+fun HomeScreen() {
+    val viewModel = hiltViewModel<HomeViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    HomeScreenContent(
+        state = state,
+        onAction = viewModel::onAction,
+    )
+}
+
+@Composable
+private fun HomeScreenContent(
     state: HomeState,
     onAction: (HomeAction) -> Unit,
 ) {
@@ -114,7 +128,7 @@ internal fun HomeScreen(
 private fun HomeScreenPreview() {
     TrackizerTheme {
         TrackizerBottomNavigation {
-            HomeScreen(
+            HomeScreenContent(
                 state = HomeState(
                     monthlyBudget = SampleData.MONTHLY_BUDGET,
                     subscriptions = SampleData.subscriptions,

@@ -1,8 +1,5 @@
 package com.jefisu.auth.presentation.login
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jefisu.auth.domain.AuthMessage
@@ -18,10 +15,12 @@ import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.WhileSubscribed
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -31,37 +30,33 @@ class LoginViewModel @Inject constructor(
     private val navigator: Navigator,
 ) : ViewModel() {
 
-    var state by mutableStateOf(LoginState())
-        private set
-
-    private val _user = userRepository.user.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5.seconds),
-        null,
-    ).value
-
-    init {
-        rememberUserEmail()
-    }
+    private val _state = MutableStateFlow(LoginState())
+    val state = _state
+        .onStart { rememberUserEmail() }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            LoginState(),
+        )
 
     fun onAction(action: LoginAction) {
         when (action) {
             is LoginAction.EmailChanged -> {
-                state = state.copy(email = action.email)
+                _state.update { it.copy(email = action.email) }
             }
 
             is LoginAction.PasswordChanged -> {
-                state = state.copy(password = action.password)
+                _state.update { it.copy(password = action.password) }
             }
 
             is LoginAction.RememberMeCredentials -> {
-                state = state.copy(rememberMeCredentials = !state.rememberMeCredentials)
+                _state.update { it.copy(rememberMeCredentials = !it.rememberMeCredentials) }
             }
 
             is LoginAction.Login -> login()
 
             is LoginAction.EmailResetPasswordChanged -> {
-                state = state.copy(emailResetPassword = action.email)
+                _state.update { it.copy(emailResetPassword = action.email) }
             }
 
             is LoginAction.SendResetPassword -> sendResetPassword()
@@ -70,44 +65,46 @@ class LoginViewModel @Inject constructor(
 
     private fun rememberUserEmail() {
         viewModelScope.launch {
-            state = state.copy(
-                email = _user?.email.orEmpty(),
-                rememberMeCredentials = _user != null,
-            )
+            val user = userRepository.user.firstOrNull()
+            _state.update {
+                it.copy(
+                    email = user?.email.orEmpty(),
+                    rememberMeCredentials = user != null,
+                )
+            }
         }
     }
 
     private fun login() = viewModelScope.launch {
-        with(state) {
-            validateAction(email, password) {
-                authRepository.signIn(email, password)
-                    .onSuccess {
-                        navigator.navigate(Destination.AuthenticatedGraph) {
-                            popUpTo(Destination.AuthGraph) {
-                                inclusive = true
-                            }
+        val email = _state.value.email
+        val password = _state.value.password
+        validateAction(email, password) {
+            authRepository.signIn(email, password)
+                .onSuccess {
+                    navigator.navigate(Destination.AuthenticatedGraph) {
+                        popUpTo(Destination.AuthGraph) {
+                            inclusive = true
                         }
                     }
-                    .onError { error ->
-                        MessageController.sendMessage(error.asMessageText())
-                    }
-            }
+                }
+                .onError { error ->
+                    MessageController.sendMessage(error.asMessageText())
+                }
         }
     }
 
     private fun sendResetPassword() {
-        with(state) {
-            validateAction(emailResetPassword) {
-                authRepository.sendPasswordResetEmail(emailResetPassword)
-                    .onSuccess { message ->
-                        MessageController.sendMessage(message.asMessageText())
-                        state = copy(emailResetPassword = "")
-                        UiEventController.sendEvent(LoginEvent.HideForgotPasswordBottomSheet)
-                    }
-                    .onError { error ->
-                        MessageController.sendMessage(error.asMessageText())
-                    }
-            }
+        val emailResetPassword = _state.value.emailResetPassword
+        validateAction(emailResetPassword) {
+            authRepository.sendPasswordResetEmail(emailResetPassword)
+                .onSuccess { message ->
+                    MessageController.sendMessage(message.asMessageText())
+                    _state.update { it.copy(emailResetPassword = "") }
+                    UiEventController.sendEvent(LoginEvent.HideForgotPasswordBottomSheet)
+                }
+                .onError { error ->
+                    MessageController.sendMessage(error.asMessageText())
+                }
         }
     }
 
@@ -132,9 +129,9 @@ class LoginViewModel @Inject constructor(
                 }
             }
 
-            state = state.copy(isLoading = true)
+            _state.update { it.copy(isLoading = true) }
             block()
-            state = state.copy(isLoading = false)
+            _state.update { it.copy(isLoading = false) }
         }
     }
 }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.auth.R
@@ -42,7 +44,7 @@ import com.jefisu.ui.screen.LocalScreenIsSmall
 @Composable
 fun LoginScreenRoot(navigateToRegister: () -> Unit) {
     val viewModel = hiltViewModel<LoginViewModel>()
-    val state = viewModel.state
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     LoginScreen(
         state = state,

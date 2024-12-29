@@ -1,8 +1,5 @@
 package com.jefisu.add_subscription.presentation
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jefisu.add_subscription.domain.validation.subscriptionPriceValidate
@@ -17,7 +14,9 @@ import com.jefisu.ui.util.asMessageText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import javax.inject.Inject
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -26,21 +25,21 @@ class AddSubscriptionViewModel @Inject constructor(
     private val navigator: Navigator,
 ) : ViewModel() {
 
-    var state by mutableStateOf(AddSubscriptionState())
-        private set
+    private val _state = MutableStateFlow(AddSubscriptionState())
+    val state = _state.asStateFlow()
 
     fun onAction(action: AddSubscriptionAction) {
         when (action) {
             is AddSubscriptionAction.DescriptionChanged -> {
-                state = state.copy(description = action.description)
+                _state.update { it.copy(description = action.description) }
             }
 
             is AddSubscriptionAction.PriceChanged -> {
-                state = state.copy(price = action.price)
+                _state.update { it.copy(price = action.price) }
             }
 
             is AddSubscriptionAction.SubscriptionServiceChanged -> {
-                state = state.copy(selectedService = action.service)
+                _state.update { it.copy(selectedService = action.service) }
             }
 
             AddSubscriptionAction.AddSubscription -> addSubscription()
@@ -51,16 +50,17 @@ class AddSubscriptionViewModel @Inject constructor(
 
     private fun addSubscription() {
         viewModelScope.launch {
-            val priceResult = subscriptionPriceValidate.validate(state.price.toDecimalValue())
+            val priceResult =
+                subscriptionPriceValidate.validate(_state.value.price.toDecimalValue())
             if (!priceResult.successfully) {
                 MessageController.sendMessage(priceResult.error!!.asMessageText())
-                cancel(priceResult.error.toString())
+                return@launch
             }
 
             val subscription = Subscription(
-                service = state.selectedService,
-                description = state.description,
-                price = state.price.toDecimalValue(),
+                service = _state.value.selectedService,
+                description = _state.value.description,
+                price = _state.value.price.toDecimalValue(),
                 firstPayment = LocalDate.now(),
                 reminder = false,
             )

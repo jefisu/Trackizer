@@ -2,6 +2,7 @@
 
 package com.jefisu.settings.presentation
 
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -19,6 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.designsystem.TrackizerTheme
@@ -40,11 +44,27 @@ import com.jefisu.settings.presentation.util.SettingsConstants
 import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.navigation.Destination
 import com.jefisu.ui.screen.LocalScreenIsSmall
+import com.jefisu.ui.sharedtransition.LocalAnimatedVisibilityScope
 import com.jefisu.ui.util.SampleData
 import java.util.Locale
 
 @Composable
-internal fun SettingsScreen(
+fun AnimatedVisibilityScope.SettingsScreen() {
+    val viewModel = hiltViewModel<SettingsViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    CompositionLocalProvider(
+        LocalAnimatedVisibilityScope provides this,
+    ) {
+        SettingsScreenContent(
+            state = state,
+            onAction = viewModel::onAction,
+        )
+    }
+}
+
+@Composable
+private fun SettingsScreenContent(
     state: SettingsState,
     onAction: (SettingsAction) -> Unit,
 ) {
@@ -262,7 +282,7 @@ internal fun SettingsScreen(
 @Composable
 private fun SettingsScreenPreview() {
     TrackizerTheme {
-        SettingsScreen(
+        SettingsScreenContent(
             state = SettingsState(
                 user = SampleData.user,
             ),
