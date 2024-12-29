@@ -28,6 +28,7 @@ jobs:
           echo "FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}" >> local.properties
           echo "FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> local.properties
           echo "FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}" >> local.properties
+          echo "IMGBB_KEY=${{ secrets.IMGBB_KEY }}" >> local.properties
 
       - name: Version Bump
         uses: chkfung/android-version-actions@v1.2.3
