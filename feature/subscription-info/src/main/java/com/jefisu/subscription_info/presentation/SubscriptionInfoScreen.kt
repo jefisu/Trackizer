@@ -21,7 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.designsystem.Black23
@@ -39,7 +40,6 @@ import com.jefisu.designsystem.Gray100
 import com.jefisu.designsystem.Gray30
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.Gray70
-import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.SubscriptionIcon
@@ -57,19 +57,16 @@ import com.jefisu.subscription_info.presentation.components.InfoRowItem
 import com.jefisu.subscription_info.presentation.components.SubscriptionInfoBottomSheet
 import com.jefisu.subscription_info.presentation.util.InfoRow
 import com.jefisu.subscription_info.presentation.util.InfoRowType
-import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.ext.toDateFormat
 import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
+import com.jefisu.designsystem.R as DesignSystemRes
+import com.jefisu.ui.R as UiRes
 
 @Composable
 fun SubscriptionInfoScreen() {
     val viewModel = hiltViewModel<SubscriptionInfoViewModel>()
-    val state = viewModel.state
-
-    LaunchedEffect(state.subscription) {
-        viewModel.checkDataChanges()
-    }
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     SubscriptionInfoScreenContent(
         state = state,

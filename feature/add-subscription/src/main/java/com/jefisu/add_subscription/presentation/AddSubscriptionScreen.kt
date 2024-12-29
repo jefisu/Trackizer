@@ -18,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jefisu.add_subscription.R
 import com.jefisu.add_subscription.presentation.components.SubscriptionServicePageItem
 import com.jefisu.add_subscription.presentation.util.SubscriptionDefaults
@@ -48,15 +50,16 @@ import com.jefisu.designsystem.util.getEndlessItem
 import com.jefisu.designsystem.util.imeOffset
 import com.jefisu.designsystem.util.rememberEndlessPagerState
 import com.jefisu.domain.model.SubscriptionService
-import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.screen.LocalScreenIsSmall
+import com.jefisu.ui.R as UiRes
 
 @Composable
 fun AddSubscriptionScreen() {
     val viewModel = hiltViewModel<AddSubscriptionViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     AddSubscriptionScreenContent(
-        state = viewModel.state,
+        state = state,
         onAction = viewModel::onAction,
     )
 }

@@ -37,6 +37,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.jefisu.calendar.R
@@ -69,9 +70,10 @@ import java.time.LocalDate
 @Composable
 fun CalendarScreen() {
     val viewModel = hiltViewModel<CalendarViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     CalendarScreenContent(
-        state = viewModel.state,
+        state = state,
         onAction = viewModel::onAction,
     )
 }
@@ -287,7 +289,7 @@ fun ScheduledSubscriptionsPerDay(
     val showDivider by remember {
         derivedStateOf {
             lazyGridState.firstVisibleItemIndex > 0 ||
-                lazyGridState.firstVisibleItemScrollOffset > 0
+                    lazyGridState.firstVisibleItemScrollOffset > 0
         }
     }
 

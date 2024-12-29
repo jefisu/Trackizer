@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jefisu.auth.R
 import com.jefisu.auth.presentation.register.components.PasswordStrengthMeter
 import com.jefisu.designsystem.Gray50
@@ -31,13 +33,13 @@ import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.imeOffset
-import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.screen.LocalScreenIsSmall
+import com.jefisu.ui.R as UiRes
 
 @Composable
 fun RegisterScreenRoot(navigateToLogin: () -> Unit) {
     val viewModel = hiltViewModel<RegisterViewModel>()
-    val state = viewModel.state
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     RegisterScreen(
         state = state,
