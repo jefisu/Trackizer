@@ -40,6 +40,7 @@ import com.jefisu.designsystem.Gray100
 import com.jefisu.designsystem.Gray30
 import com.jefisu.designsystem.Gray60
 import com.jefisu.designsystem.Gray70
+import com.jefisu.designsystem.R as DesignSystemRes
 import com.jefisu.designsystem.TrackizerTheme
 import com.jefisu.designsystem.components.ButtonType
 import com.jefisu.designsystem.components.SubscriptionIcon
@@ -57,11 +58,10 @@ import com.jefisu.subscription_info.presentation.components.InfoRowItem
 import com.jefisu.subscription_info.presentation.components.SubscriptionInfoBottomSheet
 import com.jefisu.subscription_info.presentation.util.InfoRow
 import com.jefisu.subscription_info.presentation.util.InfoRowType
+import com.jefisu.ui.R as UiRes
 import com.jefisu.ui.ext.toDateFormat
 import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.util.SampleData
-import com.jefisu.designsystem.R as DesignSystemRes
-import com.jefisu.ui.R as UiRes
 
 @Composable
 fun SubscriptionInfoScreen() {

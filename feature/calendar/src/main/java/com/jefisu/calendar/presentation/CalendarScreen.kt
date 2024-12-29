@@ -289,7 +289,7 @@ fun ScheduledSubscriptionsPerDay(
     val showDivider by remember {
         derivedStateOf {
             lazyGridState.firstVisibleItemIndex > 0 ||
-                    lazyGridState.firstVisibleItemScrollOffset > 0
+                lazyGridState.firstVisibleItemScrollOffset > 0
         }
     }
 

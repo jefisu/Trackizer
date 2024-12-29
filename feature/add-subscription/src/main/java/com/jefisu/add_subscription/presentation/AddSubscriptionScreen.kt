@@ -50,8 +50,8 @@ import com.jefisu.designsystem.util.getEndlessItem
 import com.jefisu.designsystem.util.imeOffset
 import com.jefisu.designsystem.util.rememberEndlessPagerState
 import com.jefisu.domain.model.SubscriptionService
-import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.R as UiRes
+import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @Composable
 fun AddSubscriptionScreen() {

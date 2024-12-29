@@ -33,8 +33,8 @@ import com.jefisu.designsystem.components.TrackizerTextField
 import com.jefisu.designsystem.spacing
 import com.jefisu.designsystem.typography
 import com.jefisu.designsystem.util.imeOffset
-import com.jefisu.ui.screen.LocalScreenIsSmall
 import com.jefisu.ui.R as UiRes
+import com.jefisu.ui.screen.LocalScreenIsSmall
 
 @Composable
 fun RegisterScreenRoot(navigateToLogin: () -> Unit) {
