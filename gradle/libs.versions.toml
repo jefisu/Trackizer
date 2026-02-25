@@ -2,6 +2,7 @@
 androidGradlePlugin = "8.5.2"
 androidTools = "31.5.2"
 androidxActivity = "1.9.1"
+androidxAppCompat = "1.7.0"
 androidxComposeBom = "2024.06.00"
 androidxLifecycle = "2.8.4"
 androidxNavigation = "2.8.0-beta07"
@@ -53,6 +54,7 @@ androidx-compose-animation = { module = "androidx.compose.animation:animation", 
 compose-unstyled = { module = "com.composables:core", version.ref = "composeUnstyled" }
 
 # AndroidX
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-worker = { module = "androidx.work:work-runtime-ktx", version.ref = "workerManager" }
 
 # Testing
