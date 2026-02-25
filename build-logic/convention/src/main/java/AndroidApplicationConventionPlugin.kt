@@ -33,6 +33,9 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 }
 
 private fun ApplicationExtension.configureApplication() {
+    val versionCodeEnv = System.getenv("VERSION_CODE")?.toIntOrNull()
+    val versionNameEnv = System.getenv("VERSION_NAME")
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -42,8 +45,8 @@ private fun ApplicationExtension.configureApplication() {
     defaultConfig {
         targetSdk = 35
 
-        versionCode = 1
-        versionName = "0.0.1"
+        versionCode = versionCodeEnv ?: 1
+        versionName = versionNameEnv ?: "0.0.1"
 
         vectorDrawables {
             useSupportLibrary = true
