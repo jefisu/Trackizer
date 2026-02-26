@@ -19,6 +19,11 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
+                packaging {
+                    jniLibs {
+                        useLegacyPackaging = true
+                    }
+                }
             }
 
             dependencies {
